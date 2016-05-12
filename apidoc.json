@@ -1,0 +1,8 @@
+{
+  "name": "Poster app",
+  "version": "0.1.2",
+  "description": "RestFull api docs",
+  "title": "Api docs",
+  "url": "/api",
+  "sampleUrl": "/api"
+}
