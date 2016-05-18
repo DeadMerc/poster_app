@@ -7,10 +7,62 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesResources;
+use Illuminate\Validation\Validator;
 
 class Controller extends BaseController
 {
     use AuthorizesRequests, AuthorizesResources, DispatchesJobs, ValidatesRequests;
+
+    public function fromPostToModel($rules, $model, $request,$bool = false) {
+        $valid = Validator($request->all(), $rules);
+        $manyImages = false;
+        if (!$valid->fails()) {
+            foreach ($rules as $key => $value) {
+                if ($key == 'image' || $key == 'images') {
+                    if (is_array($request->images)) {
+                        $manyImages = true;
+                    } else {
+                        if ($request->hasFile('image')) {
+                            $fileName = md5(rand(9999, 99999) . date('d m Y') . rand(9999, 99999)) . '.jpg';
+                            $request->file('image')->move(storage_path() . '/app/public/images', $fileName);
+                            $model->image = $fileName;
+                        } else {
+                            $model->image = null;
+                        }
+                    }
+                } else {
+                    $model->$key = $request->$key;
+                }
+
+            }
+            $model->save();
+
+            if($manyImages){
+                foreach($request->images as $image) {
+                    if($image) {
+                        $fileName = md5(rand(999, 99999) . date('d m Y')) . '.jpg';
+                        $image->move(storage_path() . '/app/public/images', $fileName);
+                        $photo = new Photo;
+                        $photo->event_id = $model->id;
+                        $photo->image = $fileName;
+                        $photo->save();
+                        unset($photo);
+                    }
+                }
+            }
+
+            if($bool){
+                return true;
+            }
+            return $this->helpInfo();
+        }else{
+            if($bool){
+                return $valid->errors()->all();
+            }
+            return $this->helpError('valid',$valid);
+        }
+    }
+
 
     public function helpError($message, $validator = false) {
 

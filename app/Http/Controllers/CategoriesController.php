@@ -86,18 +86,9 @@ class CategoriesController extends Controller
     
     public function store(Request $request) {
         $rules = ['name_RU'=>'required','name_EN'=>'required',
-            'name_UA'=>'required'];
-        $valid = Validator($request->all(),$rules);
-        if(!$valid->fails()){
-            $category = new Category;
-            $category->name_RU = $request->name_RU;
-            $category->name_EN = $request->name_EN;
-            $category->name_UA = $request->name_UA;
-            $category->save();
-            return $this->helpInfo();
-        }else{
-            return $this->helpError('valid',$valid);
-        }
+            'name_UA'=>'required','post_price'=>'required','image'=>'required'
+        ,'description'=>'required'];
+        return $this->fromPostToModel($rules, new Category, $request);
     }
 
 
@@ -120,7 +111,9 @@ class CategoriesController extends Controller
      */
     public function update(Request $request, $id) {
         $rules = ['name_RU'=>'required','name_EN'=>'required',
-            'name_UA'=>'required'];
+            'name_UA'=>'required','post_price'=>'required','description'=>'required'];
+        return $this->fromPostToModel($rules, Category::findorfail($id), $request);
+        /*
         $valid = Validator($request->all(),$rules);
         if(!$valid->fails()){
             $category = Category::findorfail($id);
@@ -131,7 +124,7 @@ class CategoriesController extends Controller
             return $this->helpInfo();
         }else{
             return $this->helpError('valid',$valid);
-        }
+        }*/
     }
 
     /**

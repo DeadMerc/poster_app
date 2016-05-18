@@ -11,43 +11,42 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+
+Route::get('/',function(){
+    return view('admin.index');
 });
-
-
 Route::group(['prefix' => 'api'], function () {
-    Route::get('{code}',function($code){
-        $response = ['error'=>true,'message'=>null];
-        if($code == 404){
+    Route::get('{code}', function ($code) {
+        $response = ['error' => true, 'message' => null];
+        if ($code == 404) {
             $response['response'] = 'Not found token';
-        }elseif($code == 405){
+        } elseif ($code == 405) {
             $response['response'] = 'Failed token';
-        }else{
+        } else {
             $response['response'] = 'Dont know error';
         }
         return $response;
     });
 
-    Route::group(['prefix'=>'v1'],function (){
-        Route::resource('users','UsersController');
-        Route::post('users/auth/{type}','UsersController@auth');
+    Route::group(['prefix' => 'v1'], function () {
+        Route::resource('users', 'UsersController');
+        Route::post('users/auth/{type}', 'UsersController@auth');
 
-        Route::resource('categories','CategoriesController');
-        Route::resource('events','EventsController');
-        
-        Route::group(['middleware'=>[\App\Http\Middleware\AuthByToken::class]],function(){
-            Route::post('events','EventsController@store_save');
-            Route::put('events','EventsController@update_save');
+        Route::resource('categories', 'CategoriesController');
+        Route::resource('events', 'EventsController');
 
-            Route::post('events/follow','EventsController@follow');
-            Route::get('users/events/favorite','EventsController@showFavorite');
-            Route::post('events/unfollow','EventsController@unfollow');
+        Route::group(['middleware' => [\App\Http\Middleware\AuthByToken::class]], function () {
+            Route::post('events', 'EventsController@store_save');
+            Route::put('events', 'EventsController@update_save');
 
-            Route::post('categories/favorite','CategoriesController@favorite');
-            Route::post('categories/unfavorite','CategoriesController@unfavorite');
+            Route::post('events/follow', 'EventsController@follow');
+            Route::get('users/events/favorite', 'EventsController@showFavorite');
+            Route::post('events/unfollow', 'EventsController@unfollow');
+
+            Route::post('categories/favorite', 'CategoriesController@favorite');
+            Route::post('categories/unfavorite', 'CategoriesController@unfavorite');
         });
-        
+
 
     });
 

@@ -18,6 +18,8 @@ class Categories extends Migration
             $table->string('name_EN');
             $table->string('name_UA');
             $table->string('image');
+            $table->integer('post_price');
+            $table->string('description');
             $table->timestamps();
         });
     }

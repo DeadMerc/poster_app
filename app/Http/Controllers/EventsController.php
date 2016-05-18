@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Category;
 use Illuminate\Http\Request;
+use App\User;
 use App\Event;
 use App\Event_follow;
 use App\Http\Requests;
@@ -21,7 +23,7 @@ class EventsController extends Controller
      *
      */
     public function index() {
-        return $this->helpReturn(Event::with('photos'));
+        return $this->helpReturn(Event::with('photos')->get());
     }
 
     public function show($id) {
@@ -33,7 +35,7 @@ class EventsController extends Controller
      * @api {get} /v1/users/events/favorite getEventsByFavoriteCategories
      * @apiVersion 0.1.0
      * @apiName getEventsByFavoriteCategories
-     * @apiGroup Users
+     * @apiGroup Events
      *
      * @apiDescription Все события из категорий на которые подписан пользователь
      * @apiHeader {string} token User token
@@ -124,6 +126,20 @@ class EventsController extends Controller
      */
     public function store_save(Request $request) {
         $rules = ['category_id' => 'required', 'title' => 'required', 'description' => 'required', 'date' => 'required', 'time' => 'required', 'type' => 'required', 'price' => 'required'];
+        $category = Category::findorfail($request->category_id);
+        if($request->user->balance > $category->post_price){
+            $request->user->balance = $request->user->balance - $category->post_price;
+            $event = $this->fromPostToModel($rules, new Event, $request,true);
+            if($event == true){
+                $request->user->save();
+                return $this->helpInfo();
+            }else{
+                return $this->helpError('valid',$event);
+            }
+        }else{
+            return $this->helpError('dont have money');
+        }
+        /*
         $valid = Validator($request->all(), $rules);
         if (!$valid->fails()) {
             $event = new Event;
@@ -145,6 +161,7 @@ class EventsController extends Controller
         } else {
             $this->helpError('valid', $valid);
         }
+        */
     }
 
 
