@@ -14,26 +14,33 @@ var adminApp = angular.module('adminApp', [
 
 adminApp.run(function ($rootScope, toastr) {
     console.log("App started");
+    /* config for http*/
+    $rootScope.config = {
+        headers: {
+            'token': 'adm'
+        }
+    }
+
     /* toasts */
-    $rootScope.success = function($text){
+    $rootScope.success = function ($text) {
         //success warning info error
-        toastr.success($text);
+        toastr.success($text,{allowHtml: true});
     };
-    $rootScope.warning = function($text){
+    $rootScope.warning = function ($text) {
         //success warning info error
-        toastr.warning($text);
+        toastr.warning($text,{allowHtml: true});
     };
-    $rootScope.info = function($text){
+    $rootScope.info = function ($text) {
         //success warning info error
-        toastr.info($text);
+        toastr.info($text,{allowHtml: true});
     };
-    $rootScope.error = function($text){
+    $rootScope.error = function ($text) {
         //success warning info error
-        toastr.error($text);
+        toastr.error($text,{allowHtml: true});
     };
 
 });
-adminApp.config(['cfpLoadingBarProvider', function(cfpLoadingBarProvider) {
+adminApp.config(['cfpLoadingBarProvider', function (cfpLoadingBarProvider) {
     cfpLoadingBarProvider.includeSpinner = false;
 }])
 adminApp.config(['$routeProvider',

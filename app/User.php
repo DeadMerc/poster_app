@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class User extends Model
 {
-    protected $table = 'Users';
+    protected $table = 'users';
     protected $appends = array('events_count');
 
     public function events(){

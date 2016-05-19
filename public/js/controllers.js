@@ -30,9 +30,7 @@ var adminControllers = angular.module('adminControllers', [])
                 console.log('Categories Ctrl try delete ' + id);
                 // Appending dialog to document.body to cover sidenav in docs app
                 var confirm = $mdDialog.confirm()
-                    .title('Really?')
                     .textContent('Your want delete item with id:' + id + '?')
-                    .ariaLabel('Lucky day')
                     .ok('Please do it!')
                     .cancel('No');
                 $mdDialog.show(confirm).then(function () {
@@ -76,6 +74,59 @@ var adminControllers = angular.module('adminControllers', [])
                 });
         };
 
+        $scope.ban = function (user) {
+            var id = user.id;
+            console.log('Users Ctrl try ban user with id' + id);
+            var confirm = $mdDialog.confirm()
+                .textContent('Your want ban user with id:' + id + '?')
+                .ok('Please do it!')
+                .cancel('No');
+            $mdDialog.show(confirm).then(function () {
+                $http.get('/api/v1/users/ban/' + id, $rootScope.config)
+                    .then(function (res) {
+
+                        if (res.data.error !== true) {
+                            user.banned = 1;
+                            $rootScope.success('Request is done');
+                        } else if (res.data.error == true) {
+                            console.log(res);
+                            $rootScope.warning('Request return error try with:' + res.data.response + '<br>' + res.data.message);
+                        }
+                    }, function (res) {
+                        console.log(res);
+                        $rootScope.error('Request return error code');
+                    });
+            }, function () {
+                $rootScope.info('Banned user was aborted');
+            });
+
+        };
+        $scope.unban = function (user) {
+            var id = user.id;
+            console.log('Users Ctrl try unban user with id' + id);
+            var confirm = $mdDialog.confirm()
+                .textContent('Your want unban user with id:' + id + '?')
+                .ok('Please do it!')
+                .cancel('No');
+            $mdDialog.show(confirm).then(function () {
+                $http.get('/api/v1/users/unban/' + id, $rootScope.config)
+                    .then(function (res) {
+                        if (res.data.error !== true) {
+                            user.banned = 0;
+                            $rootScope.success('Request is done');
+                        } else if (res.data.error == true) {
+                            console.log(res);
+                            $rootScope.warning('Request return error try with:' + res.data.response + '<br>' + res.data.message);
+                        }
+                    }, function (res) {
+                        console.log(res);
+                        $rootScope.error('Request return error code');
+                    });
+            }, function () {
+                $rootScope.info('UnBanned user was aborted');
+            });
+        };
+
         $scope.edit = function (id) {
             console.log('Users Ctrl try edit ' + id);
             $location.path("/user/" + id);
@@ -100,11 +151,49 @@ var adminControllers = angular.module('adminControllers', [])
         console.log("User Ctrl init");
         $scope.init = function () {
             console.log("User Ctrl scope init");
+            $http.get('api/v1/users/s/edit',{ignoreLoadingBar: true})
+                .then(function (res) {
+                    console.log('User Ctrl loading schema');
+                    //console.log(res.data.response);
+                    $scope.schema = res.data.response;
+                });
             $scope.id = $routeParams.id;
-            $scope.info = $scope.id;
             if (typeof $scope.id == 'undefined') {
-                $scope.info = 'new user';
+                $scope.id = 'new';
+            }else{
+                $http.get('/api/v1/users/'+$scope.id).then(function (res) {
+                    $scope.user = res.data.response;
+                    //console.log($scope.user);
+                });
             }
-            console.log('User Ctrl try edit id ' + $scope.info);
+            console.log('User Ctrl try edit id '+ $scope.id);
+        };
+
+        $scope.save = function (){
+            console.log('User Ctrl try save user with id:'+$scope.id);
+            if($scope.id !== 'new'){
+                $http.put('/api/v1/users/'+$scope.id,$scope.user,$rootScope.config)
+                    .then(function (res) {
+                        if(res.data.error == false){
+                            $rootScope.success('OK');
+                            $location.path('/users');
+                        }else{
+                            if(res.data.message == 'valid'){
+                                var msg = '';
+                                angular.forEach(res.data.validator,function (v,i) {
+                                    msg += v+'<br>';
+                                })
+                            }
+                            $rootScope.warning(msg);
+                        }
+                    },function (res) {
+                        $rootScope.error('Request return failed');
+                    });
+            }
+
+        }
+
+        $scope.upload = function () {
+            angular.element(document.querySelector('#fileInput')).click();
         };
     });

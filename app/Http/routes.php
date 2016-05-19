@@ -22,6 +22,8 @@ Route::group(['prefix' => 'api'], function () {
             $response['response'] = 'Not found token';
         } elseif ($code == 405) {
             $response['response'] = 'Failed token';
+        } elseif ($code == 'ban') {
+            $response['response'] = 'Your accound was banned';
         } else {
             $response['response'] = 'Dont know error';
         }
@@ -45,6 +47,9 @@ Route::group(['prefix' => 'api'], function () {
 
             Route::post('categories/favorite', 'CategoriesController@favorite');
             Route::post('categories/unfavorite', 'CategoriesController@unfavorite');
+
+            Route::get('/users/ban/{id}','UsersController@ban');
+            Route::get('/users/unban/{id}','UsersController@unban');
         });
 
 

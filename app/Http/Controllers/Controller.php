@@ -13,7 +13,7 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, AuthorizesResources, DispatchesJobs, ValidatesRequests;
 
-    public function fromPostToModel($rules, $model, $request,$bool = false) {
+    public function fromPostToModel($rules, $model, $request, $bool = false) {
         $valid = Validator($request->all(), $rules);
         $manyImages = false;
         if (!$valid->fails()) {
@@ -37,9 +37,9 @@ class Controller extends BaseController
             }
             $model->save();
 
-            if($manyImages){
-                foreach($request->images as $image) {
-                    if($image) {
+            if ($manyImages) {
+                foreach ($request->images as $image) {
+                    if ($image) {
                         $fileName = md5(rand(999, 99999) . date('d m Y')) . '.jpg';
                         $image->move(storage_path() . '/app/public/images', $fileName);
                         $photo = new Photo;
@@ -51,23 +51,43 @@ class Controller extends BaseController
                 }
             }
 
-            if($bool){
+            if ($bool) {
                 return true;
             }
             return $this->helpInfo();
-        }else{
-            if($bool){
+        } else {
+            if ($bool) {
                 return $valid->errors()->all();
             }
-            return $this->helpError('valid',$valid);
+            return $this->helpError('valid', $valid);
         }
     }
 
+    public function getSchemaByModel($model) {
+        $attributes = $model->getAttributes();
+        $keys = [];
+        $protected = ['social_hash', 'password', 'token', 'created_at', 'updated_at', 'type','id','banned','imei'];
+        foreach ($attributes as $key => $value) {
+            if (!in_array($key, $protected)) {
+                $keys[] = array('type'=>$this->getTypeInputByKey($key),'key'=>$key);
+            }
+        }
+        return $this->helpReturn($keys);
+    }
+    private function getTypeInputByKey($key){
+        if($key == 'category_id'){
+            //return 'categories_select';
+        }
+        if($key == 'image'){
+            return 'file';
+        }
+        return 'text';
+    }
 
-    public function helpError($message, $validator = false) {
+    public function helpError($message = 'valid', $validator = false) {
 
         if ($validator) {
-            return array('response' => [], 'error' => true, 'message' => $message, 'validator' => $validator->errors()->all());
+            return array('response' => [], 'error' => true, 'message' => 'valid', 'validator' => $validator->errors()->all());
         }
         return array('response' => [], 'error' => true, 'message' => $message);
     }

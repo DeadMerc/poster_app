@@ -17,6 +17,11 @@ class UsersController extends Controller
     public function index() {
         return $this->helpReturn(User::with('events')->with('favorites')->get());
     }
+
+
+    public function show($id) {
+        return $this->helpReturn(User::with('events')->with('favorites')->findorfail($id));
+    }
     /**
      * @api {post} /v1/users/auth/email AuthByEmail
      * @apiVersion 0.1.0
@@ -69,7 +74,7 @@ class UsersController extends Controller
                 $user->save();
                 return $this->helpReturn($user);
             } else {
-                return $this->helpReturn($user,null,'hey');
+                return $this->helpReturn($user, null, 'hey');
             }
         } elseif ($type == 'hidden') {
             $imei = $request->imei;
@@ -104,9 +109,9 @@ class UsersController extends Controller
      *
      */
     public function store(Request $request) {
-        $rules = ['name' => 'required|min:3','email' => 'required|unique:users', 'password' => 'required'];
+        $rules = ['name' => 'required|min:3', 'email' => 'required|unique:users', 'password' => 'required'];
         $valid = Validator($request->all(), $rules);
-        if(!$valid->fails()){
+        if (!$valid->fails()) {
             $user = new User;
             $user->name = $request->name;
             $user->email = $request->email;
@@ -115,19 +120,9 @@ class UsersController extends Controller
             $user->type = 'email';
             $user->save();
             return $this->helpReturn($user);
-        }else{
-            return $this->helpError('valid',$valid);
+        } else {
+            return $this->helpError('valid', $valid);
         }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id) {
-        //
     }
 
     /**
@@ -137,13 +132,26 @@ class UsersController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($id) {
-        //
+        return $this->getSchemaByModel(User::first());
     }
 
 
     public function update(Request $request, $id) {
-        $rules = ['name' => 'required|min:3', 'location' => 'required|min:3', 'lon' => 'required', 'lat' => 'required', 'category_id' => 'required', 'type' => 'required', 'email' => 'required', 'password' => 'required'];
-
+        $rules = ['image'=>'image','name' => 'required|min:3', 'location' => 'required|min:3', 'lon' => 'required', 'lat' => 'required', 'category_id' => 'required', 'type' => 'required', 'email' => 'required', 'password' => 'required'];
+        $user = User::findorfail($id);
+        return $this->fromPostToModel($rules, $user, $request);
+    }
+    public function ban($id){
+        $user = User::findorfail($id);
+        $user->banned = 1;
+        $user->save();
+        return $this->helpReturn($user);
+    }
+    public function unban($id){
+        $user = User::findorfail($id);
+        $user->banned = 0;
+        $user->save();
+        return $this->helpReturn($user);
     }
 
     /**

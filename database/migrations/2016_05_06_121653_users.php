@@ -26,6 +26,7 @@ class Users extends Migration
             $table->string('type');
             $table->string('social_hash')->nullable();
             $table->string('imei');
+            $table->string('image');
             $table->string('email')->nullable();
             $table->string('password')->nullable();
             $table->integer('balance')->default(0);

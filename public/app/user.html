@@ -1,3 +1,22 @@
 <div ng-init="init()">
-    <% info %>
+    <div ng-repeat="input in schema">
+        <div ng-if="input.type == 'file'">
+            <input aria-label="image" ng-model="user.images" class="ng-hide" id="input-file-id" multiple type="file"/>
+            <label for="input-file-id" ng-click="upload()" class="md-button md-raised md-primary">Choose Files for images</label>
+        </div>
+        <div ng-if="input.type == 'text'">
+            <md-input-container class="md-block">
+                <label><% input.key %></label>
+                <input type="input.type" required name="input.key" ng-model="user[input.key]">
+                <div ng-messages="user.key.$error">
+                    <div ng-message="required">This is required.</div>
+                </div>
+            </md-input-container>
+        </div>
+
+    </div>
+    <section layout="row"  layout-align="end" layout-wrap>
+        <md-button class="md-raised md-primary" ng-click="save()">Save</md-button>
+        <md-button class="md-raised md-warn">Back</md-button>
+    </section>
 </div>
