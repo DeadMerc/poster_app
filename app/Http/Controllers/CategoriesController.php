@@ -99,7 +99,7 @@ class CategoriesController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($id) {
-        //
+        return $this->getSchemaByModel(Category::first());
     }
 
     /**

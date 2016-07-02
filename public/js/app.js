@@ -5,7 +5,8 @@ var adminApp = angular.module('adminApp', [
     'ngMessages',
     'toastr',
     'angular-loading-bar',
-    'ngAnimate'
+    'ngAnimate',
+    'ngFileUpload'
 ], function ($interpolateProvider) {
     $interpolateProvider.startSymbol('<%');
     $interpolateProvider.endSymbol('%>');
@@ -17,7 +18,8 @@ adminApp.run(function ($rootScope, toastr) {
     /* config for http*/
     $rootScope.config = {
         headers: {
-            'token': 'adm'
+            'token': 'adm',
+            'Content-Type': 'application/x-www-form-urlencoded'
         }
     }
 
@@ -38,7 +40,36 @@ adminApp.run(function ($rootScope, toastr) {
         //success warning info error
         toastr.error($text,{allowHtml: true});
     };
+    $rootScope.transform  = function(obj) {
+        var query = '', name, value, fullSubName, subName, subValue, innerObj, i;
 
+        for(name in obj) {
+            value = obj[name];
+
+            if(value instanceof Array) {
+                for(i=0; i<value.length; ++i) {
+                    subValue = value[i];
+                    fullSubName = name + '[' + i + ']';
+                    innerObj = {};
+                    innerObj[fullSubName] = subValue;
+                    query += param(innerObj) + '&';
+                }
+            }
+            else if(value instanceof Object) {
+                for(subName in value) {
+                    subValue = value[subName];
+                    fullSubName = name + '[' + subName + ']';
+                    innerObj = {};
+                    innerObj[fullSubName] = subValue;
+                    query += param(innerObj) + '&';
+                }
+            }
+            else if(value !== undefined && value !== null)
+                query += encodeURIComponent(name) + '=' + encodeURIComponent(value) + '&';
+        }
+
+        return query.length ? query.substr(0, query.length - 1) : query;
+    };
 });
 adminApp.config(['cfpLoadingBarProvider', function (cfpLoadingBarProvider) {
     cfpLoadingBarProvider.includeSpinner = false;

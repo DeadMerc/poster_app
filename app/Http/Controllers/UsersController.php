@@ -28,7 +28,6 @@ class UsersController extends Controller
      * @apiName AuthByEmail
      * @apiGroup Users
      *
-     * @apiParam {string} name
      * @apiParam {string} email
      * @apiParam {string} password
      *
@@ -135,9 +134,30 @@ class UsersController extends Controller
         return $this->getSchemaByModel(User::first());
     }
 
-
+    /**
+     * @api {put} /v1/users/:type updateUser
+     * @apiVersion 0.1.0
+     * @apiName updateUser
+     * @apiGroup Users
+     *
+     * @apiDescription При редактировании, если нужно какое-то определённое поле, в других должно быть false (bool)
+     * @apiParam {string} name
+     * @apiParam {file} image
+     * @apiParam {string} email
+     * @apiParam {string} password
+     * @apiParam {string} [phone_1]
+     * @apiParam {string} [phone_2]
+     * @apiParam {string} [phone_3]
+     * @apiParam {string} location
+     * @apiParam {string} lon
+     * @apiParam {string} lat
+     * @apiParam {string} category_id
+     * @apiParam {string} email
+     * @apiParam {string} password
+     *
+     */
     public function update(Request $request, $id) {
-        $rules = ['image'=>'image','name' => 'required|min:3', 'location' => 'required|min:3', 'lon' => 'required', 'lat' => 'required', 'category_id' => 'required', 'type' => 'required', 'email' => 'required', 'password' => 'required'];
+        $rules = ['balance'=>false,'image'=>'image','phone_1'=>false,'phone_2'=>false,'phone_3'=>false,'name' => 'required|min:3', 'location' => 'required|min:3', 'lon' => 'required', 'lat' => 'required', 'category_id' => 'required',  'email' => 'required', 'password' => 'required'];
         $user = User::findorfail($id);
         return $this->fromPostToModel($rules, $user, $request);
     }

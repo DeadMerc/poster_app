@@ -15,7 +15,11 @@
             <td><% user.id %></td>
             <td><% user.name || 'Not defined' %></td>
             <td><% user.email || 'Not defined' %></td>
-            <td><% user.phone || 'Not defined' %></td>
+            <td>
+                <% user.phone_1 || 'Not defined' %><br>
+                <% user.phone_2 || 'Not defined' %><br>
+                <% user.phone_3 || 'Not defined' %>
+            </td>
             <td><% user.balance || 'Not defined' %></td>
             <td>
                 <md-button ng-click="edit(user.id)" class="md-raised md-primary">

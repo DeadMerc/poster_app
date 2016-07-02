@@ -8,13 +8,21 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesResources;
 use Illuminate\Validation\Validator;
+use Illuminate\Http\Request;
+use App\Http\Requests;
 
 class Controller extends BaseController
 {
     use AuthorizesRequests, AuthorizesResources, DispatchesJobs, ValidatesRequests;
 
     public function fromPostToModel($rules, $model, $request, $bool = false) {
-        $valid = Validator($request->all(), $rules);
+        $rulesForValidator = [];
+        foreach ($rules as $key => $value) {
+            if ($value !== false) {
+                $rulesForValidator[$key] = $value;
+            }
+        }
+        $valid = Validator($request->all(), $rulesForValidator);
         $manyImages = false;
         if (!$valid->fails()) {
             foreach ($rules as $key => $value) {
@@ -26,6 +34,8 @@ class Controller extends BaseController
                             $fileName = md5(rand(9999, 99999) . date('d m Y') . rand(9999, 99999)) . '.jpg';
                             $request->file('image')->move(storage_path() . '/app/public/images', $fileName);
                             $model->image = $fileName;
+                        }elseif($request->image){
+                            $model->image = $request->image;
                         } else {
                             $model->image = null;
                         }
@@ -66,20 +76,24 @@ class Controller extends BaseController
     public function getSchemaByModel($model) {
         $attributes = $model->getAttributes();
         $keys = [];
-        $protected = ['social_hash', 'password', 'token', 'created_at', 'updated_at', 'type','id','banned','imei'];
+        $protected = ['social_hash', 'token', 'created_at', 'updated_at', 'type', 'id', 'banned', 'imei'];
         foreach ($attributes as $key => $value) {
             if (!in_array($key, $protected)) {
-                $keys[] = array('type'=>$this->getTypeInputByKey($key),'key'=>$key);
+                $keys[] = array('type' => $this->getTypeInputByKey($key), 'key' => $key);
             }
         }
         return $this->helpReturn($keys);
     }
-    private function getTypeInputByKey($key){
-        if($key == 'category_id'){
+
+    private function getTypeInputByKey($key) {
+        if ($key == 'category_id') {
             //return 'categories_select';
         }
-        if($key == 'image'){
+        if ($key == 'image') {
             return 'file';
+        }
+        if ($key == 'balance') {
+            //return 'number';
         }
         return 'text';
     }
@@ -204,4 +218,13 @@ class Controller extends BaseController
         }
         return $response;
     }
+
+    public function uploadFile(Request $request) {
+        if ($request->hasFile('image')) {
+            $fileName = md5(rand(9999, 99999) . date('d m Y') . rand(9999, 99999)) . '.jpg';
+            $request->file('image')->move(storage_path() . '/app/public/images', $fileName);
+            return $fileName;
+        }
+    }
+
 }

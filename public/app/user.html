@@ -1,13 +1,29 @@
 <div ng-init="init()">
     <div ng-repeat="input in schema">
+
         <div ng-if="input.type == 'file'">
-            <input aria-label="image" ng-model="user.images" class="ng-hide" id="input-file-id" multiple type="file"/>
-            <label for="input-file-id" ng-click="upload()" class="md-button md-raised md-primary">Choose Files for images</label>
+            <div class="md-button md-raised md-primary" ngf-select="upload($file)" ng-model="file" ngf-multiple="false">
+                Select Image
+            </div>
+            <div ng-if="uploadedFile">
+                <img width="300px" height="100px" ng-src="/images/<% uploadedFile %>">
+            </div>
         </div>
+
         <div ng-if="input.type == 'text'">
             <md-input-container class="md-block">
                 <label><% input.key %></label>
-                <input type="input.type" required name="input.key" ng-model="user[input.key]">
+                <input type="text" required name="input.key" ng-model="data[input.key]">
+                <div ng-messages="user.key.$error">
+                    <div ng-message="required">This is required.</div>
+                </div>
+            </md-input-container>
+        </div>
+
+        <div ng-if="input.type == 'number'">
+            <md-input-container class="md-block">
+                <label><% input.key %></label>
+                <input type="number" required name="input.key" ng-model="data[input.key]">
                 <div ng-messages="user.key.$error">
                     <div ng-message="required">This is required.</div>
                 </div>
@@ -15,7 +31,7 @@
         </div>
 
     </div>
-    <section layout="row"  layout-align="end" layout-wrap>
+    <section layout="row" layout-align="end" layout-wrap>
         <md-button class="md-raised md-primary" ng-click="save()">Save</md-button>
         <md-button class="md-raised md-warn">Back</md-button>
     </section>

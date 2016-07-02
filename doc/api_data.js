@@ -110,7 +110,7 @@ define({ "api": [
     ]
   },
   {
-    "type": "get",
+    "type": "post",
     "url": "/v1/events/follow",
     "title": "followEvents",
     "version": "0.1.0",
@@ -176,6 +176,35 @@ define({ "api": [
     "sampleRequest": [
       {
         "url": "/api/v1/events/:id"
+      }
+    ]
+  },
+  {
+    "type": "get",
+    "url": "/v1/users/events/favorite",
+    "title": "getEventsByFavoriteCategories",
+    "version": "0.1.0",
+    "name": "getEventsByFavoriteCategories",
+    "group": "Events",
+    "description": "<p>Все события из категорий на которые подписан пользователь</p> ",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "string",
+            "optional": false,
+            "field": "token",
+            "description": "<p>User token</p> "
+          }
+        ]
+      }
+    },
+    "filename": "./app/Http/Controllers/EventsController.php",
+    "groupTitle": "Events",
+    "sampleRequest": [
+      {
+        "url": "/api/v1/users/events/favorite"
       }
     ]
   },
@@ -267,11 +296,53 @@ define({ "api": [
     ]
   },
   {
+    "type": "post",
+    "url": "/v1/events/unfollow",
+    "title": "unfollowEvents",
+    "version": "0.1.0",
+    "name": "unfollowEvents",
+    "group": "Events",
+    "description": "<p>НЕ иду на событие</p> ",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "string",
+            "optional": false,
+            "field": "token",
+            "description": "<p>User token</p> "
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>integer</p> ",
+            "optional": false,
+            "field": "event_id",
+            "description": ""
+          }
+        ]
+      }
+    },
+    "filename": "./app/Http/Controllers/EventsController.php",
+    "groupTitle": "Events",
+    "sampleRequest": [
+      {
+        "url": "/api/v1/events/unfollow"
+      }
+    ]
+  },
+  {
     "type": "put",
     "url": "/v1/events/:id",
-    "title": "storeEvents",
+    "title": "updateEvents",
     "version": "0.1.0",
-    "name": "storeEvents",
+    "name": "updateEvents",
     "group": "Events",
     "header": {
       "fields": {
@@ -353,48 +424,6 @@ define({ "api": [
     "sampleRequest": [
       {
         "url": "/api/v1/events/:id"
-      }
-    ]
-  },
-  {
-    "type": "get",
-    "url": "/v1/events/unfollow",
-    "title": "unfollowEvents",
-    "version": "0.1.0",
-    "name": "unfollowEvents",
-    "group": "Events",
-    "description": "<p>НЕ иду на событие</p> ",
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "string",
-            "optional": false,
-            "field": "token",
-            "description": "<p>User token</p> "
-          }
-        ]
-      }
-    },
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "<p>integer</p> ",
-            "optional": false,
-            "field": "event_id",
-            "description": ""
-          }
-        ]
-      }
-    },
-    "filename": "./app/Http/Controllers/EventsController.php",
-    "groupTitle": "Events",
-    "sampleRequest": [
-      {
-        "url": "/api/v1/events/unfollow"
       }
     ]
   },
@@ -544,35 +573,6 @@ define({ "api": [
     ]
   },
   {
-    "type": "get",
-    "url": "/v1/users/events/favorite",
-    "title": "getEventsByFavoriteCategories",
-    "version": "0.1.0",
-    "name": "getEventsByFavoriteCategories",
-    "group": "Users",
-    "description": "<p>Все события из категорий на которые подписан пользователь</p> ",
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "string",
-            "optional": false,
-            "field": "token",
-            "description": "<p>User token</p> "
-          }
-        ]
-      }
-    },
-    "filename": "./app/Http/Controllers/EventsController.php",
-    "groupTitle": "Users",
-    "sampleRequest": [
-      {
-        "url": "/api/v1/users/events/favorite"
-      }
-    ]
-  },
-  {
     "type": "post",
     "url": "/v1/users/:type",
     "title": "regUser",
@@ -602,6 +602,105 @@ define({ "api": [
             "type": "<p>string</p> ",
             "optional": false,
             "field": "password",
+            "description": ""
+          }
+        ]
+      }
+    },
+    "filename": "./app/Http/Controllers/UsersController.php",
+    "groupTitle": "Users",
+    "sampleRequest": [
+      {
+        "url": "/api/v1/users/:type"
+      }
+    ]
+  },
+  {
+    "type": "put",
+    "url": "/v1/users/:type",
+    "title": "updateUser",
+    "version": "0.1.0",
+    "name": "updateUser",
+    "group": "Users",
+    "description": "<p>При редактировании, если нужно какое-то определённое поле, в других должно быть false (bool)</p> ",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>string</p> ",
+            "optional": false,
+            "field": "name",
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>file</p> ",
+            "optional": false,
+            "field": "image",
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>string</p> ",
+            "optional": false,
+            "field": "email",
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>string</p> ",
+            "optional": false,
+            "field": "password",
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>string</p> ",
+            "optional": true,
+            "field": "phone_1",
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>string</p> ",
+            "optional": true,
+            "field": "phone_2",
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>string</p> ",
+            "optional": true,
+            "field": "phone_3",
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>string</p> ",
+            "optional": false,
+            "field": "location",
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>string</p> ",
+            "optional": false,
+            "field": "lon",
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>string</p> ",
+            "optional": false,
+            "field": "lat",
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>string</p> ",
+            "optional": false,
+            "field": "category_id",
             "description": ""
           }
         ]

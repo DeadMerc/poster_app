@@ -10,7 +10,17 @@
 | and give it the controller to call when that URI is requested.
 |
 */
+/*
+change log
+0.1.4
+- Пользователь теперь может быть забанен в Админ панели
 
+0.1.3
+- Баланс теперь в рабочем состоянии
+- У категорий появилась цена добавления эвента
+- Загрузка картинок
+- Добавлена Админ панель ( просмотр категорий и пользователей )
+*/
 
 Route::get('/',function(){
     return view('admin.index');
@@ -55,4 +65,21 @@ Route::group(['prefix' => 'api'], function () {
 
     });
 
+});
+
+Route::post('/images/upload','Controller@uploadFile');
+
+Route::get('images/{filename}', function ($filename) {
+    $path = storage_path() . '/app/public/images/' . $filename;
+    if(file_exists($path)) {
+        $file = File::get($path);
+        $type = File::mimeType($path);
+        $response = Response::make($file, 200);
+        $response->header("Content-Type", $type);
+    }else{
+        $response = array('error'=>true,'message'=>'not found image');
+    }
+
+
+    return $response;
 });

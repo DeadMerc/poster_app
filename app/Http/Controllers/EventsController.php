@@ -53,7 +53,7 @@ class EventsController extends Controller
     }
 
     /**
-     * @api {get} /v1/events/follow followEvents
+     * @api {post} /v1/events/follow followEvents
      * @apiVersion 0.1.0
      * @apiName followEvents
      * @apiGroup Events
@@ -77,7 +77,7 @@ class EventsController extends Controller
     }
 
     /**
-     * @api {get} /v1/events/unfollow unfollowEvents
+     * @api {post} /v1/events/unfollow unfollowEvents
      * @apiVersion 0.1.0
      * @apiName unfollowEvents
      * @apiGroup Events
@@ -176,9 +176,9 @@ class EventsController extends Controller
     }
 
     /**
-     * @api {put} /v1/events/:id storeEvents
+     * @api {put} /v1/events/:id updateEvents
      * @apiVersion 0.1.0
-     * @apiName storeEvents
+     * @apiName updateEvents
      * @apiGroup Events
      *
      * @apiHeader {string} token User token

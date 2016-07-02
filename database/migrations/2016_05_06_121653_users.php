@@ -27,6 +27,10 @@ class Users extends Migration
             $table->string('social_hash')->nullable();
             $table->string('imei');
             $table->string('image');
+            $table->string('phone_1');
+            $table->string('phone_2');
+            $table->string('phone_3');
+            $table->boolean('banned');
             $table->string('email')->nullable();
             $table->string('password')->nullable();
             $table->integer('balance')->default(0);
