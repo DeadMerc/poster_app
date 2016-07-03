@@ -77,19 +77,34 @@ adminApp.config(['cfpLoadingBarProvider', function (cfpLoadingBarProvider) {
 adminApp.config(['$routeProvider',
     function ($routeProvider) {
         console.log("Route Init");
-        $routeProvider.when('/categories', {
+        $routeProvider
+
+            .when('/categories', {
             templateUrl: 'app/categories.html',
             controller: 'CategoriesCtrl'
-        }).when('/category/:id?', {
+        })
+            .when('/category/:id?', {
             templateUrl: 'app/category.html',
             controller: 'CategoryCtrl'
-        }).when('/users', {
+        })
+            .when('/users', {
             templateUrl: 'app/users.html',
             controller: 'UsersCtrl'
-        }).when('/user/:id?', {
+        })
+            .when('/user/:id?', {
             templateUrl: 'app/user.html',
             controller: 'UserCtrl'
-        }).otherwise({
+        })
+            .when('/events', {
+                templateUrl: 'app/events.html',
+                controller: 'EventsCtrl'
+            })
+            .when('/event/:id?', {
+                templateUrl: 'app/event.html',
+                controller: 'EventCtrl'
+            })
+
+            .otherwise({
             redirectTo: '/'
         });
     }]);

@@ -12,6 +12,8 @@
 */
 /*
 change log
+0.1.5
+- Events 
 0.1.4
 - Пользователь теперь может быть забанен в Админ панели
 
@@ -45,11 +47,11 @@ Route::group(['prefix' => 'api'], function () {
         Route::post('users/auth/{type}', 'UsersController@auth');
 
         Route::resource('categories', 'CategoriesController');
-        Route::resource('events', 'EventsController');
+        Route::resource('events', 'EventsController',['except' => ['update']]);
 
         Route::group(['middleware' => [\App\Http\Middleware\AuthByToken::class]], function () {
             Route::post('events', 'EventsController@store_save');
-            Route::put('events', 'EventsController@update_save');
+            Route::put('events/{id}', 'EventsController@update_save');
 
             Route::post('events/follow', 'EventsController@follow');
             Route::get('users/events/favorite', 'EventsController@showFavorite');

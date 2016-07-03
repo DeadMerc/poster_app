@@ -61,6 +61,9 @@
             <li>
                 <a href="#/users">Users</a><a class="sub-menu" href="#/user"><i class="material-icons correct_icon">add_box</i></a>
             </li>
+            <li>
+                <a href="#/events">Events</a><a class="sub-menu" href="#/event"><i class="material-icons correct_icon">add_box</i></a>
+            </li>
         </ul>
     </div>
     <!-- /#sidebar-wrapper -->

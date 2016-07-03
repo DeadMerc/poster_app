@@ -130,7 +130,8 @@ class EventsController extends Controller
         if($request->user->balance > $category->post_price){
             $request->user->balance = $request->user->balance - $category->post_price;
             $event = $this->fromPostToModel($rules, new Event, $request,true);
-            if($event == true){
+            //var_dump($event);
+            if($event === true){
                 $request->user->save();
                 return $this->helpInfo();
             }else{
@@ -172,7 +173,7 @@ class EventsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($id) {
-        //
+        return $this->getSchemaByModel(Event::first());
     }
 
     /**

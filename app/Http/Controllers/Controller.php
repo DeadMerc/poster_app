@@ -67,7 +67,7 @@ class Controller extends BaseController
             return $this->helpInfo();
         } else {
             if ($bool) {
-                return $valid->errors()->all();
+                return $valid;
             }
             return $this->helpError('valid', $valid);
         }
@@ -76,7 +76,7 @@ class Controller extends BaseController
     public function getSchemaByModel($model) {
         $attributes = $model->getAttributes();
         $keys = [];
-        $protected = ['social_hash', 'token', 'created_at', 'updated_at', 'type', 'id', 'banned', 'imei'];
+        $protected = ['social_hash', 'token', 'created_at', 'updated_at', 'id', 'banned', 'imei'];
         foreach ($attributes as $key => $value) {
             if (!in_array($key, $protected)) {
                 $keys[] = array('type' => $this->getTypeInputByKey($key), 'key' => $key);

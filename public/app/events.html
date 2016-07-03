@@ -1,0 +1,33 @@
+<div ng-init="init()">
+    <table  class="table table-striped">
+        <thead>
+        <tr>
+            <td>ID</td>
+            <td>Type</td>
+            <td>Title</td>
+            <td>DateTime</td>
+            <td>Price</td>
+            <td>Follow Count</td>
+            <td>Actions</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="data in users">
+            <td><% data.id %></td>
+            <td><% data.type || 'Not defined' %></td>
+            <td><% data.title || 'Not defined' %></td>
+            <td><% data.date || 'Date not defined' %> <% data.time || 'Time not defined' %></td>
+            <td><% data.price || 'Not defined' %></td>
+            <td><% data.follow_count || 'Not defined' %></td>
+            <td>
+                <md-button ng-click="edit(data.id)" class="md-raised md-primary">
+                    Edit
+                </md-button>
+                <md-button ng-click="delete(data.id)" class="md-raised md-warn">
+                    Delete
+                </md-button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
