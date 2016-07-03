@@ -131,7 +131,7 @@ class UsersController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($id) {
-        return $this->getSchemaByModel(User::first());
+        return $this->getSchemaByModel(User::first(),['type']);
     }
 
     /**

@@ -34,7 +34,7 @@ class Controller extends BaseController
                             $fileName = md5(rand(9999, 99999) . date('d m Y') . rand(9999, 99999)) . '.jpg';
                             $request->file('image')->move(storage_path() . '/app/public/images', $fileName);
                             $model->image = $fileName;
-                        }elseif($request->image){
+                        } elseif ($request->image) {
                             $model->image = $request->image;
                         } else {
                             $model->image = null;
@@ -73,13 +73,20 @@ class Controller extends BaseController
         }
     }
 
-    public function getSchemaByModel($model) {
+    public function getSchemaByModel($model, $moreProtected = false) {
         $attributes = $model->getAttributes();
         $keys = [];
         $protected = ['social_hash', 'token', 'created_at', 'updated_at', 'id', 'banned', 'imei'];
         foreach ($attributes as $key => $value) {
             if (!in_array($key, $protected)) {
-                $keys[] = array('type' => $this->getTypeInputByKey($key), 'key' => $key);
+                //защита специфических полей
+                if (is_array($moreProtected)) {
+                    if (!in_array($key, $moreProtected)) {
+                        $keys[] = array('type' => $this->getTypeInputByKey($key), 'key' => $key);
+                    }
+                } else {
+                    $keys[] = array('type' => $this->getTypeInputByKey($key), 'key' => $key);
+                }
             }
         }
         return $this->helpReturn($keys);
