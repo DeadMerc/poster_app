@@ -55,10 +55,18 @@ class CategoriesController extends Controller
         $valid = Validator($request->all(),['category_ids'=>'required']);
         if(!$valid->fails()){
             foreach ($request->category_ids as $id){
-                $favorite = new Category_favorite;
-                $favorite->category_id = $id;
-                $favorite->user_id = $request->user->id;
-                $favorite->save();
+                if(!Category_favorite::where('category_id','=',$id)->where('user_id','=',$request->user->id)->first()){
+                    $favorite = new Category_favorite;
+                    if(Category_favorite::find($id)){
+                        $favorite->category_id = $id;
+                        $favorite->user_id = $request->user->id;
+                        $favorite->save();
+                    }else{
+                        return $this->helpError('Category not found');
+                    }
+                }else{
+                    return $this->helpInfo('duplicate');
+                }
             }
             return $this->helpInfo();
         }else{
