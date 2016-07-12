@@ -45,10 +45,10 @@ Route::group(['prefix' => 'api'], function () {
     });
 
     Route::group(['prefix' => 'v1'], function () {
-        Route::resource('users', 'UsersController');
+        Route::resource('users', 'UsersController',['expect'=>['update','show']]);
         Route::post('users/auth/{type}', 'UsersController@auth');
 
-        Route::resource('categories', 'CategoriesController');
+        Route::resource('categories', 'CategoriesController',['except'=>['show']]);
         Route::resource('events', 'EventsController',['except' => ['update']]);
 
         Route::group(['middleware' => [\App\Http\Middleware\AuthByToken::class]], function () {
@@ -61,9 +61,12 @@ Route::group(['prefix' => 'api'], function () {
 
             Route::post('categories/favorite', 'CategoriesController@favorite');
             Route::post('categories/unfavorite', 'CategoriesController@unfavorite');
+            Route::get('categories/favorites','CategoriesController@favorites');
 
-            Route::get('/users/ban/{id}','UsersController@ban');
-            Route::get('/users/unban/{id}','UsersController@unban');
+            Route::get('users/ban/{id}','UsersController@ban');
+            Route::get('users/unban/{id}','UsersController@unban');
+            Route::put('users/{id}', 'EventsController@update');
+
         });
 
 

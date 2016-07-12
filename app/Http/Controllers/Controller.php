@@ -41,7 +41,9 @@ class Controller extends BaseController
                         }
                     }
                 } else {
-                    $model->$key = $request->$key;
+                    if($model->$key != $request->$key OR ($model->$key != false AND $model->$key != "false")){
+                        $model->$key = $request->$key;
+                    }
                 }
 
             }

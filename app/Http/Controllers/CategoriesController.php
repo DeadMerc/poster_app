@@ -27,15 +27,27 @@ class CategoriesController extends Controller
     public function show($id) {
         return $this->helpReturn(Category::findorfail($id));
     }
-
     /**
-     * @api {get} /v1/categories/favorite favoriteCategories
+     * @api {get} /v1/categories/favorites getFavoriteCategories
+     * @apiVersion 0.1.0
+     * @apiName getFavoriteCategories
+     * @apiGroup Categories
+     *
+     * @apiHeader {string} token User token
+     *
+     *
+     */
+    public function favorites(Request $request){
+        return $this->helpReturn($request->user->favorites);
+    }
+    /**
+     * @api {post} /v1/categories/favorite favoriteCategories
      * @apiVersion 0.1.0
      * @apiName favoriteCategories
      * @apiGroup Categories
      *
      * @apiHeader {string} token User token
-     * @apiParam {array} category_ids example=['1','2']
+     * @apiParam {array} category_ids example in json=['1','2']
      *
      *
      */

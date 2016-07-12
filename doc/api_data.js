@@ -1,6 +1,6 @@
 define({ "api": [
   {
-    "type": "get",
+    "type": "post",
     "url": "/v1/categories/favorite",
     "title": "favoriteCategories",
     "version": "0.1.0",
@@ -27,7 +27,7 @@ define({ "api": [
             "type": "<p>array</p> ",
             "optional": false,
             "field": "category_ids",
-            "description": "<p>example=['1','2']</p> "
+            "description": "<p>example in json=['1','2']</p> "
           }
         ]
       }
@@ -65,6 +65,34 @@ define({ "api": [
     "sampleRequest": [
       {
         "url": "/api/v1/categories"
+      }
+    ]
+  },
+  {
+    "type": "get",
+    "url": "/v1/categories/favorites",
+    "title": "getFavoriteCategories",
+    "version": "0.1.0",
+    "name": "getFavoriteCategories",
+    "group": "Categories",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "string",
+            "optional": false,
+            "field": "token",
+            "description": "<p>User token</p> "
+          }
+        ]
+      }
+    },
+    "filename": "./app/Http/Controllers/CategoriesController.php",
+    "groupTitle": "Categories",
+    "sampleRequest": [
+      {
+        "url": "/api/v1/categories/favorites"
       }
     ]
   },
@@ -469,13 +497,6 @@ define({ "api": [
             "group": "Parameter",
             "type": "<p>string</p> ",
             "optional": false,
-            "field": "name",
-            "description": ""
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>string</p> ",
-            "optional": false,
             "field": "email",
             "description": ""
           },
@@ -574,7 +595,7 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/v1/users/:type",
+    "url": "/v1/users",
     "title": "regUser",
     "version": "0.1.0",
     "name": "regUser",
@@ -611,17 +632,30 @@ define({ "api": [
     "groupTitle": "Users",
     "sampleRequest": [
       {
-        "url": "/api/v1/users/:type"
+        "url": "/api/v1/users"
       }
     ]
   },
   {
     "type": "put",
-    "url": "/v1/users/:type",
+    "url": "/v1/users",
     "title": "updateUser",
     "version": "0.1.0",
     "name": "updateUser",
     "group": "Users",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "string",
+            "optional": false,
+            "field": "token",
+            "description": "<p>User token</p> "
+          }
+        ]
+      }
+    },
     "description": "<p>При редактировании, если нужно какое-то определённое поле, в других должно быть false (bool)</p> ",
     "parameter": {
       "fields": {
@@ -710,7 +744,7 @@ define({ "api": [
     "groupTitle": "Users",
     "sampleRequest": [
       {
-        "url": "/api/v1/users/:type"
+        "url": "/api/v1/users"
       }
     ]
   }

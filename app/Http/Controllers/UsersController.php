@@ -22,6 +22,8 @@ class UsersController extends Controller
     public function show($id) {
         return $this->helpReturn(User::with('events')->with('favorites')->findorfail($id));
     }
+
+
     /**
      * @api {post} /v1/users/auth/email AuthByEmail
      * @apiVersion 0.1.0
@@ -96,7 +98,7 @@ class UsersController extends Controller
     }
 
     /**
-     * @api {post} /v1/users/:type regUser
+     * @api {post} /v1/users regUser
      * @apiVersion 0.1.0
      * @apiName regUser
      * @apiGroup Users
@@ -135,11 +137,12 @@ class UsersController extends Controller
     }
 
     /**
-     * @api {put} /v1/users/:type updateUser
+     * @api {put} /v1/users updateUser
      * @apiVersion 0.1.0
      * @apiName updateUser
      * @apiGroup Users
      *
+     * @apiHeader {string} token User token
      * @apiDescription При редактировании, если нужно какое-то определённое поле, в других должно быть false (bool)
      * @apiParam {string} name
      * @apiParam {file} image

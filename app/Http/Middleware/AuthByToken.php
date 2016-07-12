@@ -25,7 +25,7 @@ class AuthByToken
                 $user = User::where('banned', '=',0)->first();
             } else {
                 //echo 'find token';
-                $user = User::where('token', '=', $request->header('token'))->first();
+                $user = User::where('token', '=', $request->header('token'))->with('favorites')->first();
                 //print_r($user);
                 if ($user->banned == 1) {
                     return redirect('/api/ban');
