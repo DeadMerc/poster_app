@@ -311,6 +311,13 @@
             "optional": false,
             "field": "price",
             "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>array</p> ",
+            "optional": false,
+            "field": "images",
+            "description": ""
           }
         ]
       }
@@ -366,7 +373,7 @@
     ]
   },
   {
-    "type": "put",
+    "type": "post",
     "url": "/v1/events/:id",
     "title": "updateEvents",
     "version": "0.1.0",
@@ -637,8 +644,8 @@
     ]
   },
   {
-    "type": "put",
-    "url": "/v1/users",
+    "type": "post",
+    "url": "/v1/users/:id",
     "title": "updateUser",
     "version": "0.1.0",
     "name": "updateUser",
@@ -744,7 +751,7 @@
     "groupTitle": "Users",
     "sampleRequest": [
       {
-        "url": "/api/v1/users"
+        "url": "/api/v1/users/:id"
       }
     ]
   }

@@ -254,7 +254,7 @@ var adminControllers = angular.module('adminControllers', [])
             } else {
                 $http.get('/api/v1/'+$scope.params.url+'/' + $scope.id).then(function (res) {
                     $scope.data = res.data.response;
-                    console.log($scope.data);
+                    //console.log($scope.data);
                 });
             }
             console.log($scope.params.name+' Ctrl try edit id ' + $scope.id);
@@ -289,6 +289,7 @@ var adminControllers = angular.module('adminControllers', [])
             if ($scope.id !== 'new') {
                 //console.log($scope.data);
                 //$rootScope.transform(
+                console.log($scope.data); 
                 $http.put('/api/v1/'+$scope.params.url+'/' + $scope.id, $rootScope.transform($scope.data), $rootScope.config)
                     .then(function (res) {
                         if (res.data.error == false) {

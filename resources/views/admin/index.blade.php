@@ -64,6 +64,9 @@
             <li>
                 <a href="#/events">Events</a><a class="sub-menu" href="#/event"><i class="material-icons correct_icon">add_box</i></a>
             </li>
+            <li>
+                <a href="#/push">Push</a><a class="sub-menu" href="#/push/history"><i class="material-icons correct_icon">history</i></a>
+            </li>
         </ul>
     </div>
     <!-- /#sidebar-wrapper -->

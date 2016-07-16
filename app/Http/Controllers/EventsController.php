@@ -122,10 +122,10 @@ class EventsController extends Controller
      * @apiParam {string} time
      * @apiParam {string='private','public'} type
      * @apiParam {string} price
-     *
+     * @apiParam {array} images 
      */
     public function store_save(Request $request) {
-        $rules = ['category_id' => 'required', 'title' => 'required', 'description' => 'required', 'date' => 'required', 'time' => 'required', 'type' => 'required', 'price' => 'required'];
+        $rules = ['category_id' => 'required', 'title' => 'required', 'description' => 'required', 'date' => 'required', 'time' => 'required', 'type' => 'required', 'price' => 'required','images'=>false];
         $category = Category::findorfail($request->category_id);
         if($request->user->balance > $category->post_price){
             $request->user->balance = $request->user->balance - $category->post_price;
@@ -177,7 +177,7 @@ class EventsController extends Controller
     }
 
     /**
-     * @api {put} /v1/events/:id updateEvents
+     * @api {post} /v1/events/:id updateEvents
      * @apiVersion 0.1.0
      * @apiName updateEvents
      * @apiGroup Events

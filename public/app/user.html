@@ -2,18 +2,22 @@
     <div ng-repeat="input in schema">
 
         <div ng-if="input.type == 'file'">
+            <label><a target="_blank" href="/images/<% data[input.key] || 'Not defined' %>"><% data[input.key] || 'Not defined' %></a></label><br>
+            <div ng-if="data[input.key]">
+                <img width="300px" height="100px" ng-src="/images/<% data[input.key] %>">
+            </div>
             <div class="md-button md-raised md-primary" ngf-select="upload($file)" ng-model="file" ngf-multiple="false">
                 Select Image
             </div>
-            <div ng-if="uploadedFile">
+            <!--<div ng-if="uploadedFile">
                 <img width="300px" height="100px" ng-src="/images/<% uploadedFile %>">
-            </div>
+            </div>-->
         </div>
 
         <div ng-if="input.type == 'text'">
             <md-input-container class="md-block">
                 <label><% input.key %></label>
-                <input type="text" required name="input.key" ng-model="data[input.key]">
+                <input type="text"  name="input.key" ng-model="data[input.key]">
                 <div ng-messages="user.key.$error">
                     <div ng-message="required">This is required.</div>
                 </div>

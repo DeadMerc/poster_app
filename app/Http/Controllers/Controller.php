@@ -9,6 +9,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesResources;
 use Illuminate\Validation\Validator;
 use Illuminate\Http\Request;
+use App\Photo;
 use App\Http\Requests;
 
 class Controller extends BaseController
@@ -42,6 +43,9 @@ class Controller extends BaseController
                     }
                 } else {
                     if($model->$key != $request->$key OR ($model->$key != false AND $model->$key != "false")){
+                        if($key == 'password' AND $model->$key !== $request->$key){
+                            $request->$key = md5($request->$key . 'requestLoginEvstolia');
+                        }
                         $model->$key = $request->$key;
                     }
                 }

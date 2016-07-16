@@ -53,7 +53,7 @@ Route::group(['prefix' => 'api'], function () {
 
         Route::group(['middleware' => [\App\Http\Middleware\AuthByToken::class]], function () {
             Route::post('events', 'EventsController@store_save');
-            Route::put('events/{id}', 'EventsController@update_save');
+            Route::post('events/{id}', 'EventsController@update_save');
 
             Route::post('events/follow', 'EventsController@follow');
             Route::get('users/events/favorite', 'EventsController@showFavorite');
@@ -65,7 +65,7 @@ Route::group(['prefix' => 'api'], function () {
 
             Route::get('users/ban/{id}','UsersController@ban');
             Route::get('users/unban/{id}','UsersController@unban');
-            Route::put('users/{id}', 'EventsController@update');
+            Route::post('users/{id}', 'UsersController@update');
 
         });
 

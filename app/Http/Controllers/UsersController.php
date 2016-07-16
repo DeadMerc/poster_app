@@ -57,7 +57,7 @@ class UsersController extends Controller
     public function auth(Request $request, $type = 'email') {
         if ($type == 'email') {
             $data['email'] = $request->email;
-            $data['password'] = md5($request->password . $request->email . 'requestLoginEvstolia');
+            $data['password'] = md5($request->password . 'requestLoginEvstolia');
             $user = User::where('email', '=', $data['email'])->where('password', '=', $data['password'])->first();
             if ($user) {
                 return $this->helpReturn($user);
@@ -116,7 +116,7 @@ class UsersController extends Controller
             $user = new User;
             $user->name = $request->name;
             $user->email = $request->email;
-            $user->password = md5($request->password . $request->email . 'requestLoginEvstolia');
+            $user->password = md5($request->password . 'requestLoginEvstolia');
             $user->token = md5(uniqid() . md5(date("h:m")));
             $user->type = 'email';
             $user->save();
@@ -137,7 +137,7 @@ class UsersController extends Controller
     }
 
     /**
-     * @api {put} /v1/users updateUser
+     * @api {post} /v1/users/:id updateUser
      * @apiVersion 0.1.0
      * @apiName updateUser
      * @apiGroup Users
@@ -155,12 +155,14 @@ class UsersController extends Controller
      * @apiParam {string} lon
      * @apiParam {string} lat
      * @apiParam {string} category_id
+     * @apiParam {string} place_id
      * @apiParam {string} email
      * @apiParam {string} password
      *
      */
     public function update(Request $request, $id) {
-        $rules = ['balance'=>false,'image'=>'image','phone_1'=>false,'phone_2'=>false,'phone_3'=>false,'name' => 'required|min:3', 'location' => 'required|min:3', 'lon' => 'required', 'lat' => 'required', 'category_id' => 'required',  'email' => 'required', 'password' => 'required'];
+        //return var_dump($request->all());
+        $rules = ['balance'=>false,'image'=>false,'description'=>false,'phone_1'=>false,'phone_2'=>false,'phone_3'=>false,'name' => 'required|min:3', 'location' => false, 'lon' => false, 'lat' => false, 'category_id' => false,  'email' => false, 'password' => false,'place_id'=>false];
         $user = User::findorfail($id);
         return $this->fromPostToModel($rules, $user, $request);
     }
