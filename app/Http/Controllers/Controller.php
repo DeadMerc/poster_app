@@ -70,7 +70,7 @@ class Controller extends BaseController
             if ($bool) {
                 return true;
             }
-            return $this->helpInfo();
+            return $this->helpReturn($model);
         } else {
             if ($bool) {
                 return $valid;

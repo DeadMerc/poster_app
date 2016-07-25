@@ -743,6 +743,20 @@
             "optional": false,
             "field": "category_id",
             "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>string</p> ",
+            "optional": false,
+            "field": "place_id",
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>string</p> ",
+            "optional": false,
+            "field": "description",
+            "description": ""
           }
         ]
       }
