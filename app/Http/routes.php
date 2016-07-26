@@ -58,6 +58,8 @@ Route::group(['prefix' => 'api'], function () {
             Route::post('events/follow', 'EventsController@follow');
             Route::get('users/events/favorite', 'EventsController@showFavorite');
             Route::post('events/unfollow', 'EventsController@unfollow');
+            Route::get('events/publish/{id}','EventsController@publish');
+            Route::get('events/unpublish/{id}','EventsController@unpublish');
 
             Route::post('categories/favorite', 'CategoriesController@favorite');
             Route::post('categories/unfavorite', 'CategoriesController@unfavorite');

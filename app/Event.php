@@ -15,6 +15,9 @@ class Event extends Model
     public function follows(){
         return $this->hasMany('App\Event_follow');
     }
+    public function user(){
+        return $this->hasOne('App\User','id','user_id');
+    }
 
     public function getFollowCountAttribute() {
         $events = $this->follows();

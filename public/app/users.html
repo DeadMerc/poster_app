@@ -1,17 +1,47 @@
 <div ng-init="init()">
-    <table  class="table table-striped">
+    <form>
+        <div class="form-group">
+            <div class="input-group">
+                <div class="input-group-addon"><i class="fa fa-search"></i></div>
+                <input type="text" class="form-control" placeholder="Search in params" ng-model="search">
+            </div>
+        </div>
+    </form>
+    <table ng-table="tableParams" class="table table-striped" show-filter="true">
         <thead>
         <tr>
-            <td>ID</td>
-            <td>Name</td>
-            <td>email</td>
+            <td>
+                <a ng-click="sortType = 'id'; sortReverse = !sortReverse">
+                    ID
+                    <span ng-show="sortType == 'id' && !sortReverse" class="fa fa-caret-down"></span>
+                    <span ng-show="sortType == 'id' && sortReverse" class="fa fa-caret-up"></span>
+                </a>
+            </td>
+            <td>
+                <a ng-click="sortType = 'name'; sortReverse = !sortReverse">
+                    Name
+                    <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down"></span>
+                    <span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up"></span>
+                </a>
+            </td>
+            <td><a ng-click="sortType = 'email'; sortReverse = !sortReverse">
+                Email
+                <span ng-show="sortType == 'email' && !sortReverse" class="fa fa-caret-down"></span>
+                <span ng-show="sortType == 'email' && sortReverse" class="fa fa-caret-up"></span>
+            </a></td>
             <td>Phone</td>
-            <td>Balance</td>
+            <td>
+                <a ng-click="sortType = 'balance'; sortReverse = !sortReverse">
+                    Balance
+                    <span ng-show="sortType == 'balance' && !sortReverse" class="fa fa-caret-down"></span>
+                    <span ng-show="sortType == 'balance' && sortReverse" class="fa fa-caret-up"></span>
+                </a>
+            </td>
             <td>Actions</td>
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="user in users">
+        <tr ng-repeat="user in users | orderBy:sortType:sortReverse | filter:search">
             <td><% user.id %></td>
             <td><% user.name || 'Not defined' %></td>
             <td><% user.email || 'Not defined' %></td>
@@ -22,6 +52,9 @@
             </td>
             <td><% user.balance || 'Not defined' %></td>
             <td>
+                <md-button ng-click="events(user.email)" class="md-raised md-primary">
+                    Events
+                </md-button>
                 <md-button ng-click="edit(user.id)" class="md-raised md-primary">
                     Edit
                 </md-button>

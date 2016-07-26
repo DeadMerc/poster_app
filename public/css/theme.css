@@ -88,6 +88,9 @@
 li{
     display: flex;
 }
+a{
+    cursor: pointer;
+}
 .sub-menu{
     margin-left: 37%;
 }

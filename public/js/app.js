@@ -6,7 +6,8 @@ var adminApp = angular.module('adminApp', [
     'toastr',
     'angular-loading-bar',
     'ngAnimate',
-    'ngFileUpload'
+    'ngFileUpload',
+    'ui.grid'
 ], function ($interpolateProvider) {
     $interpolateProvider.startSymbol('<%');
     $interpolateProvider.endSymbol('%>');
@@ -72,6 +73,7 @@ adminApp.run(function ($rootScope, toastr) {
     };
 });
 adminApp.config(['cfpLoadingBarProvider', function (cfpLoadingBarProvider) {
+    console.log("Spinner init");
     cfpLoadingBarProvider.includeSpinner = false;
 }])
 adminApp.config(['$routeProvider',

@@ -10,6 +10,13 @@
             </div>
         </div>
 
+        <div ng-if="input.type == 'checkbox'">
+            <md-input-container class="md-block">
+                <label><% input.key %></label>
+                <input type="checkbox" ng-model="data[input.key]" ng-true-value="1" ng-false-value="0">
+            </md-input-container>
+        </div>
+
         <div ng-if="input.type == 'text'">
             <md-input-container class="md-block">
                 <label><% input.key %></label>

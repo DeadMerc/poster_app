@@ -23,7 +23,7 @@ class EventsController extends Controller
      *
      */
     public function index() {
-        return $this->helpReturn(Event::with('photos')->get());
+        return $this->helpReturn(Event::with('photos')->with('user')->get());
     }
 
     public function show($id) {
@@ -73,6 +73,26 @@ class EventsController extends Controller
             return $this->helpInfo();
         } else {
             return $this->helpError('valid', $valid);
+        }
+    }
+    public function publish(Request $request,$id){
+        $event = Event::findorfail($id);
+        if($event){
+            $event->publish = 1;
+            $event->save();
+            $this->helpInfo();
+        }else{
+            return $this->helpError('Event not found');
+        }
+    }
+    public function unpublish(Request $request,$id){
+        $event = Event::findorfail($id);
+        if($event){
+            $event->publish = 0;
+            $event->save();
+            $this->helpInfo();
+        }else{
+            return $this->helpError('Event not found');
         }
     }
 
@@ -207,6 +227,7 @@ class EventsController extends Controller
             $event->time = $request->time;
             $event->type = $request->type;
             $event->price = $request->price;
+            $event->publish = $request->publish;
             if ($request->hasFile('image')) {
                 $fileName = md5(rand(999, 9999) . date('d m Y')) . '.jpg';
                 $request->file('image')->move(storage_path() . '/app/public/', $fileName);

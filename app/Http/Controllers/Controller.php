@@ -108,6 +108,12 @@ class Controller extends BaseController
         if ($key == 'balance') {
             //return 'number';
         }
+        if($key == 'date'){
+            //return 'date';
+        }
+        if($key == 'publish'){
+            return 'checkbox';
+        }
         return 'text';
     }
 

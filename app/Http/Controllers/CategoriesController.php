@@ -27,6 +27,7 @@ class CategoriesController extends Controller
     public function show($id) {
         return $this->helpReturn(Category::findorfail($id));
     }
+
     /**
      * @api {get} /v1/categories/favorites getFavoriteCategories
      * @apiVersion 0.1.0
@@ -37,9 +38,10 @@ class CategoriesController extends Controller
      *
      *
      */
-    public function favorites(Request $request){
+    public function favorites(Request $request) {
         return $this->helpReturn($request->user->favorites);
     }
+
     /**
      * @api {post} /v1/categories/favorite favoriteCategories
      * @apiVersion 0.1.0
@@ -51,28 +53,36 @@ class CategoriesController extends Controller
      *
      *
      */
-    public function favorite(Request $request){
-        $valid = Validator($request->all(),['category_ids'=>'required']);
-        if(!$valid->fails()){
-            foreach ($request->category_ids as $id){
-                if(!Category_favorite::where('category_id','=',$id)->where('user_id','=',$request->user->id)->first()){
-                    $favorite = new Category_favorite;
-                    if(Category_favorite::find($id)){
-                        $favorite->category_id = $id;
-                        $favorite->user_id = $request->user->id;
-                        $favorite->save();
-                    }else{
-                        return $this->helpError('Category not found');
+    public function favorite(Request $request) {
+        $valid = Validator($request->all(), ['category_ids' => 'required']);
+        if (!$valid->fails()) {
+            $request->category_ids = json_decode($request->category_ids);
+            if (is_array($request->category_ids)) {
+                foreach ($request->category_ids as $id) {
+                    //echo $id.'=';
+                    if (!Category_favorite::where('category_id', '=', $id)->where('user_id', '=', $request->user->id)->first()) {
+                        $favorite = new Category_favorite;
+                        if (Category_favorite::find($id)) {
+                            $favorite->category_id = $id;
+                            $favorite->user_id = $request->user->id;
+                            $favorite->save();
+                        } else {
+                            return $this->helpError('Category with id '.$id.' not found ');
+                        }
+                    } else {
+                        return $this->helpInfo('duplicate id '.$id);
                     }
-                }else{
-                    return $this->helpInfo('duplicate');
                 }
+            }else{
+                return $this->helpError('Category_ids param is bad json format');
             }
+
             return $this->helpInfo();
-        }else{
-            return $this->helpError('valid',$valid);
+        } else {
+            return $this->helpError('valid', $valid);
         }
     }
+
     /**
      * @api {get} /v1/categories/unfavorite unfavoriteCategories
      * @apiVersion 0.1.0
@@ -84,16 +94,17 @@ class CategoriesController extends Controller
      *
      *
      */
-    public function unfavorite(Request $request){
-        $valid = Validator($request->all(),['category_id'=>'required']);
-        if(!$valid->fails()){
+    public function unfavorite(Request $request) {
+        $valid = Validator($request->all(), ['category_id' => 'required']);
+        if (!$valid->fails()) {
             $favorite = Category_favorite::findorfail($request->categofy_id);
             $favorite->delete();
             return $this->helpInfo();
-        }else{
-            return $this->helpError('valid',$valid);
+        } else {
+            return $this->helpError('valid', $valid);
         }
     }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -103,11 +114,9 @@ class CategoriesController extends Controller
         //
     }
 
-    
+
     public function store(Request $request) {
-        $rules = ['name_RU'=>'required','name_EN'=>'required',
-            'name_UA'=>'required','post_price'=>'required','image'=>'required'
-        ,'description'=>'required'];
+        $rules = ['name_RU' => 'required', 'name_EN' => 'required', 'name_UA' => 'required', 'post_price' => 'required', 'image' => 'required', 'description' => 'required'];
         return $this->fromPostToModel($rules, new Category, $request);
     }
 
@@ -130,8 +139,7 @@ class CategoriesController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id) {
-        $rules = ['name_RU'=>'required','name_EN'=>'required',
-            'name_UA'=>'required','post_price'=>'required','description'=>'required'];
+        $rules = ['name_RU' => 'required', 'name_EN' => 'required', 'name_UA' => 'required', 'post_price' => 'required', 'description' => 'required'];
         return $this->fromPostToModel($rules, Category::findorfail($id), $request);
         /*
         $valid = Validator($request->all(),$rules);

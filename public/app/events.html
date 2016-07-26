@@ -1,8 +1,17 @@
 <div ng-init="init()">
+    <form>
+        <div class="form-group">
+            <div class="input-group">
+                <div class="input-group-addon"><i class="fa fa-search"></i></div>
+                <input type="text" class="form-control" placeholder="Search in params" ng-model="search">
+            </div>
+        </div>
+    </form>
     <table  class="table table-striped">
         <thead>
         <tr>
             <td>ID</td>
+            <td>Author</td>
             <td>Type</td>
             <td>Title</td>
             <td>DateTime</td>
@@ -12,14 +21,21 @@
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="data in users">
+        <tr ng-repeat="data in users | filter:search">
             <td><% data.id %></td>
+            <td><% data.user.email || 'Not defined' %></td>
             <td><% data.type || 'Not defined' %></td>
             <td><% data.title || 'Not defined' %></td>
             <td><% data.date || 'Date not defined' %> <% data.time || 'Time not defined' %></td>
             <td><% data.price || 'Not defined' %></td>
             <td><% data.follow_count || 'Not defined' %></td>
             <td>
+                <md-button ng-if="data.publish !== 1" ng-click="publish(data)" class="md-raised md-primary">
+                    Publish
+                </md-button>
+                <md-button ng-if="data.publish == 1" ng-click="unpublish(data)" class="md-raised md-warn">
+                    UnPublish
+                </md-button>
                 <md-button ng-click="edit(data.id)" class="md-raised md-primary">
                     Edit
                 </md-button>
