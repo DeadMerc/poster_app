@@ -58,22 +58,19 @@ class CategoriesController extends Controller
         if (!$valid->fails()) {
             $request->category_ids = json_decode($request->category_ids);
             if (is_array($request->category_ids)) {
+                Category_favorite::where('user_id', '=', $request->user->id)->delete();
                 foreach ($request->category_ids as $id) {
                     //echo $id.'=';
                     if (!Category_favorite::where('category_id', '=', $id)->where('user_id', '=', $request->user->id)->first()) {
                         $favorite = new Category_favorite;
-                        if (Category_favorite::find($id)) {
-                            $favorite->category_id = $id;
-                            $favorite->user_id = $request->user->id;
-                            $favorite->save();
-                        } else {
-                            return $this->helpError('Category with id '.$id.' not found ');
-                        }
+                        $favorite->category_id = $id;
+                        $favorite->user_id = $request->user->id;
+                        $favorite->save();
                     } else {
-                        return $this->helpInfo('duplicate id '.$id);
+                        return $this->helpInfo('duplicate id ' . $id);
                     }
                 }
-            }else{
+            } else {
                 return $this->helpError('Category_ids param is bad json format');
             }
 

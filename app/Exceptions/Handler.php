@@ -42,7 +42,7 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $e) {
         if(!$request->header('debug')){
             if ($e instanceof ModelNotFoundException) {
-                return \App\Http\Controllers\Controller::helpReturnS(false, false, 'not found resource');
+                return \App\Http\Controllers\Controller::helpReturnS(false, false, 'Not found resource:'.$e->getMessage());
             }
         }
         return parent::render($request, $e);

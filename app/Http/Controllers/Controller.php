@@ -52,7 +52,7 @@ class Controller extends BaseController
 
             }
             $model->save();
-
+            
             if ($manyImages) {
                 foreach ($request->images as $image) {
                     if ($image) {

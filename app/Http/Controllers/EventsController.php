@@ -27,6 +27,7 @@ class EventsController extends Controller
     }
 
     public function show($id) {
+        //return $this->helpReturn(Event::find(2666));
         return $this->helpReturn(Event::with('photos')->findorfail($id));
     }
 
