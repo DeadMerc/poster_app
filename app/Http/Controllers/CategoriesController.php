@@ -102,11 +102,7 @@ class CategoriesController extends Controller
         }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create() {
         //
     }
@@ -118,23 +114,12 @@ class CategoriesController extends Controller
     }
 
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function edit($id) {
         return $this->getSchemaByModel(Category::first());
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(Request $request, $id) {
         $rules = ['name_RU' => 'required', 'name_EN' => 'required', 'name_UA' => 'required', 'post_price' => 'required', 'description' => 'required'];
         return $this->fromPostToModel($rules, Category::findorfail($id), $request);
@@ -152,12 +137,7 @@ class CategoriesController extends Controller
         }*/
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function destroy($id) {
         //
     }

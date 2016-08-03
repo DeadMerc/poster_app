@@ -32,7 +32,7 @@ define({ "api": [
         ]
       }
     },
-    "filename": "./app/Http/Controllers/CategoriesController.php",
+    "filename": "app/Http/Controllers/CategoriesController.php",
     "groupTitle": "Categories",
     "sampleRequest": [
       {
@@ -60,7 +60,7 @@ define({ "api": [
         ]
       }
     },
-    "filename": "./app/Http/Controllers/CategoriesController.php",
+    "filename": "app/Http/Controllers/CategoriesController.php",
     "groupTitle": "Categories",
     "sampleRequest": [
       {
@@ -88,7 +88,7 @@ define({ "api": [
         ]
       }
     },
-    "filename": "./app/Http/Controllers/CategoriesController.php",
+    "filename": "app/Http/Controllers/CategoriesController.php",
     "groupTitle": "Categories",
     "sampleRequest": [
       {
@@ -129,7 +129,7 @@ define({ "api": [
         ]
       }
     },
-    "filename": "./app/Http/Controllers/CategoriesController.php",
+    "filename": "app/Http/Controllers/CategoriesController.php",
     "groupTitle": "Categories",
     "sampleRequest": [
       {
@@ -171,7 +171,7 @@ define({ "api": [
         ]
       }
     },
-    "filename": "./app/Http/Controllers/EventsController.php",
+    "filename": "app/Http/Controllers/EventsController.php",
     "groupTitle": "Events",
     "sampleRequest": [
       {
@@ -199,7 +199,7 @@ define({ "api": [
         ]
       }
     },
-    "filename": "./app/Http/Controllers/EventsController.php",
+    "filename": "app/Http/Controllers/EventsController.php",
     "groupTitle": "Events",
     "sampleRequest": [
       {
@@ -228,7 +228,7 @@ define({ "api": [
         ]
       }
     },
-    "filename": "./app/Http/Controllers/EventsController.php",
+    "filename": "app/Http/Controllers/EventsController.php",
     "groupTitle": "Events",
     "sampleRequest": [
       {
@@ -322,7 +322,7 @@ define({ "api": [
         ]
       }
     },
-    "filename": "./app/Http/Controllers/EventsController.php",
+    "filename": "app/Http/Controllers/EventsController.php",
     "groupTitle": "Events",
     "sampleRequest": [
       {
@@ -364,7 +364,7 @@ define({ "api": [
         ]
       }
     },
-    "filename": "./app/Http/Controllers/EventsController.php",
+    "filename": "app/Http/Controllers/EventsController.php",
     "groupTitle": "Events",
     "sampleRequest": [
       {
@@ -461,264 +461,11 @@ define({ "api": [
         ]
       }
     },
-    "filename": "./app/Http/Controllers/EventsController.php",
+    "filename": "app/Http/Controllers/EventsController.php",
     "groupTitle": "Events",
     "sampleRequest": [
       {
         "url": "/api/v1/events/:id"
-      }
-    ]
-  },
-  {
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "optional": false,
-            "field": "varname1",
-            "description": "<p>No type.</p> "
-          },
-          {
-            "group": "Success 200",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "varname2",
-            "description": "<p>With type.</p> "
-          }
-        ]
-      }
-    },
-    "type": "",
-    "url": "",
-    "version": "0.0.0",
-    "filename": "./doc/main.js",
-    "group": "F__GoogleDrive_sites_poster_ru_doc_main_js",
-    "groupTitle": "F__GoogleDrive_sites_poster_ru_doc_main_js",
-    "name": ""
-  },
-  {
-    "type": "",
-    "url": "private",
-    "title": "",
-    "version": "0.0.0",
-    "filename": "./public/js/logger.js",
-    "group": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
-    "groupTitle": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
-    "name": "Private",
-    "sampleRequest": [
-      {
-        "url": "/apiprivate"
-      }
-    ]
-  },
-  {
-    "type": "",
-    "url": "private",
-    "title": "",
-    "version": "0.0.0",
-    "filename": "./public/js/logger.js",
-    "group": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
-    "groupTitle": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
-    "name": "Private",
-    "sampleRequest": [
-      {
-        "url": "/apiprivate"
-      }
-    ]
-  },
-  {
-    "type": "",
-    "url": "private",
-    "title": "",
-    "version": "0.0.0",
-    "filename": "./public/js/logger.js",
-    "group": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
-    "groupTitle": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
-    "name": "Private",
-    "sampleRequest": [
-      {
-        "url": "/apiprivate"
-      }
-    ]
-  },
-  {
-    "type": "",
-    "url": "private",
-    "title": "",
-    "version": "0.0.0",
-    "filename": "./public/js/logger.js",
-    "group": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
-    "groupTitle": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
-    "name": "Private",
-    "sampleRequest": [
-      {
-        "url": "/apiprivate"
-      }
-    ]
-  },
-  {
-    "type": "",
-    "url": "private",
-    "title": "",
-    "version": "0.0.0",
-    "filename": "./public/js/logger.js",
-    "group": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
-    "groupTitle": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
-    "name": "Private",
-    "sampleRequest": [
-      {
-        "url": "/apiprivate"
-      }
-    ]
-  },
-  {
-    "type": "",
-    "url": "private",
-    "title": "",
-    "version": "0.0.0",
-    "filename": "./public/js/logger.js",
-    "group": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
-    "groupTitle": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
-    "name": "Private",
-    "sampleRequest": [
-      {
-        "url": "/apiprivate"
-      }
-    ]
-  },
-  {
-    "type": "",
-    "url": "private",
-    "title": "",
-    "version": "0.0.0",
-    "filename": "./public/js/logger.js",
-    "group": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
-    "groupTitle": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
-    "name": "Private",
-    "sampleRequest": [
-      {
-        "url": "/apiprivate"
-      }
-    ]
-  },
-  {
-    "type": "",
-    "url": "private",
-    "title": "",
-    "version": "0.0.0",
-    "filename": "./public/js/logger.js",
-    "group": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
-    "groupTitle": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
-    "name": "Private",
-    "sampleRequest": [
-      {
-        "url": "/apiprivate"
-      }
-    ]
-  },
-  {
-    "type": "",
-    "url": "public",
-    "title": "",
-    "version": "0.0.0",
-    "filename": "./public/js/logger.js",
-    "group": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
-    "groupTitle": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
-    "name": "Public",
-    "sampleRequest": [
-      {
-        "url": "/apipublic"
-      }
-    ]
-  },
-  {
-    "type": "",
-    "url": "public",
-    "title": "",
-    "version": "0.0.0",
-    "filename": "./public/js/logger.js",
-    "group": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
-    "groupTitle": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
-    "name": "Public",
-    "sampleRequest": [
-      {
-        "url": "/apipublic"
-      }
-    ]
-  },
-  {
-    "type": "",
-    "url": "public",
-    "title": "",
-    "version": "0.0.0",
-    "filename": "./public/js/logger.js",
-    "group": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
-    "groupTitle": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
-    "name": "Public",
-    "sampleRequest": [
-      {
-        "url": "/apipublic"
-      }
-    ]
-  },
-  {
-    "type": "",
-    "url": "public",
-    "title": "",
-    "version": "0.0.0",
-    "filename": "./public/js/logger.js",
-    "group": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
-    "groupTitle": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
-    "name": "Public",
-    "sampleRequest": [
-      {
-        "url": "/apipublic"
-      }
-    ]
-  },
-  {
-    "type": "",
-    "url": "public",
-    "title": "",
-    "version": "0.0.0",
-    "filename": "./public/js/logger.js",
-    "group": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
-    "groupTitle": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
-    "name": "Public",
-    "sampleRequest": [
-      {
-        "url": "/apipublic"
-      }
-    ]
-  },
-  {
-    "type": "",
-    "url": "public",
-    "title": "",
-    "version": "0.0.0",
-    "filename": "./public/js/logger.js",
-    "group": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
-    "groupTitle": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
-    "name": "Public",
-    "sampleRequest": [
-      {
-        "url": "/apipublic"
-      }
-    ]
-  },
-  {
-    "type": "",
-    "url": "public",
-    "title": "",
-    "version": "0.0.0",
-    "filename": "./public/js/logger.js",
-    "group": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
-    "groupTitle": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
-    "name": "Public",
-    "sampleRequest": [
-      {
-        "url": "/apipublic"
       }
     ]
   },
@@ -749,7 +496,7 @@ define({ "api": [
         ]
       }
     },
-    "filename": "./app/Http/Controllers/UsersController.php",
+    "filename": "app/Http/Controllers/UsersController.php",
     "groupTitle": "Users",
     "sampleRequest": [
       {
@@ -777,7 +524,7 @@ define({ "api": [
         ]
       }
     },
-    "filename": "./app/Http/Controllers/UsersController.php",
+    "filename": "app/Http/Controllers/UsersController.php",
     "groupTitle": "Users",
     "sampleRequest": [
       {
@@ -824,7 +571,7 @@ define({ "api": [
         ]
       }
     },
-    "filename": "./app/Http/Controllers/UsersController.php",
+    "filename": "app/Http/Controllers/UsersController.php",
     "groupTitle": "Users",
     "sampleRequest": [
       {
@@ -867,7 +614,7 @@ define({ "api": [
         ]
       }
     },
-    "filename": "./app/Http/Controllers/UsersController.php",
+    "filename": "app/Http/Controllers/UsersController.php",
     "groupTitle": "Users",
     "sampleRequest": [
       {
@@ -1011,7 +758,7 @@ define({ "api": [
         ]
       }
     },
-    "filename": "./app/Http/Controllers/UsersController.php",
+    "filename": "app/Http/Controllers/UsersController.php",
     "groupTitle": "Users",
     "sampleRequest": [
       {
