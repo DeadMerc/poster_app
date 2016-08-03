@@ -54,7 +54,7 @@ class EventsController extends Controller
     }
 
     /**
-     * @api {post} /v1/events/follow followEvents
+     * @api {post} /v1/users/events/follow followEvents
      * @apiVersion 0.1.0
      * @apiName followEvents
      * @apiGroup Events
@@ -71,11 +71,12 @@ class EventsController extends Controller
             $follow->user_id = $request->user->id;
             $follow->event_id = $request->event_id;
             $follow->save();
-            return $this->helpInfo();
+            return $this->helpInfo($follow);
         } else {
             return $this->helpError('valid', $valid);
         }
     }
+
     public function publish(Request $request,$id){
         $event = Event::findorfail($id);
         if($event){
@@ -213,6 +214,8 @@ class EventsController extends Controller
      * @apiParam {string} time
      * @apiParam {string} type
      * @apiParam {string} price
+     *
+     * @apiParam {datetime} date_stop Дата окончания показа в приложении
      *
      */
     public function update_save(Request $request, $id) {

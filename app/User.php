@@ -8,6 +8,7 @@ class User extends Model
 {
     protected $table = 'users';
     protected $appends = array('events_count');
+    protected $hidden = ['password'];
 
     public function getEventsCountAttribute() {
         $events = $this->events();

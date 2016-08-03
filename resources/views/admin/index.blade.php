@@ -18,6 +18,8 @@
     <link rel="stylesheet"
           href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.css">
     <!--AngularJS-->
+    <script src="https://cdn.jsdelivr.net/lodash/4.14.1/lodash.min.js"></script>
+
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.12/angular.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.min.js"></script>
@@ -39,11 +41,21 @@
     <!-- Table sorter -->
     <link rel="stylesheet" href="https://cdn.rawgit.com/angular-ui/bower-ui-grid/master/ui-grid.min.css">
     <script src="https://cdn.rawgit.com/angular-ui/bower-ui-grid/master/ui-grid.min.js"></script>
+    <!--Google map -->
+    <script src="js/logger.js"></script>
+    <script src="js/maps.js"></script>
+    <script src='//maps.googleapis.com/maps/api/js?sensor=false&libraries=geometry&key=AIzaSyAERAEhHw6pPKhUpee6ofTz8f3qZUhUgLU'></script>
+
+
+
+    <!--<script src="https://cdn.jsdelivr.net/angular.google-maps/1.2.4/angular-google-maps.min.js"></script>-->
     <!-- App -->
     <script src="js/app.js"></script>
     <script src="js/controllers.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <!-- Custom CSS -->
+
+
+
 
 
 </head>

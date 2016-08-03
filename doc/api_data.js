@@ -139,7 +139,7 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/v1/events/follow",
+    "url": "/v1/users/events/follow",
     "title": "followEvents",
     "version": "0.1.0",
     "name": "followEvents",
@@ -175,7 +175,7 @@ define({ "api": [
     "groupTitle": "Events",
     "sampleRequest": [
       {
-        "url": "/api/v1/events/follow"
+        "url": "/api/v1/users/events/follow"
       }
     ]
   },
@@ -450,6 +450,13 @@ define({ "api": [
             "optional": false,
             "field": "price",
             "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>datetime</p> ",
+            "optional": false,
+            "field": "date_stop",
+            "description": "<p>Дата окончания показа в приложении</p> "
           }
         ]
       }
@@ -489,6 +496,231 @@ define({ "api": [
     "group": "F__GoogleDrive_sites_poster_ru_doc_main_js",
     "groupTitle": "F__GoogleDrive_sites_poster_ru_doc_main_js",
     "name": ""
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./public/js/logger.js",
+    "group": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
+    "groupTitle": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
+    "name": "Private",
+    "sampleRequest": [
+      {
+        "url": "/apiprivate"
+      }
+    ]
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./public/js/logger.js",
+    "group": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
+    "groupTitle": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
+    "name": "Private",
+    "sampleRequest": [
+      {
+        "url": "/apiprivate"
+      }
+    ]
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./public/js/logger.js",
+    "group": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
+    "groupTitle": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
+    "name": "Private",
+    "sampleRequest": [
+      {
+        "url": "/apiprivate"
+      }
+    ]
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./public/js/logger.js",
+    "group": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
+    "groupTitle": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
+    "name": "Private",
+    "sampleRequest": [
+      {
+        "url": "/apiprivate"
+      }
+    ]
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./public/js/logger.js",
+    "group": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
+    "groupTitle": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
+    "name": "Private",
+    "sampleRequest": [
+      {
+        "url": "/apiprivate"
+      }
+    ]
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./public/js/logger.js",
+    "group": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
+    "groupTitle": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
+    "name": "Private",
+    "sampleRequest": [
+      {
+        "url": "/apiprivate"
+      }
+    ]
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./public/js/logger.js",
+    "group": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
+    "groupTitle": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
+    "name": "Private",
+    "sampleRequest": [
+      {
+        "url": "/apiprivate"
+      }
+    ]
+  },
+  {
+    "type": "",
+    "url": "private",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./public/js/logger.js",
+    "group": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
+    "groupTitle": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
+    "name": "Private",
+    "sampleRequest": [
+      {
+        "url": "/apiprivate"
+      }
+    ]
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./public/js/logger.js",
+    "group": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
+    "groupTitle": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
+    "name": "Public",
+    "sampleRequest": [
+      {
+        "url": "/apipublic"
+      }
+    ]
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./public/js/logger.js",
+    "group": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
+    "groupTitle": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
+    "name": "Public",
+    "sampleRequest": [
+      {
+        "url": "/apipublic"
+      }
+    ]
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./public/js/logger.js",
+    "group": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
+    "groupTitle": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
+    "name": "Public",
+    "sampleRequest": [
+      {
+        "url": "/apipublic"
+      }
+    ]
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./public/js/logger.js",
+    "group": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
+    "groupTitle": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
+    "name": "Public",
+    "sampleRequest": [
+      {
+        "url": "/apipublic"
+      }
+    ]
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./public/js/logger.js",
+    "group": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
+    "groupTitle": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
+    "name": "Public",
+    "sampleRequest": [
+      {
+        "url": "/apipublic"
+      }
+    ]
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./public/js/logger.js",
+    "group": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
+    "groupTitle": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
+    "name": "Public",
+    "sampleRequest": [
+      {
+        "url": "/apipublic"
+      }
+    ]
+  },
+  {
+    "type": "",
+    "url": "public",
+    "title": "",
+    "version": "0.0.0",
+    "filename": "./public/js/logger.js",
+    "group": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
+    "groupTitle": "F__GoogleDrive_sites_poster_ru_public_js_logger_js",
+    "name": "Public",
+    "sampleRequest": [
+      {
+        "url": "/apipublic"
+      }
+    ]
   },
   {
     "type": "post",
@@ -756,6 +988,24 @@ define({ "api": [
             "type": "<p>string</p> ",
             "optional": false,
             "field": "description",
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>string</p> ",
+            "allowedValues": [
+              "\"ios\"",
+              "\"android\""
+            ],
+            "optional": false,
+            "field": "device_type",
+            "description": "<p>для пушей</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>string</p> ",
+            "optional": false,
+            "field": "device_token",
             "description": ""
           }
         ]

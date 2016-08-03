@@ -1,7 +1,7 @@
 /**
  * Created by dead on 15.05.2016.
  */
-var adminControllers = angular.module('adminControllers', [])
+var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
     .controller('CategoriesCtrl', function ($rootScope, $scope, $http, $location, $mdDialog) {
             console.log("Categories Ctrl init");
             $scope.init = function () {
@@ -143,9 +143,9 @@ var adminControllers = angular.module('adminControllers', [])
     .controller('UsersCtrl', function ($rootScope, $scope, $http, $location, $mdDialog, $routeParams) {
         console.log("Users Ctrl init");
         $scope.params = {name: 'Users', url: 'users'};
-        $scope.sortType     = 'id'; // set the default sort type
-        $scope.sortReverse  = false;  // set the default sort order
-        $scope.search   = $routeParams.search;
+        $scope.sortType = 'id'; // set the default sort type
+        $scope.sortReverse = false;  // set the default sort order
+        $scope.search = $routeParams.search;
 
         $scope.init = function () {
             console.log($scope.params.name + " Ctrl scope init");
@@ -343,9 +343,9 @@ var adminControllers = angular.module('adminControllers', [])
         $scope.params = {name: 'Events', url: 'events', editurl: 'event'};
         console.log($scope.params.name + " Ctrl init");
 
-        $scope.sortType     = 'name'; // set the default sort type
-        $scope.sortReverse  = false;  // set the default sort order
-        $scope.search   = $routeParams.search;
+        $scope.sortType = 'name'; // set the default sort type
+        $scope.sortReverse = false;  // set the default sort order
+        $scope.search = $routeParams.search;
 
         $scope.init = function () {
             console.log($scope.params.name + " Ctrl scope init");
@@ -539,4 +539,238 @@ var adminControllers = angular.module('adminControllers', [])
             }
 
         }
+    })
+
+    .controller('PushHistoryCtrl', function ($rootScope, $scope, $http, $routeParams, $location, Upload, $timeout, $mdDialog) {
+        $scope.params = {name: 'Push', url: 'push'};
+        console.log($scope.params.name + " Ctrl init");
+        $scope.data = {};
+        $scope.search = $routeParams.search;
+        $scope.init = function () {
+            console.log($scope.params.name + " Ctrl scope init");
+            $http.get("/api/v1/" + $scope.params.url + "")
+                .then(function (res) {
+                    //console.log(res.data.response[0]);
+                    if (res.data.error == false) {
+                        console.log($scope.params.name + " Ctrl data to view");
+                        $scope.users = res.data.response;
+                    } else {
+                        console.log($scope.params.name + " Ctrl data have error");
+                        $rootScope.warning('Request return error');
+                    }
+                }, function (res) {
+                    console.log($scope.params.name + " Ctrl bad request");
+                    $rootScope.error('Request failed');
+                });
+        };
+        $scope.delete = function (id) {
+            console.log($scope.params.name + ' Ctrl try delete ' + id);
+            var confirm = $mdDialog.confirm()
+                .title('Really?')
+                .textContent('Your want delete item with id:' + id + '?')
+                .ariaLabel('Lucky day')
+                .ok('Please do it!')
+                .cancel('No');
+            $mdDialog.show(confirm).then(function () {
+                $http.delete('/api/v1/' + $scope.params.url + '/' + id, $rootScope.config)
+                    .then(function (res) {
+                        if (res.data.error !== true) {
+                            $rootScope.success('Request is done');
+                            $http.get("/api/v1/" + $scope.params.url + "")
+                                .then(function (res) {
+                                    //console.log(res.data.response[0]);
+                                    if (res.data.error == false) {
+                                        console.log($scope.params.name + " Ctrl data to view");
+                                        $scope.users = res.data.response;
+                                    } else {
+                                        console.log($scope.params.name + " Ctrl data have error");
+                                        $rootScope.warning('Request return error');
+                                    }
+                                }, function (res) {
+                                    console.log($scope.params.name + " Ctrl bad request");
+                                    $rootScope.error('Request failed');
+                                });
+                        } else if (res.data.error == true) {
+                            console.log(res);
+                            $rootScope.warning('Request return error try with:' + res.data.response + '<br>' + res.data.message);
+                        }
+                    }, function (res) {
+                        console.log(res);
+                        $rootScope.error('Request return error code');
+                    });
+            }, function () {
+                $rootScope.info('Request was aborted');
+            });
+        };
+    })
+    .controller('PushCtrl', function ($rootScope, $scope, $http, $routeParams, $location, Upload, $timeout, uiGmapGoogleMapApi) {
+        $scope.params = {name: 'Push', url: 'push'};
+        console.log($scope.params.name + " Ctrl init");
+        $scope.data = {};
+        $scope.sendFor = [];
+
+        //$scope.categories = [{name_EN: 'Loading...'}];
+        $scope.map = {center: {latitude: 55, longitude: 37}, zoom: 4};
+        $scope.markers = [];
+        uiGmapGoogleMapApi.then(function (maps) {
+            $scope.maps = maps;
+        });
+        $scope.init = function () {
+            console.log("Categories Ctrl scope init");
+            $http.get("/api/v1/categories", {ignoreLoadingBar: true})
+                .then(function (res) {
+                    if (res.data.error == false) {
+                        console.log("Push Ctrl data to view");
+                        $scope.categories = res.data.response;
+                        //console.log($scope.categories);
+                    } else {
+                        console.log("Push Ctrl data have error");
+                        $rootScope.warning('Request return error');
+                    }
+                }, function (res) {
+                    console.log("Push Ctrl bad request");
+                    $rootScope.error('Request failed');
+                });
+
+        };
+
+        $scope.headers = {
+            headers: {
+                'token': 'adm',
+                'Content-Type': 'application/json'
+            }
+        }
+
+        $scope.sendPushes = function () {
+            $scope.pushData = {push: $scope.push, users: $scope.sendFor};
+            $http.post('/api/v1/push/send/system', $scope.pushData, $scope.headers)
+                .then(function (res) {
+                    if (res.data.error == false) {
+                        var msg = '';
+                        angular.forEach(res.data.message, function (v, i) {
+                            msg += v + '<br>';
+                        })
+                        $rootScope.success(msg);
+                        $scope.push.title = '';
+                        $scope.push.description = '';
+                    } else {
+                        if (res.data.message == 'valid') {
+                            var msg = '';
+                            angular.forEach(res.data.validator, function (v, i) {
+                                msg += v + '<br>';
+                            })
+                        } else {
+                            msg = res.data.message;
+                        }
+                        $rootScope.warning(msg);
+                    }
+                }, function (res) {
+                    $rootScope.error('Request return failed');
+                });
+        }
+
+        $scope.upload = function (file) {
+            console.log($scope.params.name + ' Ctrl  try upload' + file);
+            if (file) {
+                console.log($scope.params.name + ' Ctrl  file exists');
+                var file = file;
+                if (!file.$error) {
+                    console.log($scope.params.name + ' Ctrl  go upload');
+                    Upload.upload({
+                        url: '/images/upload',
+                        data: {
+                            image: file
+                        }
+                    }).then(function (res) {
+                        //console.log(res);
+                        if (res.status == 200) {
+                            $scope.push.image = res.data;
+                        }
+                    });
+                }
+
+            }
+        };
+
+        $scope.checkMarkers = function () {
+            //console.log($scope.markers.length)
+            if ($scope.sendFor.length > 0 && $scope.push.title.length > 0 && $scope.push.description.length > 0 && $scope.push.image.length > 0) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        $scope.showUsersInMap = function () {
+            console.log("Push Ctrl show users in map");
+            $scope.markers = [];
+            $http.get("/api/v1/users/push/get/" + $scope.category_selected, $rootScope.config)
+                .then(function (res) {
+                    if (res.data.error == false) {
+                        console.log("Push Ctrl data to view");
+                        angular.forEach(res.data.response, function (v, key) {
+                            //console.log(v.id)
+                            $scope.markers.push({
+                                id: v.id,
+                                latitude: v.lat,
+                                longitude: v.lon
+                            });
+                        });
+                        //console.log($scope.circles);
+
+                    } else {
+                        console.log("Push Ctrl data have error");
+                        $rootScope.warning('Request return error');
+                    }
+                }, function (res) {
+                    console.log("Push Ctrl bad request");
+                    $rootScope.error('Request failed');
+                });
+        };
+
+        $scope.options = {scrollwheel: false};
+        $scope.circles = [
+            {
+                id: 1,
+                center: {
+                    latitude: 55,
+                    longitude: 37
+                },
+                radius: 500000,
+                stroke: {
+                    color: '#08B21F',
+                    weight: 2,
+                    opacity: 1
+                },
+                fill: {
+                    color: '#08B21F',
+                    opacity: 0.5
+                },
+                geodesic: true, // optional: defaults to false
+                draggable: true, // optional: defaults to false
+                clickable: true, // optional: defaults to true
+                editable: true, // optional: defaults to false
+                visible: true, // optional: defaults to true
+                control: {},
+                events: {
+                    dragend: function () {
+                        //console.log();
+                        $scope.sendFor = [];
+                        var circle = new $scope.maps.LatLng($scope.circles[0].center.latitude, $scope.circles[0].center.longitude);
+                        angular.forEach($scope.markers, function (v, key) {
+                            var marker = new $scope.maps.LatLng(v.latitude, v.longitude);
+                            var dist = $scope.maps.geometry.spherical.computeDistanceBetween(circle, marker);
+                            if (dist < $scope.circles[0].radius) {
+                                $scope.sendFor.push(v);
+                            }
+                        });
+
+
+                        //console.log($scope.circles[0].center.latitude);
+                    }
+                }
+            }
+        ];
+
+
     });

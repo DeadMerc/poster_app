@@ -1,0 +1,40 @@
+<div ng-init="init()">
+    <form>
+        <div class="form-group">
+            <div class="input-group">
+                <div class="input-group-addon"><i class="fa fa-search"></i></div>
+                <input type="text" class="form-control" placeholder="Search in params" ng-model="search">
+            </div>
+        </div>
+    </form>
+    <table  class="table table-striped">
+        <thead>
+        <tr>
+            <td>ID</td>
+            <td>Title</td>
+            <td>Description</td>
+            <td>Created by</td>
+            <td>Send to</td>
+            <td>Date</td>
+            <td>Image</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="data in users | filter:search">
+            <td><% data.id %></td>
+            <td><% data.title || 'Not defined' %></td>
+            <td><% data.description || 'Not defined' %></td>
+            <td><% data.created_by || 'Not defined' %></td>
+            <td><% data.user.email || 'Not defined' %></td>
+            <td><% data.date || 'Date not defined' %></td>
+            <td><% data.image || 'Not defined' %></td>
+            <td>
+
+                <md-button ng-click="delete(data.id)" class="md-raised md-warn">
+                    Delete
+                </md-button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

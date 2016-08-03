@@ -7,7 +7,8 @@ var adminApp = angular.module('adminApp', [
     'angular-loading-bar',
     'ngAnimate',
     'ngFileUpload',
-    'ui.grid'
+    'ui.grid',
+    'uiGmapgoogle-maps'
 ], function ($interpolateProvider) {
     $interpolateProvider.startSymbol('<%');
     $interpolateProvider.endSymbol('%>');
@@ -27,28 +28,28 @@ adminApp.run(function ($rootScope, toastr) {
     /* toasts */
     $rootScope.success = function ($text) {
         //success warning info error
-        toastr.success($text,{allowHtml: true});
+        toastr.success($text, {allowHtml: true});
     };
     $rootScope.warning = function ($text) {
         //success warning info error
-        toastr.warning($text,{allowHtml: true});
+        toastr.warning($text, {allowHtml: true});
     };
     $rootScope.info = function ($text) {
         //success warning info error
-        toastr.info($text,{allowHtml: true});
+        toastr.info($text, {allowHtml: true});
     };
     $rootScope.error = function ($text) {
         //success warning info error
-        toastr.error($text,{allowHtml: true});
+        toastr.error($text, {allowHtml: true});
     };
-    $rootScope.transform  = function(obj) {
+    $rootScope.transform = function (obj) {
         var query = '', name, value, fullSubName, subName, subValue, innerObj, i;
 
-        for(name in obj) {
+        for (name in obj) {
             value = obj[name];
 
-            if(value instanceof Array) {
-                for(i=0; i<value.length; ++i) {
+            if (value instanceof Array) {
+                for (i = 0; i < value.length; ++i) {
                     subValue = value[i];
                     fullSubName = name + '[' + i + ']';
                     innerObj = {};
@@ -56,8 +57,8 @@ adminApp.run(function ($rootScope, toastr) {
                     query += param(innerObj) + '&';
                 }
             }
-            else if(value instanceof Object) {
-                for(subName in value) {
+            else if (value instanceof Object) {
+                for (subName in value) {
                     subValue = value[subName];
                     fullSubName = name + '[' + subName + ']';
                     innerObj = {};
@@ -65,7 +66,7 @@ adminApp.run(function ($rootScope, toastr) {
                     query += param(innerObj) + '&';
                 }
             }
-            else if(value !== undefined && value !== null)
+            else if (value !== undefined && value !== null)
                 query += encodeURIComponent(name) + '=' + encodeURIComponent(value) + '&';
         }
 
@@ -76,27 +77,35 @@ adminApp.config(['cfpLoadingBarProvider', function (cfpLoadingBarProvider) {
     console.log("Spinner init");
     cfpLoadingBarProvider.includeSpinner = false;
 }])
+
+adminApp.config(function(uiGmapGoogleMapApiProvider) {
+    uiGmapGoogleMapApiProvider.configure({
+        key: 'AIzaSyAERAEhHw6pPKhUpee6ofTz8f3qZUhUgLU',
+        v: '3.20', //defaults to latest 3.X anyhow
+        libraries: 'weather,geometry,visualization'
+    });
+})
 adminApp.config(['$routeProvider',
     function ($routeProvider) {
         console.log("Route Init");
         $routeProvider
 
             .when('/categories', {
-            templateUrl: 'app/categories.html',
-            controller: 'CategoriesCtrl'
-        })
+                templateUrl: 'app/categories.html',
+                controller: 'CategoriesCtrl'
+            })
             .when('/category/:id?', {
-            templateUrl: 'app/category.html',
-            controller: 'CategoryCtrl'
-        })
+                templateUrl: 'app/category.html',
+                controller: 'CategoryCtrl'
+            })
             .when('/users', {
-            templateUrl: 'app/users.html',
-            controller: 'UsersCtrl'
-        })
+                templateUrl: 'app/users.html',
+                controller: 'UsersCtrl'
+            })
             .when('/user/:id?', {
-            templateUrl: 'app/user.html',
-            controller: 'UserCtrl'
-        })
+                templateUrl: 'app/user.html',
+                controller: 'UserCtrl'
+            })
             .when('/events', {
                 templateUrl: 'app/events.html',
                 controller: 'EventsCtrl'
@@ -105,8 +114,16 @@ adminApp.config(['$routeProvider',
                 templateUrl: 'app/event.html',
                 controller: 'EventCtrl'
             })
+            .when('/push', {
+                templateUrl: 'app/push.html',
+                controller: 'PushCtrl'
+            })
+            .when('/push/history', {
+                templateUrl: 'app/push_history.html',
+                controller: 'PushHistoryCtrl'
+            })
 
             .otherwise({
-            redirectTo: '/'
-        });
+                redirectTo: '/'
+            });
     }]);

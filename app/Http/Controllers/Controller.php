@@ -170,7 +170,7 @@ class Controller extends BaseController
 
     /**
      * @device_ids string sa
-     * @message arrray message,type,id
+     * @message array message,type,id
      */
     public function sendPushToAndroid(array $device_ids, $message = false) {
         if (!$message) {
@@ -228,10 +228,10 @@ class Controller extends BaseController
      */
 
     public function sendPushToUser($user, $message) {
-        if ($user->deviceType == 'android') {
-            $response = $this->sendPushToAndroid(array($user->deviceToken), $message);
-        } elseif ($user->deviceType == 'ios') {
-            $response = $this->sendPushToIos(array($user->deviceToken), $message);
+        if ($user->device_type == 'android') {
+            $response = $this->sendPushToAndroid(array($user->device_token), $message);
+        } elseif ($user->device_type == 'ios') {
+            $response = $this->sendPushToIos(array($user->device_token), $message);
         } else {
             $response = false;
         }

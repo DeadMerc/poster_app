@@ -85,6 +85,7 @@
 .sidebar-nav li:hover{
     background-color: deepskyblue;
 }
+.angular-google-map-container { height: 400px; }
 li{
     display: flex;
 }

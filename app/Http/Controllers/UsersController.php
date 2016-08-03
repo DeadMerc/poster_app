@@ -23,6 +23,24 @@ class UsersController extends Controller
         return $this->helpReturn(User::with('events')->with('favorites')->findorfail($id));
     }
 
+    public function forPush(Request $request,$category_id){
+        if($category_id == 'all'){
+            return $this->helpReturn(
+                User::where('lon','>',"0")
+                    ->where('lat','>',"0")
+                    ->get()
+            );
+        }else{
+            return $this->helpReturn(
+                User::where('lon','>',"0")
+                    ->where('lat','>',"0")
+                    ->where('category_id',$category_id)
+                    ->get()
+            );
+        }
+
+    }
+
 
     /**
      * @api {post} /v1/users/auth/email AuthByEmail
@@ -159,6 +177,9 @@ class UsersController extends Controller
      * @apiParam {string} email
      * @apiParam {string} password
      * @apiParam {string} description
+     *
+     * @apiParam {string="ios","android"} device_type для пушей
+     * @apiParam {string} device_token
      *
      */
     public function update(Request $request, $id) {
