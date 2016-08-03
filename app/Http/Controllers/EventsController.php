@@ -182,9 +182,6 @@ class EventsController extends Controller
         }
         */
     }
-
-
-
     public function edit($id) {
         return $this->getSchemaByModel(Event::first());
     }
