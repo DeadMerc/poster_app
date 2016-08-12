@@ -35,10 +35,8 @@ class Controller extends BaseController
                             $fileName = md5(rand(9999, 99999) . date('d m Y') . rand(9999, 99999)) . '.jpg';
                             $request->file('image')->move(storage_path() . '/app/public/images', $fileName);
                             $model->image = $fileName;
-                        } elseif ($request->image) {
+                        } elseif (!empty($request->image)) {
                             $model->image = $request->image;
-                        } else {
-                            $model->image = null;
                         }
                     }
                 } else {
