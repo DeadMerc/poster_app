@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Category;
+use App\Photo;
 use Illuminate\Http\Request;
 use App\User;
 use App\Event;
@@ -143,15 +144,15 @@ class EventsController extends Controller
      * @apiParam {array} images 
      */
     public function store_save(Request $request) {
-        $rules = ['category_id' => 'required', 'title' => 'required', 'description' => 'required', 'date' => 'required', 'time' => 'required', 'type' => 'required', 'price' => 'required','images'=>false];
+        $rules = ['category_id' => 'required', 'title' => 'required', 'description' => 'required', 'date' => 'required', 'time' => 'required', 'type' => 'required', 'price' => 'required'];
         $category = Category::findorfail($request->category_id);
         if($request->user->balance > $category->post_price){
             $request->user->balance = $request->user->balance - $category->post_price;
-            $event = $this->fromPostToModel($rules, new Event, $request,true);
-            //var_dump($event);
-            if($event === true){
+            $event = $this->fromPostToModel($rules, new Event, $request,'model');
+            //dd(get_class($event));
+            if(get_class($event) == 'App\Event'){
                 $request->user->save();
-                return $this->helpInfo();
+                return $this->helpInfo($event->id);
             }else{
                 return $this->helpError('valid',$event);
             }
@@ -232,6 +233,14 @@ class EventsController extends Controller
         }
     }
 
+    public function getImagesFromEvent(Request $request,$id){
+        $this->helpReturn(Event::findorfail($id)->photos());
+    }
+    public function removePhoto(Request $request,$id){
+        $photo = Photo::findorfail($id);
+        $photo->delete();
+        $this->helpInfo();
+    }
 
     public function destroy($id) {
         //

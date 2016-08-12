@@ -139,6 +139,8 @@ class CategoriesController extends Controller
 
 
     public function destroy($id) {
-        //
+        $item = Category::findorfail($id);
+        $item->delete();
+        return $this->helpInfo();
     }
 }

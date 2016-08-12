@@ -18,11 +18,7 @@ class PushController extends Controller
         return $this->helpReturn(Push::with('user')->get());
     }
 
-    public function destroy(Request $request, $id){
-        $item = Push::findorfail($id);
-        $item->delete();
-        return $this->helpInfo();
-    }
+
 
     public function send(Request $request){
         $rules = ['image'=>'required','title'=>'required','description'=>'required'];
@@ -54,6 +50,12 @@ class PushController extends Controller
             );
         }
         return $this->helpInfo($info);
+    }
+
+    public function destroy(Request $request, $id){
+        $item = Push::findorfail($id);
+        $item->delete();
+        return $this->helpInfo();
     }
 
 }

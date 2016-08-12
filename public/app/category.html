@@ -2,6 +2,7 @@
     <div ng-repeat="input in schema">
 
         <div ng-if="input.type == 'file'">
+            <label><a target="_blank" href="/images/<% data[input.key] || 'Not defined' %>"><% data[input.key] || 'Not defined' %></a></label><br>
             <div class="md-button md-raised md-primary" ngf-select="upload($file)" ng-model="file" ngf-multiple="false">
                 Select Image
             </div>
@@ -33,6 +34,6 @@
     </div>
     <section layout="row" layout-align="end" layout-wrap>
         <md-button class="md-raised md-primary" ng-click="save()">Save</md-button>
-        <md-button class="md-raised md-warn">Back</md-button>
+        <md-button class="md-raised md-warn" onclick="window.history.back();">Back</md-button>
     </section>
 </div>

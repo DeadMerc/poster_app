@@ -24,11 +24,14 @@ Route::group([ 'prefix' => 'api' ], function () {
 
         Route::resource('categories', 'CategoriesController', [ 'except' => [ 'show' ] ]);
         Route::resource('events', 'EventsController', [ 'except' => [ 'update' ] ]);
+        Route::get('event/{id}/images','EventsController@getImagesFromEvent');
+
         Route::resource('push','PushController');
 
         Route::group([ 'middleware' => [ \App\Http\Middleware\AuthByToken::class ] ], function () {
             Route::post('events', 'EventsController@store_save');
             Route::post('events/{id}', 'EventsController@update_save');
+            Route::get('photo/{id}/remove','EventsController@removePhoto');
 
             Route::post('users/events/follow', 'EventsController@follow');
             Route::get('users/events/favorite', 'EventsController@showFavorite');
@@ -63,7 +66,7 @@ Route::get('images/{filename}', function ($filename) {
         $response = Response::make($file, 200);
         $response->header("Content-Type", $type);
     } else {
-        $response = array( 'error' => true, 'message' => 'not found image' );
+        $response = array( 'error' => true, 'message' => 'Not found image' );
     }
 
 

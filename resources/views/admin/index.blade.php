@@ -21,6 +21,7 @@
     <script src="https://cdn.jsdelivr.net/lodash/4.14.1/lodash.min.js"></script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.12/angular.min.js"></script>
+    <!--<script src="https://code.angularjs.org/1.4.0-rc.0/angular.js"></script>-->
     <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-aria.min.js"></script>

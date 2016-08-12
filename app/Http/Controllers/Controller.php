@@ -66,7 +66,9 @@ class Controller extends BaseController
                     }
                 }
             }
-
+            if($bool == 'model'){
+                return $model;
+            }
             if ($bool) {
                 return true;
             }
@@ -239,9 +241,17 @@ class Controller extends BaseController
     }
 
     public function uploadFile(Request $request) {
+
         if ($request->hasFile('image')) {
             $fileName = md5(rand(9999, 99999) . date('d m Y') . rand(9999, 99999)) . '.jpg';
             $request->file('image')->move(storage_path() . '/app/public/images', $fileName);
+            if(!empty($request->event)){
+                $photo = new Photo;
+                $photo->event_id = $request->event;
+                $photo->image = $fileName;
+                $photo->save();
+                return $this->helpInfo($photo);
+            }
             return $fileName;
         }
     }

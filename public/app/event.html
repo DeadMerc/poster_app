@@ -37,9 +37,33 @@
             </md-input-container>
         </div>
 
+
+
+
+
+
     </div>
+
+    <div ng-if="id == 'new'">
+        Create Event before upload images please.
+    </div>
+    <div ng-if="id !== 'new'">
+        <div ng-if="photos">
+            <div ng-repeat="photo in photos">
+                <img width="90%" height="200px" ng-src="/images/<% photo.image %>"><a ng-click="removePhoto(photo.id)">[x]</a>
+            </div>
+        </div>
+
+        <div class="md-button md-raised md-primary" ngf-select="upload($file)" ng-model="file" ngf-multiple="false">
+            Select Image
+        </div>
+        <div ng-if="uploadedFile">
+            <img width="300px" height="100px" ng-src="/images/<% uploadedFile %>">
+        </div>
+    </div>
+
     <section layout="row" layout-align="end" layout-wrap>
         <md-button class="md-raised md-primary" ng-click="save()">Save</md-button>
-        <md-button class="md-raised md-warn">Back</md-button>
+        <md-button class="md-raised md-warn" onclick="window.history.back();">Back</md-button>
     </section>
 </div>

@@ -37,6 +37,7 @@
                     <span ng-show="sortType == 'balance' && sortReverse" class="fa fa-caret-up"></span>
                 </a>
             </td>
+            <td>Location</td>
             <td>Actions</td>
         </tr>
         </thead>
@@ -51,6 +52,7 @@
                 <% user.phone_3 || 'Not defined' %>
             </td>
             <td><% user.balance || 'Not defined' %></td>
+            <td><% user.location || 'Not defined' %></td>
             <td>
                 <md-button ng-click="events(user.email)" class="md-raised md-primary">
                     Events
@@ -66,9 +68,9 @@
                     UnBan
                 </md-button>
 
-                <md-button ng-click="delete(user.id)" class="md-raised md-warn">
+                <!--<md-button ng-click="delete(user.id)" class="md-raised md-warn">
                     Delete
-                </md-button>
+                </md-button>-->
             </td>
         </tr>
         </tbody>
