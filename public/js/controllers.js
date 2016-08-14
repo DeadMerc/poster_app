@@ -76,7 +76,7 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
             if (typeof $scope.id == 'undefined') {
                 $scope.id = 'new';
             } else {
-                $http.get('/api/v1/' + $scope.params.url + '/' + $scope.id).then(function (res) {
+                $http.get('/api/v1/category/' + $scope.id).then(function (res) {
                     $scope.data = res.data.response;
                     //console.log($scope.user);
                 });
