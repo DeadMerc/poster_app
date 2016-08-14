@@ -23,7 +23,7 @@ Route::group([ 'prefix' => 'api' ], function () {
 
 
         Route::resource('categories', 'CategoriesController', [ 'except' => [ 'show' ] ]);
-        Route::resource('category/{id}','CategoriesController@show');
+        Route::get('category/{id}','CategoriesController@show');
 
         Route::resource('events', 'EventsController', [ 'except' => [ 'update' ] ]);
         Route::get('event/{id}/images','EventsController@getImagesFromEvent');

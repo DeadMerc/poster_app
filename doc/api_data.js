@@ -318,6 +318,20 @@ define({ "api": [
             "optional": false,
             "field": "images",
             "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>string</p> ",
+            "optional": true,
+            "field": "place_id",
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>string</p> ",
+            "optional": true,
+            "field": "address",
+            "description": ""
           }
         ]
       }
@@ -449,6 +463,20 @@ define({ "api": [
             "type": "<p>string</p> ",
             "optional": false,
             "field": "price",
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>string</p> ",
+            "optional": true,
+            "field": "place_id",
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>string</p> ",
+            "optional": true,
+            "field": "address",
             "description": ""
           },
           {
