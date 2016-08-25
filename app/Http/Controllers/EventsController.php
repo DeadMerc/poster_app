@@ -47,7 +47,7 @@ class EventsController extends Controller
         $categories = $request->user->favorites;
         $events = [ ];
         foreach ($categories as $category) {
-            foreach (Event::where('category_id', $category->category_id)->where('type', 'public')->get() as $event) {
+            foreach (Event::with('photos')->where('category_id', $category->category_id)->where('type', 'public')->get() as $event) {
                 $events[] = $event;
             }
         }

@@ -37,6 +37,7 @@ Route::group([ 'prefix' => 'api' ], function () {
 
             Route::post('users/events/follow', 'EventsController@follow');
             Route::get('users/events/favorite', 'EventsController@showFavorite');
+
             Route::post('events/unfollow', 'EventsController@unfollow');
             Route::get('events/publish/{id}', 'EventsController@publish');
             Route::get('events/unpublish/{id}', 'EventsController@unpublish');
@@ -48,9 +49,12 @@ Route::group([ 'prefix' => 'api' ], function () {
             Route::get('users/push/get/{id}','UsersController@forPush');
             Route::get('users/ban/{id}', 'UsersController@ban');
             Route::get('users/unban/{id}', 'UsersController@unban');
+
             Route::post('users/{id}', 'UsersController@update');
 
             Route::post('push/send/system','PushController@send');
+
+            Route::post('payments/pay','PayController@pay');
         });
 
 

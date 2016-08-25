@@ -184,7 +184,7 @@ class UsersController extends Controller
      */
     public function update(Request $request, $id) {
         //return var_dump($request->all());
-        $rules = ['balance'=>false,'description'=>false,'image'=>false,'description'=>false,'phone_1'=>false,'phone_2'=>false,'phone_3'=>false,'name' => 'required|min:3', 'location' => false, 'lon' => false, 'lat' => false, 'category_id' => false,  'email' => false, 'password' => false,'place_id'=>false];
+        $rules = ['balance'=>false,'description'=>false,'image'=>false,'description'=>false,'phone_1'=>false,'phone_2'=>false,'phone_3'=>false,'name' => false, 'location' => false, 'lon' => false, 'lat' => false, 'category_id' => false,  'email' => false, 'password' => false,'place_id'=>false];
         $user = User::findorfail($id);
         return $this->fromPostToModel($rules, $user, $request);
     }
