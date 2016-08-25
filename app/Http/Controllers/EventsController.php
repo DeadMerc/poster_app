@@ -145,9 +145,11 @@ class EventsController extends Controller
      * @apiParam {string} [place_id]
      * @apiParam {string} [address]
      *
+     * @apiParam {datetime} date_stop Дата окончания показа в приложении
+     *
      */
     public function store_save(Request $request) {
-        $rules = [ 'address'=>false, 'place_id'=>false,'category_id' => 'required', 'title' => 'required', 'description' => 'required', 'date' => 'required', 'time' => 'required', 'type' => 'required', 'price' => 'required', 'images' => false ];
+        $rules = [ 'date_stop'=>false,'address'=>false, 'place_id'=>false,'category_id' => 'required', 'title' => 'required', 'description' => 'required', 'date' => 'required', 'time' => 'required', 'type' => 'required', 'price' => 'required', 'images' => false ];
         $category = Category::findorfail($request->category_id);
         if ($request->user->balance > $category->post_price) {
             $request->user->balance = $request->user->balance - $category->post_price;
@@ -214,7 +216,7 @@ class EventsController extends Controller
      *
      */
     public function update_save(Request $request, $id) {
-        $rules = [ 'address'=>false,'place_id'=>false,'category_id' => 'required', 'title' => 'required', 'description' => 'required', 'date' => 'required', 'time' => 'required', 'type' => 'required', 'price' => 'required', 'images' => false ];
+        $rules = [ 'date_stop'=>false,'address'=>false,'place_id'=>false,'category_id' => 'required', 'title' => 'required', 'description' => 'required', 'date' => 'required', 'time' => 'required', 'type' => 'required', 'price' => 'required', 'images' => false ];
         $event = $this->fromPostToModel($rules, Event::findorfail($id), $request, 'model');
         //dd(get_class($event));
         if (get_class($event) == 'App\Event') {

@@ -332,6 +332,13 @@ define({ "api": [
             "optional": true,
             "field": "address",
             "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>datetime</p> ",
+            "optional": false,
+            "field": "date_stop",
+            "description": "<p>Дата окончания показа в приложении</p> "
           }
         ]
       }
