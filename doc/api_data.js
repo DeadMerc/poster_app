@@ -237,6 +237,35 @@ define({ "api": [
     ]
   },
   {
+    "type": "get",
+    "url": "/v1/events/byuser/:id",
+    "title": "getEventsByUser",
+    "version": "0.1.0",
+    "name": "getEventsByUser",
+    "group": "Events",
+    "description": "<p>Все события из категорий на которые подписан пользователь</p> ",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "string",
+            "optional": false,
+            "field": "token",
+            "description": "<p>User token</p> "
+          }
+        ]
+      }
+    },
+    "filename": "app/Http/Controllers/EventsController.php",
+    "groupTitle": "Events",
+    "sampleRequest": [
+      {
+        "url": "/api/v1/events/byuser/:id"
+      }
+    ]
+  },
+  {
     "type": "post",
     "url": "/v1/events",
     "title": "storeEvents",
