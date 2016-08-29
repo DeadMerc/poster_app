@@ -145,6 +145,7 @@ class EventsController extends Controller
      * @apiVersion 0.1.0
      * @apiName storeEvents
      * @apiGroup Events
+     * @apiDescription add Event object
      *
      * @apiHeader {string} token User token
      * @apiParam {string} category_id
