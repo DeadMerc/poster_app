@@ -16,7 +16,7 @@ class User extends Model
         return $events;
     }
     public function events(){
-        return $this->hasMany('App\Event');
+        return $this->hasMany('App\Event')->with('photos');
     }
 
 

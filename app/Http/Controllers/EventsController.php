@@ -47,11 +47,24 @@ class EventsController extends Controller
         $categories = $request->user->favorites;
         $events = [ ];
         foreach ($categories as $category) {
-            foreach (Event::with('photos')->where('category_id', $category->category_id)->where('type', 'public')->get() as $event) {
+            foreach (Event::with('photos','user')->where('category_id', $category->category_id)->where('type', 'public')->get() as $event) {
                 $events[] = $event;
             }
         }
         return $this->helpReturn($events);
+    }
+    /**
+     * @api {get} /v1/events/byuser/:id getEventsByUser
+     * @apiVersion 0.1.0
+     * @apiName getEventsByUser
+     * @apiGroup Events
+     *
+     * @apiDescription Все события из категорий на которые подписан пользователь
+     * @apiHeader {string} token User token
+     *
+     */
+    public function showByUser(Request $request,$id){
+        return $this->helpReturn(User::findorfail($id)->events);
     }
 
     /**
@@ -149,10 +162,11 @@ class EventsController extends Controller
      *
      */
     public function store_save(Request $request) {
-        $rules = [ 'date_stop'=>false,'address'=>false, 'place_id'=>false,'category_id' => 'required', 'title' => 'required', 'description' => 'required', 'date' => 'required', 'time' => 'required', 'type' => 'required', 'price' => 'required', 'images' => false ];
+        $rules = ['video'=>false, 'user_id'=>false,'date_stop'=>false,'address'=>false, 'place_id'=>false,'category_id' => 'required', 'title' => 'required', 'description' => 'required', 'date' => 'required', 'time' => 'required', 'type' => 'required', 'price' => 'required', 'images' => false ];
         $category = Category::findorfail($request->category_id);
         if ($request->user->balance > $category->post_price) {
             $request->user->balance = $request->user->balance - $category->post_price;
+            $request->user_id = $request->user->id;
             $event = $this->fromPostToModel($rules, new Event, $request, 'model');
             //dd(get_class($event));
             if (get_class($event) == 'App\Event') {
@@ -216,7 +230,8 @@ class EventsController extends Controller
      *
      */
     public function update_save(Request $request, $id) {
-        $rules = [ 'date_stop'=>false,'address'=>false,'place_id'=>false,'category_id' => 'required', 'title' => 'required', 'description' => 'required', 'date' => 'required', 'time' => 'required', 'type' => 'required', 'price' => 'required', 'images' => false ];
+        $rules = [ 'video'=>false,'user_id'=>false,'date_stop'=>false,'address'=>false,'place_id'=>false,'category_id' => 'required', 'title' => 'required', 'description' => 'required', 'date' => 'required', 'time' => 'required', 'type' => 'required', 'price' => 'required', 'images' => false ];
+        $request->user_id = $request->user->id;
         $event = $this->fromPostToModel($rules, Event::findorfail($id), $request, 'model');
         //dd(get_class($event));
         if (get_class($event) == 'App\Event') {

@@ -37,6 +37,7 @@ Route::group([ 'prefix' => 'api' ], function () {
 
             Route::post('users/events/follow', 'EventsController@follow');
             Route::get('users/events/favorite', 'EventsController@showFavorite');
+            Route::get('events/byuser/{id}','EventsController@showByUser');
 
             Route::post('events/unfollow', 'EventsController@unfollow');
             Route::get('events/publish/{id}', 'EventsController@publish');
