@@ -172,7 +172,8 @@ class EventsController extends Controller
             //dd(get_class($event));
             if (get_class($event) == 'App\Event') {
                 $request->user->save();
-                return $this->helpInfo($event->id);
+                //return $this->helpInfo($event->id);
+                return $this->helpReturn($request->user,false,$event->id);
             } else {
                 return $this->helpError('valid', $event);
             }

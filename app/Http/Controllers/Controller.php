@@ -12,36 +12,35 @@ use Illuminate\Http\Request;
 use App\Photo;
 use App\Http\Requests;
 
-class Controller extends BaseController
-{
+class Controller extends BaseController {
     use AuthorizesRequests, AuthorizesResources, DispatchesJobs, ValidatesRequests;
 
     public function fromPostToModel($rules, $model, $request, $bool = false) {
         $rulesForValidator = [];
-        foreach ($rules as $key => $value) {
-            if ($value !== false) {
-                $rulesForValidator[$key] = $value;
+        foreach($rules as $key => $value) {
+            if($value !== false) {
+                $rulesForValidator[ $key ] = $value;
             }
         }
         $valid = Validator($request->all(), $rulesForValidator);
         $manyImages = false;
-        if (!$valid->fails()) {
-            foreach ($rules as $key => $value) {
-                if ($key == 'image' || $key == 'images') {
-                    if (is_array($request->images)) {
+        if(!$valid->fails()) {
+            foreach($rules as $key => $value) {
+                if($key == 'image' || $key == 'images') {
+                    if(is_array($request->images)) {
                         $manyImages = true;
                     } else {
-                        if ($request->hasFile('image')) {
+                        if($request->hasFile('image')) {
                             $fileName = md5(rand(9999, 99999) . date('d m Y') . rand(9999, 99999)) . '.jpg';
                             $request->file('image')->move(storage_path() . '/app/public/images', $fileName);
                             $model->image = $fileName;
-                        } elseif (!empty($request->image)) {
+                        } elseif(!empty($request->image)) {
                             $model->image = $request->image;
                         }
                     }
                 } else {
-                    if($model->$key != $request->$key AND !empty($request->$key)){
-                        if($key == 'password'){
+                    if($model->$key != $request->$key AND !empty($request->$key)) {
+                        if($key == 'password') {
                             $request->$key = md5($request->$key . 'requestLoginEvstolia');
                         }
                         $model->$key = $request->$key;
@@ -50,10 +49,10 @@ class Controller extends BaseController
 
             }
             $model->save();
-            
-            if ($manyImages) {
-                foreach ($request->images as $image) {
-                    if ($image) {
+
+            if($manyImages) {
+                foreach($request->images as $image) {
+                    if($image) {
                         $fileName = md5(rand(999, 99999) . date('d m Y')) . '.jpg';
                         $image->move(storage_path() . '/app/public/images', $fileName);
                         $photo = new Photo;
@@ -64,15 +63,15 @@ class Controller extends BaseController
                     }
                 }
             }
-            if($bool == 'model'){
+            if($bool == 'model') {
                 return $model;
             }
-            if ($bool) {
+            if($bool) {
                 return true;
             }
             return $this->helpReturn($model);
         } else {
-            if ($bool) {
+            if($bool) {
                 return $valid;
             }
             return $this->helpError('valid', $valid);
@@ -83,11 +82,11 @@ class Controller extends BaseController
         $attributes = $model->getAttributes();
         $keys = [];
         $protected = ['social_hash', 'token', 'created_at', 'updated_at', 'id', 'banned', 'imei'];
-        foreach ($attributes as $key => $value) {
-            if (!in_array($key, $protected)) {
+        foreach($attributes as $key => $value) {
+            if(!in_array($key, $protected)) {
                 //защита специфических полей
-                if (is_array($moreProtected)) {
-                    if (!in_array($key, $moreProtected)) {
+                if(is_array($moreProtected)) {
+                    if(!in_array($key, $moreProtected)) {
                         $keys[] = array('type' => $this->getTypeInputByKey($key), 'key' => $key);
                     }
                 } else {
@@ -99,19 +98,19 @@ class Controller extends BaseController
     }
 
     private function getTypeInputByKey($key) {
-        if ($key == 'category_id') {
+        if($key == 'category_id') {
             //return 'categories_select';
         }
-        if ($key == 'image') {
+        if($key == 'image') {
             return 'file';
         }
-        if ($key == 'balance') {
+        if($key == 'balance') {
             //return 'number';
         }
-        if($key == 'date'){
+        if($key == 'date') {
             //return 'date';
         }
-        if($key == 'publish'){
+        if($key == 'publish') {
             return 'checkbox';
         }
         return 'text';
@@ -119,22 +118,27 @@ class Controller extends BaseController
 
     public function helpError($message = 'valid', $validator = false) {
 
-        if ($validator) {
-            return array('response' => [], 'error' => true, 'message' => 'valid', 'validator' => $validator->errors()->all());
+        if($validator) {
+            return array(
+                'response'  => [],
+                'error'     => true,
+                'message'   => 'valid',
+                'validator' => $validator->errors()->all(),
+            );
         }
         return array('response' => [], 'error' => true, 'message' => $message);
     }
 
     public function helpReturn($response, $info = false, $message = false) {
         $arrayForResponse['response'] = $response;
-        if ($info) {
+        if($info) {
             $arrayForResponse['info'] = $info;
         }
-        if ($message) {
+        if($message) {
             $arrayForResponse['message'] = $message;
         }
         $arrayForResponse['error'] = false;
-        if (!$response) {
+        if(!$response) {
             $arrayForResponse['error'] = true;
             $arrayForResponse['message'] = 'Resource not found';
         }
@@ -144,14 +148,14 @@ class Controller extends BaseController
 
     public static function helpReturnS($response, $info = false, $message = false) {
         $arrayForResponse['response'] = $response;
-        if ($info) {
+        if($info) {
             $arrayForResponse['info'] = $info;
         }
-        if ($message) {
+        if($message) {
             $arrayForResponse['message'] = $message;
         }
         $arrayForResponse['error'] = false;
-        if (!$response) {
+        if(!$response) {
             $arrayForResponse['error'] = true;
             $arrayForResponse['message'] = 'Resource not found';
         }
@@ -160,7 +164,7 @@ class Controller extends BaseController
     }
 
     public function helpInfo($message = false) {
-        if ($message) {
+        if($message) {
             $arrayForResponse['message'] = $message;
         }
         $arrayForResponse['response'] = [];
@@ -173,12 +177,24 @@ class Controller extends BaseController
      * @message array message,type,id
      */
     public function sendPushToAndroid(array $device_ids, $message = false) {
-        if (!$message) {
-            $message = array('message' => 'here is a message. message', 'title' => 'This is a title. title', 'subtitle' => 'This is a subtitle. subtitle', 'tickerText' => 'Ticker text here...Ticker text here...Ticker text here', 'vibrate' => 1, 'sound' => 1, 'largeIcon' => 'large_icon', 'smallIcon' => 'small_icon');
+        if(!$message) {
+            $message = array(
+                'message'    => 'here is a message. message',
+                'title'      => 'This is a title. title',
+                'subtitle'   => 'This is a subtitle. subtitle',
+                'tickerText' => 'Ticker text here...Ticker text here...Ticker text here',
+                'vibrate'    => 1,
+                'sound'      => 1,
+                'largeIcon'  => 'large_icon',
+                'smallIcon'  => 'small_icon',
+            );
         }
 
         $fields = array('registration_ids' => $device_ids, 'data' => $message);
-        $headers = array('Authorization: key=AIzaSyCJb8kzYjf6vTu1gyet0ZS_4v4MoiaqVEA', 'Content-Type: application/json');
+        $headers = array(
+            'Authorization: key=AIzaSyCJb8kzYjf6vTu1gyet0ZS_4v4MoiaqVEA',
+            'Content-Type: application/json',
+        );
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, 'https://android.googleapis.com/gcm/send');
         curl_setopt($ch, CURLOPT_POST, true);
@@ -193,33 +209,65 @@ class Controller extends BaseController
     }
 
     public function sendPushToIos($device_ids = false, $message = false) {
-        $tHost = 'gateway.push.apple.com';
+
+        if(!$message) {
+            $message = [
+                'category' => 'NEW_INVITE',
+                'alert'    => [
+                    'title' => 'test title',
+                    'body'  => 'test body',
+                ],
+                'badge'    => '0',
+                'sound'    => 'default',
+            ];
+
+        } else {
+            $message = [
+                'type'  => $message['type'],
+                'alert' => [
+                    'id'    => $message['id'],
+                    'title' => $message['title'],
+                    'body'  => $message['body'],
+                    'image' => $message['image'],
+
+                ],
+                'badge' => '0',
+                'sound' => 'default',
+            ];
+        }
+
+
+        $tHost = 'gateway.sandbox.push.apple.com';
         $tPort = 2195;
         $errors = false;
-        $tCert = storage_path() . '/app/cert.pem';
-        $tPassphrase = '';
-        //$tToken = '0a32cbcc8464ec05ac3389429813119b6febca1cd567939b2f54892cd1dcb134';
+        $tCert = storage_path() . '/app/dist.pem';
+        $tPassphrase = 'qwer';
         $tToken = $device_ids;
-        $tAlert = 'Alert';
-        $tBadge = 8;
-        $tSound = 'default';
+        $tToken = '913102bc68b8cd1a65f2e5ebe39f4ccb0e03de5c25f107e14a9698d6d1be4d20';
         $tPayload = 'Payload';
-        $tBody['aps'] = array('alert' => $tAlert, 'badge' => $tBadge, 'sound' => $tSound,);
+        $error = '';
+        $errstr = '';
+        $tBody['aps'] = $message;
         $tBody ['payload'] = $tPayload;
+        $tBody['acme2'] = ["bang", "whiz"];
         $tBody = json_encode($tBody);
+        if(is_array($tToken)) {
+            $tToken = $tToken[0];
+        }
+        //echo $tBody;
         $tContext = stream_context_create();
         stream_context_set_option($tContext, 'ssl', 'local_cert', $tCert);
         stream_context_set_option($tContext, 'ssl', 'passphrase', $tPassphrase);
         $tSocket = stream_socket_client('ssl://' . $tHost . ':' . $tPort, $error, $errstr, 30, STREAM_CLIENT_CONNECT | STREAM_CLIENT_PERSISTENT, $tContext);
-        if (!$tSocket)
+        if(!$tSocket)
             $errors = 'Cant open socket';
         $tMsg = chr(0) . chr(0) . chr(32) . pack('H*', $tToken) . pack('n', strlen($tBody)) . $tBody;
         $tResult = fwrite($tSocket, $tMsg, strlen($tMsg));
-        if ($tResult)
-            $errors = false; else
-            $errors = $tResult;
+        /*dump($error);
+        dump($errstr);
+        dump($tResult);*/
         fclose($tSocket);
-        return $errors;
+        return $tResult;
     }
 
     /*
@@ -228,9 +276,9 @@ class Controller extends BaseController
      */
 
     public function sendPushToUser($user, $message) {
-        if ($user->device_type == 'android') {
+        if($user->device_type == 'android') {
             $response = $this->sendPushToAndroid(array($user->device_token), $message);
-        } elseif ($user->device_type == 'ios') {
+        } elseif($user->device_type == 'ios') {
             $response = $this->sendPushToIos(array($user->device_token), $message);
         } else {
             $response = false;
@@ -240,10 +288,10 @@ class Controller extends BaseController
 
     public function uploadFile(Request $request) {
 
-        if ($request->hasFile('image')) {
+        if($request->hasFile('image')) {
             $fileName = md5(rand(9999, 99999) . date('d m Y') . rand(9999, 99999)) . '.jpg';
             $request->file('image')->move(storage_path() . '/app/public/images', $fileName);
-            if(!empty($request->event)){
+            if(!empty($request->event)) {
                 $photo = new Photo;
                 $photo->event_id = $request->event;
                 $photo->image = $fileName;

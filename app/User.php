@@ -19,6 +19,8 @@ class User extends Model
         return $this->hasMany('App\Event')->with('photos');
     }
 
+    
+
 
 
     public function favorites(){

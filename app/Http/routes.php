@@ -29,7 +29,7 @@ Route::group([ 'prefix' => 'api' ], function () {
         Route::get('event/{id}/images','EventsController@getImagesFromEvent');
 
         Route::resource('push','PushController');
-
+        Route::get('push/send/user/{id}','PushController@sendForUser');
         Route::group([ 'middleware' => [ \App\Http\Middleware\AuthByToken::class ] ], function () {
             Route::post('events', 'EventsController@store_save');
             Route::post('events/{id}', 'EventsController@update_save');
@@ -54,6 +54,7 @@ Route::group([ 'prefix' => 'api' ], function () {
             Route::post('users/{id}', 'UsersController@update');
 
             Route::post('push/send/system','PushController@send');
+
 
             Route::post('payments/pay','PayController@pay');
         });
