@@ -44,6 +44,16 @@
             </div>
         </md-input-container>
 
+        <md-input-container class="md-block">
+            <label>Type</label>
+            <select ng-model="push.type" name="input.key" placeholder="Type of push" class="no-underline">
+                <option value="ADVERTISING">Advertising</option>
+                <option value="INFORMATION">Information</option>
+                <option value="ANNOUNCEMENT">Announcement</option>
+            </select>
+        </md-input-container>
+
+
         <% push.image || 'Image not uploaded' %><br>
         <div class="md-button md-raised md-primary" ngf-select="upload($file)" ng-model="push.image" ngf-multiple="false">
             Select Image

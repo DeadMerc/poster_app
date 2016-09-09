@@ -1,7 +1,7 @@
 <?php
 Route::get('/', function () {
     return view('admin.index');
-});
+})->middleware([\App\Http\Middleware\AuthOnce::class]);
 Route::group([ 'prefix' => 'api' ], function () {
     Route::get('{code}', function ($code) {
         $response = [ 'error' => true, 'message' => null ];

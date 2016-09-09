@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Push;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -15,7 +16,7 @@ use App\Http\Requests;
 class Controller extends BaseController {
     use AuthorizesRequests, AuthorizesResources, DispatchesJobs, ValidatesRequests;
 
-    public function fromPostToModel($rules, $model, $request, $bool = false) {
+    public function fromPostToModel($rules, $model, $request, $bool = false,$info = false) {
         $rulesForValidator = [];
         foreach($rules as $key => $value) {
             if($value !== false) {
@@ -69,7 +70,7 @@ class Controller extends BaseController {
             if($bool) {
                 return true;
             }
-            return $this->helpReturn($model);
+            return $this->helpReturn($model,$info);
         } else {
             if($bool) {
                 return $valid;
@@ -177,7 +178,8 @@ class Controller extends BaseController {
      * @message array message,type,id
      */
     public function sendPushToAndroid(array $device_ids, $message = false) {
-        $device_ids = array($_GET['id']);
+        //$device_ids = array($_GET['id']);
+        $res = 'Failed';
         if(!$message) {
             $message = array(
                 'message'    => 'here is a message. message',
@@ -207,7 +209,10 @@ class Controller extends BaseController {
         $result = curl_exec($ch);
         //print_r($result);
         curl_close($ch);
-        return $result;
+        if(json_decode($result)->success == '1'){
+            $res = 'Success';
+        }
+        return $res;
     }
 
     public function sendPushToIos($device_ids = false, $message = false) {
@@ -285,6 +290,16 @@ class Controller extends BaseController {
         } else {
             $response = false;
         }
+        $push_history = new Push;
+        $push_history->title = $message['title'];
+        $push_history->description = $message['body'];
+        $push_history->created_by = 'admin';
+        $push_history->send_to = $user->id;
+        $push_history->image = $message['image'];
+        $push_history->type = $message['type'];
+        $push_history->save();
+
+        $response = $user->id.':'.$response;
         return $response;
     }
 

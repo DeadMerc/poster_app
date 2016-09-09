@@ -52,8 +52,7 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
                     $rootScope.info('Request was aborted');
                 });
             };
-        }
-    )
+        })
     .controller('CategoryCtrl', function ($rootScope, $scope, $http, $routeParams, $location, Upload, $timeout) {
         /*PARAMS FOR CONTROLLER*/
         $scope.params = {name: 'category', url: 'categories'};
@@ -246,7 +245,32 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
                 .ok('Please do it!')
                 .cancel('No');
             $mdDialog.show(confirm).then(function () {
-                console.log('first');
+                $http.delete('/api/v1/' + $scope.params.url + '/' + id, $rootScope.config)
+                    .then(function (res) {
+                        if (res.data.error !== true) {
+                            $rootScope.success('Request is done');
+                            $http.get("/api/v1/" + $scope.params.url + "")
+                                .then(function (res) {
+                                    //console.log(res.data.response[0]);
+                                    if (res.data.error == false) {
+                                        console.log($scope.params.name + " Ctrl data to view");
+                                        $scope.users = res.data.response;
+                                    } else {
+                                        console.log($scope.params.name + " Ctrl data have error");
+                                        $rootScope.warning('Request return error');
+                                    }
+                                }, function (res) {
+                                    console.log($scope.params.name + " Ctrl bad request");
+                                    $rootScope.error('Request failed');
+                                });
+                        } else if (res.data.error == true) {
+                            console.log(res);
+                            $rootScope.warning('Request return error try with:' + res.data.response + '<br>' + res.data.message);
+                        }
+                    }, function (res) {
+                        console.log(res);
+                        $rootScope.error('Request return error code');
+                    });
             }, function () {
                 console.log('second')
             });
@@ -681,6 +705,7 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
                         $rootScope.success(msg);
                         $scope.push.title = '';
                         $scope.push.description = '';
+
                     } else {
                         if (res.data.message == 'valid') {
                             var msg = '';

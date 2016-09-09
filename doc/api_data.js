@@ -47,6 +47,24 @@ define({ "api": [
     "version": "0.1.0",
     "name": "getCategories",
     "group": "Categories",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "string",
+            "allowedValues": [
+              "\"EN\"",
+              "\"UA\"",
+              "\"RU\""
+            ],
+            "optional": false,
+            "field": "lang",
+            "description": ""
+          }
+        ]
+      }
+    },
     "parameter": {
       "fields": {
         "Parameter": [

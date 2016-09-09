@@ -197,7 +197,16 @@ class EventsController extends Controller {
             //dd(get_class($event));
             if(get_class($event) == 'App\Event') {
                 $request->user->save();
-                //return $this->helpInfo($event->id);
+                $info = [];
+                foreach(User::all() as $user){
+                    $info[] = $this->sendPushToUser($user,[
+                        'id'    => $event->id,
+                        'title' => $event->title,
+                        'body'  => $event->description,
+                        'image' => $event->load('photos'),
+                        'type'  => 'EVENT_WAS_ADDED',
+                    ]);
+                }
                 return $this->helpReturn($request->user, false, $event->id);
             } else {
                 return $this->helpError('valid', $event);

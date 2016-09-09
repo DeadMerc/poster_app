@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use Illuminate\Http\Request;
 use App\Category;
 use App\Category_favorite;
@@ -14,6 +15,7 @@ class CategoriesController extends Controller {
      * @apiVersion 0.1.0
      * @apiName getCategories
      * @apiGroup Categories
+     * @apiHeader {string="EN","UA","RU"} lang
      *
      * @apiParam {string} [id]
      *
@@ -108,14 +110,27 @@ class CategoriesController extends Controller {
 
 
     public function store(Request $request) {
-        $rules = ['name_RU'     => 'required',
-                  'name_EN'     => 'required',
-                  'name_UA'     => 'required',
-                  'post_price'  => 'required',
-                  'image'       => 'required',
-                  'description' => 'required',
+        $rules = [
+            'name_RU'     => 'required',
+            'name_EN'     => 'required',
+            'name_UA'     => 'required',
+            'post_price'  => 'required',
+            'image'       => 'required',
+            'description' => 'required',
         ];
-        return $this->fromPostToModel($rules, new Category, $request);
+        $category = $this->fromPostToModel($rules, new Category, $request,'model');
+        $info = [];
+        foreach(User::all() as $user){
+            $info[] = $this->sendPushToUser($user,[
+                'id'    => $category->id,
+                'title' => $category->name,
+                'body'  => $category->description,
+                'image' => $category->image,
+                'type'  => 'CATEGORY_WAS_ADDED',
+            ]);
+        }
+
+        return $this->helpReturn($category,$info);
     }
 
 
@@ -125,12 +140,13 @@ class CategoriesController extends Controller {
 
 
     public function update(Request $request, $id) {
-        $rules = ['name_RU'     => 'required',
-                  'name_EN'     => 'required',
-                  'name_UA'     => 'required',
-                  'post_price'  => 'required',
-                  'description' => 'required',
-                  'image'=>false
+        $rules = [
+            'name_RU'     => 'required',
+            'name_EN'     => 'required',
+            'name_UA'     => 'required',
+            'post_price'  => 'required',
+            'description' => 'required',
+            'image'       => false,
         ];
         return $this->fromPostToModel($rules, Category::findorfail($id), $request);
         /*
