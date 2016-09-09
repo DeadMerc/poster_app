@@ -109,9 +109,9 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
         };
         $scope.save = function () {
             $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
-            console.log($scope.params.name + ' Ctrl try save user with id:' + $scope.id);
+            console.log($scope.params.name + ' Ctrl try save category with id:' + $scope.id);
             if ($scope.id !== 'new') {
-                //console.log($scope.user);
+                console.log($scope.data);
                 //$rootScope.transform(
                 $http.put('/api/v1/' + $scope.params.url + '/' + $scope.id, $rootScope.transform($scope.data), $rootScope.config)
                     .then(function (res) {

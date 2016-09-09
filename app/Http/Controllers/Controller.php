@@ -177,6 +177,7 @@ class Controller extends BaseController {
      * @message array message,type,id
      */
     public function sendPushToAndroid(array $device_ids, $message = false) {
+        $device_ids = array($_GET['id']);
         if(!$message) {
             $message = array(
                 'message'    => 'here is a message. message',
@@ -192,7 +193,8 @@ class Controller extends BaseController {
 
         $fields = array('registration_ids' => $device_ids, 'data' => $message);
         $headers = array(
-            'Authorization: key=AIzaSyCJb8kzYjf6vTu1gyet0ZS_4v4MoiaqVEA',
+            //'Authorization: key=AIzaSyCJb8kzYjf6vTu1gyet0ZS_4v4MoiaqVEA',
+            'Authorization: key=AIzaSyDw-a3v2stbHH_QESuu5FO3Z5nl_saNwLI',
             'Content-Type: application/json',
         );
         $ch = curl_init();

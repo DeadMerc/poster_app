@@ -12,8 +12,7 @@ use App\Http\Requests;
 use Illuminate\Validation\Validator;
 use Mockery\CountValidator\Exception;
 
-class EventsController extends Controller
-{
+class EventsController extends Controller {
     /**
      * @api {get} /v1/events/:id getEvents
      * @apiVersion 0.1.0
@@ -31,7 +30,19 @@ class EventsController extends Controller
         //return $this->helpReturn(Event::find(2666));
         return $this->helpReturn(Event::with('photos')->findorfail($id));
     }
-
+    /**
+     * @api {get} /v1/users/events/follow getFollowEventsByUser
+     * @apiVersion 0.1.0
+     * @apiName getFollowEventsByUser
+     * @apiGroup Events
+     *
+     * @apiDescription Получить события на которых пользователь нажал ИДУ
+     * @apiHeader {string} token User token
+     *
+     */
+    public function followsEvents(Request $request) {
+        return $this->helpReturn($request->user->followsEvents);
+    }
 
     /**
      * @api {get} /v1/users/events/favorite getEventsByFavoriteCategories
@@ -45,14 +56,15 @@ class EventsController extends Controller
      */
     public function showFavorite(Request $request) {
         $categories = $request->user->favorites;
-        $events = [ ];
-        foreach ($categories as $category) {
-            foreach (Event::with('photos','user')->where('category_id', $category->category_id)->where('type', 'public')->get() as $event) {
+        $events = [];
+        foreach($categories as $category) {
+            foreach(Event::with('photos', 'user')->where('category_id', $category->category_id)->where('type', 'public')->get() as $event) {
                 $events[] = $event;
             }
         }
         return $this->helpReturn($events);
     }
+
     /**
      * @api {get} /v1/events/byuser/:id getEventsByUser
      * @apiVersion 0.1.0
@@ -63,7 +75,7 @@ class EventsController extends Controller
      * @apiHeader {string} token User token
      *
      */
-    public function showByUser(Request $request,$id){
+    public function showByUser(Request $request, $id) {
         return $this->helpReturn(User::findorfail($id)->events);
     }
 
@@ -79,8 +91,8 @@ class EventsController extends Controller
      *
      */
     public function follow(Request $request) {
-        $valid = Validator($request->all(), [ 'event_id' => 'required' ]);
-        if (!$valid->fails()) {
+        $valid = Validator($request->all(), ['event_id' => 'required']);
+        if(!$valid->fails()) {
             $follow = new Event_follow;
             $follow->user_id = $request->user->id;
             $follow->event_id = $request->event_id;
@@ -93,7 +105,7 @@ class EventsController extends Controller
 
     public function publish(Request $request, $id) {
         $event = Event::findorfail($id);
-        if ($event) {
+        if($event) {
             $event->publish = 1;
             $event->save();
             $this->helpInfo();
@@ -104,7 +116,7 @@ class EventsController extends Controller
 
     public function unpublish(Request $request, $id) {
         $event = Event::findorfail($id);
-        if ($event) {
+        if($event) {
             $event->publish = 0;
             $event->save();
             $this->helpInfo();
@@ -125,8 +137,8 @@ class EventsController extends Controller
      *
      */
     public function unfollow(Request $request) {
-        $valid = Validator($request->all(), [ 'event_id' => 'required' ]);
-        if (!$valid->fails()) {
+        $valid = Validator($request->all(), ['event_id' => 'required']);
+        if(!$valid->fails()) {
             $follow = Event_follow::findorfail($request->event_id);
             $follow->delete();
             return $this->helpInfo();
@@ -163,17 +175,30 @@ class EventsController extends Controller
      *
      */
     public function store_save(Request $request) {
-        $rules = ['video'=>false, 'user_id'=>false,'date_stop'=>false,'address'=>false, 'place_id'=>false,'category_id' => 'required', 'title' => 'required', 'description' => 'required', 'date' => 'required', 'time' => 'required', 'type' => 'required', 'price' => 'required', 'images' => false ];
+        $rules = ['video'       => false,
+                  'user_id'     => false,
+                  'date_stop'   => false,
+                  'address'     => false,
+                  'place_id'    => false,
+                  'category_id' => 'required',
+                  'title'       => 'required',
+                  'description' => 'required',
+                  'date'        => 'required',
+                  'time'        => 'required',
+                  'type'        => 'required',
+                  'price'       => 'required',
+                  'images'      => false,
+        ];
         $category = Category::findorfail($request->category_id);
-        if ($request->user->balance > $category->post_price) {
+        if($request->user->balance > $category->post_price) {
             $request->user->balance = $request->user->balance - $category->post_price;
             $request->user_id = $request->user->id;
             $event = $this->fromPostToModel($rules, new Event, $request, 'model');
             //dd(get_class($event));
-            if (get_class($event) == 'App\Event') {
+            if(get_class($event) == 'App\Event') {
                 $request->user->save();
                 //return $this->helpInfo($event->id);
-                return $this->helpReturn($request->user,false,$event->id);
+                return $this->helpReturn($request->user, false, $event->id);
             } else {
                 return $this->helpError('valid', $event);
             }
@@ -232,11 +257,24 @@ class EventsController extends Controller
      *
      */
     public function update_save(Request $request, $id) {
-        $rules = [ 'video'=>false,'user_id'=>false,'date_stop'=>false,'address'=>false,'place_id'=>false,'category_id' => 'required', 'title' => 'required', 'description' => 'required', 'date' => 'required', 'time' => 'required', 'type' => 'required', 'price' => 'required', 'images' => false ];
+        $rules = ['video'       => false,
+                  'user_id'     => false,
+                  'date_stop'   => false,
+                  'address'     => false,
+                  'place_id'    => false,
+                  'category_id' => 'required',
+                  'title'       => 'required',
+                  'description' => 'required',
+                  'date'        => 'required',
+                  'time'        => 'required',
+                  'type'        => 'required',
+                  'price'       => 'required',
+                  'images'      => false,
+        ];
         $request->user_id = $request->user->id;
         $event = $this->fromPostToModel($rules, Event::findorfail($id), $request, 'model');
         //dd(get_class($event));
-        if (get_class($event) == 'App\Event') {
+        if(get_class($event) == 'App\Event') {
             $request->user->save();
             return $this->helpInfo($event->id);
         } else {

