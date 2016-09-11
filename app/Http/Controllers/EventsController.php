@@ -104,10 +104,10 @@ class EventsController extends Controller {
      *
      */
     public function follow(Request $request) {
-
+        $this->deleteDuplicateInFollows();
         $valid = Validator($request->all(), ['event_id' => 'required']);
         if(!$valid->fails()) {
-            if(!Event_follow::where('user_id', $request->user->id)->where('event_id')->first()) {
+            if(!Event_follow::where('user_id', $request->user->id)->where('event_id',$request->event_id)->first()) {
                 $follow = new Event_follow;
                 $follow->user_id = $request->user->id;
                 $follow->event_id = $request->event_id;
