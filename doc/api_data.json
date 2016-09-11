@@ -430,7 +430,7 @@
   },
   {
     "type": "post",
-    "url": "/v1/events/unfollow",
+    "url": "/v1/users/events/unfollow",
     "title": "unfollowEvents",
     "version": "0.1.0",
     "name": "unfollowEvents",
@@ -466,7 +466,7 @@
     "groupTitle": "Events",
     "sampleRequest": [
       {
-        "url": "/api/v1/events/unfollow"
+        "url": "/api/v1/users/events/unfollow"
       }
     ]
   },

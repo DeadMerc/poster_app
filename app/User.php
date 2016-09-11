@@ -22,7 +22,7 @@ class User extends Model
     }
 
     public function followsEvents(){
-        return $this->belongsToMany('App\Event','events_follow','user_id','event_id');
+        return $this->belongsToMany('App\Event','events_follow','user_id','event_id')->with('photos');
     }
 
 

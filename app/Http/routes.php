@@ -36,11 +36,11 @@ Route::group([ 'prefix' => 'api' ], function () {
             Route::get('photo/{id}/remove','EventsController@removePhoto');
 
             Route::post('users/events/follow', 'EventsController@follow');
+            Route::post('users/events/unfollow', 'EventsController@unfollow');
             Route::get('users/events/follow','EventsController@followsEvents');
             Route::get('users/events/favorite', 'EventsController@showFavorite');
             Route::get('events/byuser/{id}','EventsController@showByUser');
 
-            Route::post('events/unfollow', 'EventsController@unfollow');
             Route::get('events/publish/{id}', 'EventsController@publish');
             Route::get('events/unpublish/{id}', 'EventsController@unpublish');
 
