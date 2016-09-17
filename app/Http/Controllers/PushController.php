@@ -48,8 +48,6 @@ class PushController extends Controller {
             $push_history->send_to = $user['id'];
             $push_history->image = $push['image'];
             $push_history->save();*/
-
-
             $info[] = $this->sendPushToUser(User::find($user['id']), [
                 'id'    => false,
                 'title' => $push['title'],

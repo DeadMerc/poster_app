@@ -16,7 +16,7 @@ use App\Http\Requests;
 class Controller extends BaseController {
     use AuthorizesRequests, AuthorizesResources, DispatchesJobs, ValidatesRequests;
 
-    public function fromPostToModel($rules, $model, $request, $bool = false,$info = false) {
+    public function fromPostToModel($rules, $model, $request, $bool = false, $info = false) {
         $rulesForValidator = [];
         foreach($rules as $key => $value) {
             if($value !== false) {
@@ -70,7 +70,7 @@ class Controller extends BaseController {
             if($bool) {
                 return true;
             }
-            return $this->helpReturn($model,$info);
+            return $this->helpReturn($model, $info);
         } else {
             if($bool) {
                 return $valid;
@@ -196,7 +196,7 @@ class Controller extends BaseController {
         $fields = array('registration_ids' => $device_ids, 'data' => $message);
         $headers = array(
             //'Authorization: key=AIzaSyCJb8kzYjf6vTu1gyet0ZS_4v4MoiaqVEA',
-            'Authorization: key=AIzaSyDw-a3v2stbHH_QESuu5FO3Z5nl_saNwLI',
+            'Authorization: key=AIzaSyC058Lyrn0NKvEswoGBEP5Y7iNkj8edgss',
             'Content-Type: application/json',
         );
         $ch = curl_init();
@@ -208,10 +208,9 @@ class Controller extends BaseController {
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
         $result = curl_exec($ch);
         //print_r($result);
+        //dd(json_decode($result));
         curl_close($ch);
-        if(json_decode($result)->success == '1'){
-            $res = 'Success';
-        }
+        $res = json_decode($result);
         return $res;
     }
 
@@ -250,7 +249,7 @@ class Controller extends BaseController {
         $tCert = storage_path() . '/app/dist.pem';
         $tPassphrase = 'qwer';
         $tToken = $device_ids;
-        $tToken = '913102bc68b8cd1a65f2e5ebe39f4ccb0e03de5c25f107e14a9698d6d1be4d20';
+        //$tToken = '913102bc68b8cd1a65f2e5ebe39f4ccb0e03de5c25f107e14a9698d6d1be4d20';
         $tPayload = 'Payload';
         $error = '';
         $errstr = '';
@@ -283,6 +282,7 @@ class Controller extends BaseController {
      */
 
     public function sendPushToUser($user, $message) {
+
         if($user->device_type == 'android') {
             $response = $this->sendPushToAndroid(array($user->device_token), $message);
         } elseif($user->device_type == 'ios') {
@@ -298,13 +298,12 @@ class Controller extends BaseController {
         $push_history->image = $message['image'];
         $push_history->type = $message['type'];
         $push_history->save();
-
-        $response = $user->id.':'.$response;
+        $response = 'Ok';
+        //$response = $user->id . ':' . $response;
         return $response;
     }
 
     public function uploadFile(Request $request) {
-
         if($request->hasFile('image')) {
             $fileName = md5(rand(9999, 99999) . date('d m Y') . rand(9999, 99999)) . '.jpg';
             $request->file('image')->move(storage_path() . '/app/public/images', $fileName);

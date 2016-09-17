@@ -12,6 +12,18 @@ class User extends Model
     protected $appends = array('events_count');
     protected $hidden = ['password'];
 
+    /*
+     * Security problem in future.
+     */
+    public function getTokenAttribute($v){
+        $headers = apache_request_headers();
+        if(isset($headers['Token'])){
+            return null;
+        }else{
+            return $v;
+        }
+    }
+
     public function getEventsCountAttribute() {
         $events = $this->events();
         $events = $events->count();

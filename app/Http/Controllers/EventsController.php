@@ -192,6 +192,10 @@ class EventsController extends Controller {
      *
      */
     public function store_save(Request $request) {
+        //dump('Files');
+        //dump($request->allFiles());
+        //dump('All params');
+        //dd($request->all());
         $rules = [
             'video'       => false,
             'user_id'     => false,

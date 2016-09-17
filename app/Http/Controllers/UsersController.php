@@ -7,8 +7,7 @@ use App\User;
 use App\Http\Requests;
 use Illuminate\Validation\Validator;
 
-class UsersController extends Controller
-{
+class UsersController extends Controller {
     /**
      * Display a listing of the resource.
      *
@@ -23,20 +22,11 @@ class UsersController extends Controller
         return $this->helpReturn(User::with('events')->with('favorites')->findorfail($id));
     }
 
-    public function forPush(Request $request,$category_id){
-        if($category_id == 'all'){
-            return $this->helpReturn(
-                User::where('lon','>',"0")
-                    ->where('lat','>',"0")
-                    ->get()
-            );
-        }else{
-            return $this->helpReturn(
-                User::where('lon','>',"0")
-                    ->where('lat','>',"0")
-                    ->where('category_id',$category_id)
-                    ->get()
-            );
+    public function forPush(Request $request, $category_id) {
+        if($category_id == 'all') {
+            return $this->helpReturn(User::where('lon', '>', "0")->where('lat', '>', "0")->get());
+        } else {
+            return $this->helpReturn(User::where('lon', '>', "0")->where('lat', '>', "0")->where('category_id', $category_id)->get());
         }
 
     }
@@ -73,41 +63,53 @@ class UsersController extends Controller
      *
      */
     public function auth(Request $request, $type = 'email') {
-        if ($type == 'email') {
+        if($type == 'email') {
             $data['email'] = $request->email;
             $data['password'] = md5($request->password . 'requestLoginEvstolia');
             $user = User::where('email', '=', $data['email'])->where('password', '=', $data['password'])->first();
-            if ($user) {
+
+            if($user) {
+                $this->checkPushToken($request,$user);
                 return $this->helpReturn($user);
             } else {
                 return $this->helpError('Wrong credentials');
             }
-        } elseif ($type == 'fb' or $type == 'vk') {
+        } elseif($type == 'fb' or $type == 'vk') {
             $user = User::where('social_hash', '=', $request->social_hash)->first();
-            if (!$user) {
+            if(!$user) {
                 $user = new User;
                 $user->social_hash = $request->social_hash;
                 $user->name = $request->name;
                 $user->token = md5(uniqid() . md5(date("h:m")));
                 $user->type = 'social';
                 $user->save();
+                $this->checkPushToken($request,$user);
                 return $this->helpReturn($user);
             } else {
                 return $this->helpReturn($user, null, 'hey');
             }
-        } elseif ($type == 'hidden') {
+        } elseif($type == 'hidden') {
             $imei = $request->imei;
             $user = User::where('imei', '=', $imei)->first();
-            if (!$user) {
+            if(!$user) {
                 $user = new User;
                 $user->imei = $request->imei;
                 $user->token = md5(uniqid() . md5(date("h:m")));
                 $user->type = 'hidden';
                 $user->save();
+                $this->checkPushToken($request,$user);
                 return $this->helpReturn($user);
             } else {
                 return $this->helpReturn($user);
             }
+        }
+    }
+
+    protected function checkPushToken($request, $user) {
+        if($request->device_type AND $request->device_token) {
+            $user->device_type = $request->device_type;
+            $user->device_token = $request->device_token;
+            $user->save();
         }
     }
 
@@ -130,7 +132,7 @@ class UsersController extends Controller
     public function store(Request $request) {
         $rules = ['name' => 'required|min:3', 'email' => 'required|unique:users', 'password' => 'required'];
         $valid = Validator($request->all(), $rules);
-        if (!$valid->fails()) {
+        if(!$valid->fails()) {
             $user = new User;
             $user->name = $request->name;
             $user->email = $request->email;
@@ -151,7 +153,7 @@ class UsersController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($id) {
-        return $this->getSchemaByModel(User::first(),['type']);
+        return $this->getSchemaByModel(User::first(), ['type']);
     }
 
     /**
@@ -184,17 +186,36 @@ class UsersController extends Controller
      */
     public function update(Request $request, $id) {
         //return var_dump($request->all());
-        $rules = ['device_type'=>false,'device_token'=>false,'balance'=>false,'description'=>false,'image'=>false,'description'=>false,'phone_1'=>false,'phone_2'=>false,'phone_3'=>false,'name' => false, 'location' => false, 'lon' => false, 'lat' => false, 'category_id' => false,  'email' => false, 'password' => false,'place_id'=>false];
+        $rules = ['device_type'  => false,
+                  'device_token' => false,
+                  'balance'      => false,
+                  'description'  => false,
+                  'image'        => false,
+                  'description'  => false,
+                  'phone_1'      => false,
+                  'phone_2'      => false,
+                  'phone_3'      => false,
+                  'name'         => false,
+                  'location'     => false,
+                  'lon'          => false,
+                  'lat'          => false,
+                  'category_id'  => false,
+                  'email'        => false,
+                  'password'     => false,
+                  'place_id'     => false,
+        ];
         $user = User::findorfail($id);
         return $this->fromPostToModel($rules, $user, $request);
     }
-    public function ban($id){
+
+    public function ban($id) {
         $user = User::findorfail($id);
         $user->banned = 1;
         $user->save();
         return $this->helpReturn($user);
     }
-    public function unban($id){
+
+    public function unban($id) {
         $user = User::findorfail($id);
         $user->banned = 0;
         $user->save();

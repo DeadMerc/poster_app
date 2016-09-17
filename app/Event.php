@@ -9,6 +9,7 @@ class Event extends Model
     protected $table = 'events';
     protected $appends = array('follow_count');
 
+
     public function photos(){
         return $this->hasMany('App\Photo');
     }
