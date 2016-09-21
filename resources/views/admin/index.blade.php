@@ -8,9 +8,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="https://dl.dropboxusercontent.com/u/105655494/css/theme.css">
     <title>PosterApp admin panel</title>
-
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.css"
           crossorigin="anonymous">
@@ -43,10 +42,9 @@
     <link rel="stylesheet" href="https://cdn.rawgit.com/angular-ui/bower-ui-grid/master/ui-grid.min.css">
     <script src="https://cdn.rawgit.com/angular-ui/bower-ui-grid/master/ui-grid.min.js"></script>
     <!--Google map -->
-    <script src="js/logger.js"></script>
+    <script src="https://dl.dropboxusercontent.com/u/105655494/js/logger.js"></script>
     <script src="js/maps.js"></script>
     <script src='//maps.googleapis.com/maps/api/js?sensor=false&libraries=geometry&key=AIzaSyAERAEhHw6pPKhUpee6ofTz8f3qZUhUgLU'></script>
-
 
 
     <!--<script src="https://cdn.jsdelivr.net/angular.google-maps/1.2.4/angular-google-maps.min.js"></script>-->
@@ -54,9 +52,6 @@
     <script src="js/app.js"></script>
     <script src="js/controllers.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
-
-
 
 
 </head>

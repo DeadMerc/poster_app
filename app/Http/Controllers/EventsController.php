@@ -28,7 +28,7 @@ class EventsController extends Controller {
 
     public function show($id) {
         //return $this->helpReturn(Event::find(2666));
-        return $this->helpReturn(Event::with('photos')->findorfail($id));
+        return $this->helpReturn(Event::with('photos','user')->findorfail($id));
     }
 
     /**
@@ -304,6 +304,10 @@ class EventsController extends Controller {
             'images'      => false,
         ];
         $request->user_id = $request->user->id;
+        if($request->images){
+            Photo::where('event_id',$id)->delete();
+        }
+
         $event = $this->fromPostToModel($rules, Event::findorfail($id), $request, 'model');
         //dd(get_class($event));
         if(get_class($event) == 'App\Event') {

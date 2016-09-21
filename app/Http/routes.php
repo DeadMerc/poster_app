@@ -25,12 +25,13 @@ Route::group([ 'prefix' => 'api' ], function () {
         Route::resource('categories', 'CategoriesController', [ 'except' => [ 'show' ] ]);
         Route::get('category/{id}','CategoriesController@show');
 
-        Route::resource('events', 'EventsController', [ 'except' => [ 'update' ] ]);
+
         Route::get('event/{id}/images','EventsController@getImagesFromEvent');
 
         Route::resource('push','PushController');
         Route::get('push/send/user/{id}','PushController@sendForUser');
         Route::group([ 'middleware' => [ \App\Http\Middleware\AuthByToken::class ] ], function () {
+            Route::resource('events', 'EventsController', [ 'except' => [ 'update' ] ]);
             Route::post('events', 'EventsController@store_save');
             Route::post('events/{id}', 'EventsController@update_save');
             Route::get('photo/{id}/remove','EventsController@removePhoto');
@@ -67,8 +68,7 @@ Route::group([ 'prefix' => 'api' ], function () {
 });
 
 Route::post('/images/upload', 'Controller@uploadFile');
-
-Route::get('images/{filename}', function ($filename) {
+    Route::get('images/{filename}', function ($filename) {
     $path = storage_path() . '/app/public/images/' . $filename;
     if (file_exists($path)) {
         $file = File::get($path);
@@ -78,7 +78,28 @@ Route::get('images/{filename}', function ($filename) {
     } else {
         $response = array( 'error' => true, 'message' => 'Not found image' );
     }
-
-
     return $response;
+});
+Route::get('images/{filename}/thumbnail',function($filename){
+    $pathOriginal = storage_path() . '/app/public/images/' . $filename;
+    $pathThumbnail = storage_path() . '/app/public/images/thumbnail_200_' . $filename.'';
+    if(file_exists($pathThumbnail)){
+        $file = File::get($pathThumbnail);
+        $type = File::mimeType($pathThumbnail);
+        $response = Response::make($file, 200);
+        $response->header("Content-Type", $type);
+        return $response;
+    }else{
+        if(file_exists($pathOriginal)){
+            $img = Image::make($pathOriginal);
+            $img->resize(null, 200, function ($constraint) {
+                $constraint->aspectRatio();
+            });
+            $img->save(storage_path() . '/app/public/images/thumbnail_200_' . $filename);
+            return $img->response('jpg');
+        }else{
+            return array( 'error' => true, 'message' => 'Not found image' );
+        }
+
+    }
 });

@@ -13,8 +13,9 @@ class User extends Model
     protected $hidden = ['password'];
 
     /*
-     * Security problem in future.
+     * TODO:Security problem in future partly solved
      */
+
     public function getTokenAttribute($v){
         $headers = apache_request_headers();
         if(isset($headers['Token'])){
@@ -34,7 +35,7 @@ class User extends Model
     }
 
     public function followsEvents(){
-        return $this->belongsToMany('App\Event','events_follow','user_id','event_id')->with('photos');
+        return $this->belongsToMany('App\Event','events_follow','user_id','event_id')->with('photos','user');
     }
 
 
