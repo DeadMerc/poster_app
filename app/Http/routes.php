@@ -16,7 +16,7 @@ Route::group([ 'prefix' => 'api' ], function () {
         }
         return $response;
     });
-
+    Route::post('payment/callback','PayController@callback');
     Route::group([ 'prefix' => 'v1' ], function () {
         Route::resource('users', 'UsersController', [ 'expect' => [ 'update', 'show' ] ]);
         Route::post('users/auth/{type}', 'UsersController@auth');

@@ -8,6 +8,10 @@ use App\Http\Requests;
 
 class PayController extends Controller
 {
+    public function callback(Request $request){
+        return $this->helpInfo();
+    }
+
     public function pay(Request $request,LiqPay $liqPay){
         $res = $liqPay->api("request", array(
             'action'         => 'pay',
