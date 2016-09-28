@@ -13,10 +13,17 @@ class UsersController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
+    /**
+     * @api {get} /v1/users/:id getUser
+     * @apiVersion 0.1.0
+     * @apiName getUser
+     * @apiGroup Users
+     * @apiHeader {string} token User token
+     *
+     */
     public function index() {
         return $this->helpReturn(User::with('events')->with('favorites')->get());
     }
-
 
     public function show($id) {
         return $this->helpReturn(User::with('events')->with('favorites')->findorfail($id));

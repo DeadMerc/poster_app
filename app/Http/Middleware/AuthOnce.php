@@ -19,6 +19,7 @@ class AuthOnce
             $headers = array('WWW-Authenticate' => 'Basic');
             return Response::make('Invalid credentials.', 401, $headers);
         }else{
+            //$request->cookie('admin',md5('adminTEST'));
             return $next($request);
         }
     }

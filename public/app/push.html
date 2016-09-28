@@ -29,7 +29,7 @@
 
 
         <md-input-container class="md-block">
-            <label>Title</label>
+            <label>Title<FONT color="red">*</FONT> </label>
             <input type="text"  name="input.key" ng-model="push.title">
             <div ng-messages="user.key.$error">
                 <div ng-message="required">This is required.</div>
@@ -37,7 +37,7 @@
         </md-input-container>
 
         <md-input-container class="md-block">
-            <label>Description</label>
+            <label>Description<FONT color="red">*</FONT></label>
             <input type="text"  name="input.key" ng-model="push.description">
             <div ng-messages="user.key.$error">
                 <div ng-message="required">This is required.</div>
@@ -51,20 +51,20 @@
 
         <md-input-container class="md-block">
             <label>Link</label>
-            <input type="text" placeholder="optional"  name="input.key" ng-model="push.link">
+            <input type="text" placeholder="http://www.yandex.ru"  name="input.key" ng-model="push.link">
         </md-input-container>
 
         <md-input-container class="md-block">
-            <label>Type</label>
+            <label>Type<FONT color="red">*</FONT></label>
             <select ng-model="push.type" name="input.key" placeholder="Type of push" class="no-underline">
-                <option value="ADVERTISING">Advertising</option>
+                <option selected value="ADVERTISING">Advertising</option>
                 <option value="INFORMATION">Information</option>
                 <option value="ANNOUNCEMENT">Announcement</option>
             </select>
         </md-input-container>
 
 
-        <% push.image || 'Image not uploaded' %><br>
+        <% push.image || 'Image not uploaded' %><FONT color="red">*</FONT><br>
         <div class="md-button md-raised md-primary" ngf-select="upload($file)" ng-model="push.image" ngf-multiple="false">
             Select Image
         </div>

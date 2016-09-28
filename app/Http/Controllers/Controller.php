@@ -229,12 +229,15 @@ class Controller extends BaseController {
 
         } else {
             $message = [
+                "content-available" => 1,
                 'type'  => $message['type'],
                 'alert' => [
                     'id'    => $message['id'],
                     'title' => $message['title'],
                     'body'  => $message['body'],
                     'image' => $message['image'],
+                    'link' => (!empty($message['link'])?$message['link']:null),
+                    'date' => (!empty($message['date'])?$message['date']:null),
 
                 ],
                 'badge' => '0',

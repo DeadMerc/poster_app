@@ -39,8 +39,10 @@ class PushController extends Controller
             //return $this->helpError('valid',$valid);
         }
         $data = $request->all();
+
         //print_r($data);
         $push = $data['push'];
+        //dump($push);dd();
         $users = $data['users'];
         $info = [];
         foreach ($users as $user) {
@@ -56,9 +58,9 @@ class PushController extends Controller
                 'title' => $push['title'],
                 'body' => $push['description'],
                 'image' => $push['image'],
-                'type' => $push['type'],
-                'date' => $push['date'],
-                'link' => $push['link']
+                'type' => (!empty($push['type'])?$push['type']:null),
+                'date' => (!empty($push['date'])?$push['date']:null),
+                'link' => (!empty($push['link'])?$push['link']:null)
             ]);
         }
         return $this->helpInfo($info);

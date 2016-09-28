@@ -14,7 +14,7 @@
             "type": "string",
             "optional": false,
             "field": "token",
-            "description": "<p>User token</p> "
+            "description": "<p>User token</p>"
           }
         ]
       }
@@ -24,10 +24,10 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "<p>array</p> ",
+            "type": "array",
             "optional": false,
             "field": "category_ids",
-            "description": "<p>example in json=['1','2']</p> "
+            "description": "<p>example in json=['1','2']</p>"
           }
         ]
       }
@@ -70,7 +70,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "<p>string</p> ",
+            "type": "string",
             "optional": true,
             "field": "id",
             "description": ""
@@ -101,7 +101,7 @@
             "type": "string",
             "optional": false,
             "field": "token",
-            "description": "<p>User token</p> "
+            "description": "<p>User token</p>"
           }
         ]
       }
@@ -129,7 +129,7 @@
             "type": "string",
             "optional": false,
             "field": "token",
-            "description": "<p>User token</p> "
+            "description": "<p>User token</p>"
           }
         ]
       }
@@ -139,10 +139,10 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "<p>array</p> ",
+            "type": "array",
             "optional": false,
             "field": "category_ids",
-            "description": "<p>example=['1','2']</p> "
+            "description": "<p>example=['1','2']</p>"
           }
         ]
       }
@@ -162,7 +162,7 @@
     "version": "0.1.0",
     "name": "followEvents",
     "group": "Events",
-    "description": "<p>Иду на событие</p> ",
+    "description": "<p>Иду на событие</p>",
     "header": {
       "fields": {
         "Header": [
@@ -171,7 +171,7 @@
             "type": "string",
             "optional": false,
             "field": "token",
-            "description": "<p>User token</p> "
+            "description": "<p>User token</p>"
           }
         ]
       }
@@ -181,7 +181,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "<p>integer</p> ",
+            "type": "integer",
             "optional": false,
             "field": "event_id",
             "description": ""
@@ -209,7 +209,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "<p>string</p> ",
+            "type": "string",
             "optional": true,
             "field": "id",
             "description": ""
@@ -232,7 +232,7 @@
     "version": "0.1.0",
     "name": "getEventsByFavoriteCategories",
     "group": "Events",
-    "description": "<p>Все события из категорий на которые подписан пользователь</p> ",
+    "description": "<p>Все события из категорий на которые подписан пользователь</p>",
     "header": {
       "fields": {
         "Header": [
@@ -241,7 +241,7 @@
             "type": "string",
             "optional": false,
             "field": "token",
-            "description": "<p>User token</p> "
+            "description": "<p>User token</p>"
           }
         ]
       }
@@ -261,7 +261,7 @@
     "version": "0.1.0",
     "name": "getEventsByUser",
     "group": "Events",
-    "description": "<p>Все события из категорий на которые подписан пользователь</p> ",
+    "description": "<p>Все события из категорий на которые подписан пользователь</p>",
     "header": {
       "fields": {
         "Header": [
@@ -270,7 +270,7 @@
             "type": "string",
             "optional": false,
             "field": "token",
-            "description": "<p>User token</p> "
+            "description": "<p>User token</p>"
           }
         ]
       }
@@ -290,7 +290,7 @@
     "version": "0.1.0",
     "name": "getFollowEventsByUser",
     "group": "Events",
-    "description": "<p>Получить события на которых пользователь нажал ИДУ</p> ",
+    "description": "<p>Получить события на которых пользователь нажал ИДУ</p>",
     "header": {
       "fields": {
         "Header": [
@@ -299,7 +299,7 @@
             "type": "string",
             "optional": false,
             "field": "token",
-            "description": "<p>User token</p> "
+            "description": "<p>User token</p>"
           }
         ]
       }
@@ -319,7 +319,7 @@
     "version": "0.1.0",
     "name": "storeEvents",
     "group": "Events",
-    "description": "<p>add Event object</p> ",
+    "description": "<p>add Event object</p>",
     "header": {
       "fields": {
         "Header": [
@@ -328,7 +328,7 @@
             "type": "string",
             "optional": false,
             "field": "token",
-            "description": "<p>User token</p> "
+            "description": "<p>User token</p>"
           }
         ]
       }
@@ -338,42 +338,42 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "<p>string</p> ",
+            "type": "string",
             "optional": false,
             "field": "category_id",
             "description": ""
           },
           {
             "group": "Parameter",
-            "type": "<p>string</p> ",
+            "type": "string",
             "optional": false,
             "field": "title",
             "description": ""
           },
           {
             "group": "Parameter",
-            "type": "<p>string</p> ",
+            "type": "string",
             "optional": false,
             "field": "description",
             "description": ""
           },
           {
             "group": "Parameter",
-            "type": "<p>string</p> ",
+            "type": "string",
             "optional": false,
             "field": "date",
             "description": ""
           },
           {
             "group": "Parameter",
-            "type": "<p>string</p> ",
+            "type": "string",
             "optional": false,
             "field": "time",
             "description": ""
           },
           {
             "group": "Parameter",
-            "type": "<p>string</p> ",
+            "type": "string",
             "allowedValues": [
               "'private'",
               "'public'"
@@ -384,38 +384,38 @@
           },
           {
             "group": "Parameter",
-            "type": "<p>string</p> ",
+            "type": "string",
             "optional": false,
             "field": "price",
             "description": ""
           },
           {
             "group": "Parameter",
-            "type": "<p>array</p> ",
+            "type": "array",
             "optional": false,
             "field": "images",
             "description": ""
           },
           {
             "group": "Parameter",
-            "type": "<p>string</p> ",
+            "type": "string",
             "optional": true,
             "field": "place_id",
             "description": ""
           },
           {
             "group": "Parameter",
-            "type": "<p>string</p> ",
+            "type": "string",
             "optional": true,
             "field": "address",
             "description": ""
           },
           {
             "group": "Parameter",
-            "type": "<p>datetime</p> ",
+            "type": "datetime",
             "optional": false,
             "field": "date_stop",
-            "description": "<p>Дата окончания показа в приложении</p> "
+            "description": "<p>Дата окончания показа в приложении</p>"
           }
         ]
       }
@@ -435,7 +435,7 @@
     "version": "0.1.0",
     "name": "unfollowEvents",
     "group": "Events",
-    "description": "<p>НЕ иду на событие</p> ",
+    "description": "<p>НЕ иду на событие</p>",
     "header": {
       "fields": {
         "Header": [
@@ -444,7 +444,7 @@
             "type": "string",
             "optional": false,
             "field": "token",
-            "description": "<p>User token</p> "
+            "description": "<p>User token</p>"
           }
         ]
       }
@@ -454,7 +454,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "<p>integer</p> ",
+            "type": "integer",
             "optional": false,
             "field": "event_id",
             "description": ""
@@ -485,7 +485,7 @@
             "type": "string",
             "optional": false,
             "field": "token",
-            "description": "<p>User token</p> "
+            "description": "<p>User token</p>"
           }
         ]
       }
@@ -495,80 +495,80 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "<p>integer</p> ",
+            "type": "integer",
             "optional": false,
             "field": "id",
             "description": ""
           },
           {
             "group": "Parameter",
-            "type": "<p>string</p> ",
+            "type": "string",
             "optional": false,
             "field": "category_id",
             "description": ""
           },
           {
             "group": "Parameter",
-            "type": "<p>string</p> ",
+            "type": "string",
             "optional": false,
             "field": "title",
             "description": ""
           },
           {
             "group": "Parameter",
-            "type": "<p>string</p> ",
+            "type": "string",
             "optional": false,
             "field": "description",
             "description": ""
           },
           {
             "group": "Parameter",
-            "type": "<p>string</p> ",
+            "type": "string",
             "optional": false,
             "field": "date",
             "description": ""
           },
           {
             "group": "Parameter",
-            "type": "<p>string</p> ",
+            "type": "string",
             "optional": false,
             "field": "time",
             "description": ""
           },
           {
             "group": "Parameter",
-            "type": "<p>string</p> ",
+            "type": "string",
             "optional": false,
             "field": "type",
             "description": ""
           },
           {
             "group": "Parameter",
-            "type": "<p>string</p> ",
+            "type": "string",
             "optional": false,
             "field": "price",
             "description": ""
           },
           {
             "group": "Parameter",
-            "type": "<p>string</p> ",
+            "type": "string",
             "optional": true,
             "field": "place_id",
             "description": ""
           },
           {
             "group": "Parameter",
-            "type": "<p>string</p> ",
+            "type": "string",
             "optional": true,
             "field": "address",
             "description": ""
           },
           {
             "group": "Parameter",
-            "type": "<p>datetime</p> ",
+            "type": "datetime",
             "optional": false,
             "field": "date_stop",
-            "description": "<p>Дата окончания показа в приложении</p> "
+            "description": "<p>Дата окончания показа в приложении</p>"
           }
         ]
       }
@@ -593,14 +593,14 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "<p>string</p> ",
+            "type": "string",
             "optional": false,
             "field": "email",
             "description": ""
           },
           {
             "group": "Parameter",
-            "type": "<p>string</p> ",
+            "type": "string",
             "optional": false,
             "field": "password",
             "description": ""
@@ -628,7 +628,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "<p>string</p> ",
+            "type": "string",
             "optional": false,
             "field": "imei",
             "description": ""
@@ -656,7 +656,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "<p>string</p> ",
+            "type": "string",
             "allowedValues": [
               "'vk'",
               "'fb'",
@@ -664,18 +664,18 @@
             ],
             "optional": false,
             "field": "type",
-            "description": "<p>Hidden=если пользователь ни как не авторизировался для учёта инфы</p> "
+            "description": "<p>Hidden=если пользователь ни как не авторизировался для учёта инфы</p>"
           },
           {
             "group": "Parameter",
-            "type": "<p>string</p> ",
+            "type": "string",
             "optional": false,
             "field": "name",
             "description": ""
           },
           {
             "group": "Parameter",
-            "type": "<p>string</p> ",
+            "type": "string",
             "optional": false,
             "field": "social_hash",
             "description": ""
@@ -692,33 +692,61 @@
     ]
   },
   {
+    "type": "get",
+    "url": "/v1/users/:id",
+    "title": "getUser",
+    "version": "0.1.0",
+    "name": "getUser",
+    "group": "Users",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "string",
+            "optional": false,
+            "field": "token",
+            "description": "<p>User token</p>"
+          }
+        ]
+      }
+    },
+    "filename": "app/Http/Controllers/UsersController.php",
+    "groupTitle": "Users",
+    "sampleRequest": [
+      {
+        "url": "/api/v1/users/:id"
+      }
+    ]
+  },
+  {
     "type": "post",
     "url": "/v1/users",
     "title": "regUser",
     "version": "0.1.0",
     "name": "regUser",
     "group": "Users",
-    "description": "<p>Только для авторизации по имейлу нужна регистрация,в остальных случаях она автоматическая</p> ",
+    "description": "<p>Только для авторизации по имейлу нужна регистрация,в остальных случаях она автоматическая</p>",
     "parameter": {
       "fields": {
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "<p>string</p> ",
+            "type": "string",
             "optional": false,
             "field": "name",
             "description": ""
           },
           {
             "group": "Parameter",
-            "type": "<p>string</p> ",
+            "type": "string",
             "optional": false,
             "field": "email",
             "description": ""
           },
           {
             "group": "Parameter",
-            "type": "<p>string</p> ",
+            "type": "string",
             "optional": false,
             "field": "password",
             "description": ""
@@ -749,120 +777,120 @@
             "type": "string",
             "optional": false,
             "field": "token",
-            "description": "<p>User token</p> "
+            "description": "<p>User token</p>"
           }
         ]
       }
     },
-    "description": "<p>При редактировании, если нужно какое-то определённое поле, в других должно быть false (bool)</p> ",
+    "description": "<p>При редактировании, если нужно какое-то определённое поле, в других должно быть false (bool)</p>",
     "parameter": {
       "fields": {
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "<p>string</p> ",
+            "type": "string",
             "optional": false,
             "field": "name",
             "description": ""
           },
           {
             "group": "Parameter",
-            "type": "<p>file</p> ",
+            "type": "file",
             "optional": false,
             "field": "image",
             "description": ""
           },
           {
             "group": "Parameter",
-            "type": "<p>string</p> ",
+            "type": "string",
             "optional": false,
             "field": "email",
             "description": ""
           },
           {
             "group": "Parameter",
-            "type": "<p>string</p> ",
+            "type": "string",
             "optional": false,
             "field": "password",
             "description": ""
           },
           {
             "group": "Parameter",
-            "type": "<p>string</p> ",
+            "type": "string",
             "optional": true,
             "field": "phone_1",
             "description": ""
           },
           {
             "group": "Parameter",
-            "type": "<p>string</p> ",
+            "type": "string",
             "optional": true,
             "field": "phone_2",
             "description": ""
           },
           {
             "group": "Parameter",
-            "type": "<p>string</p> ",
+            "type": "string",
             "optional": true,
             "field": "phone_3",
             "description": ""
           },
           {
             "group": "Parameter",
-            "type": "<p>string</p> ",
+            "type": "string",
             "optional": false,
             "field": "location",
             "description": ""
           },
           {
             "group": "Parameter",
-            "type": "<p>string</p> ",
+            "type": "string",
             "optional": false,
             "field": "lon",
             "description": ""
           },
           {
             "group": "Parameter",
-            "type": "<p>string</p> ",
+            "type": "string",
             "optional": false,
             "field": "lat",
             "description": ""
           },
           {
             "group": "Parameter",
-            "type": "<p>string</p> ",
+            "type": "string",
             "optional": false,
             "field": "category_id",
             "description": ""
           },
           {
             "group": "Parameter",
-            "type": "<p>string</p> ",
+            "type": "string",
             "optional": false,
             "field": "place_id",
             "description": ""
           },
           {
             "group": "Parameter",
-            "type": "<p>string</p> ",
+            "type": "string",
             "optional": false,
             "field": "description",
             "description": ""
           },
           {
             "group": "Parameter",
-            "type": "<p>string</p> ",
+            "type": "string",
             "allowedValues": [
               "\"ios\"",
               "\"android\""
             ],
             "optional": false,
             "field": "device_type",
-            "description": "<p>для пушей</p> "
+            "description": "<p>для пушей</p>"
           },
           {
             "group": "Parameter",
-            "type": "<p>string</p> ",
+            "type": "string",
             "optional": false,
             "field": "device_token",
             "description": ""

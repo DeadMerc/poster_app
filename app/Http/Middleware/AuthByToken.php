@@ -22,7 +22,7 @@ class AuthByToken
         //$controller = new Controller();
         if ($request->header('token')) {
             if ($request->header('token') == 'adm') {
-                $user = User::where('banned', '=',0)->first();
+                $user = User::where('banned', '!=',0)->first();
             } else {
                 //echo 'find token';
                 $user = User::where('token', '=', $request->header('token'))->with('favorites')->first();
@@ -42,6 +42,7 @@ class AuthByToken
                 return redirect('/api/405');
             }
         } else {
+            //return response('wrong');
             return redirect('/api/404');
         }
 

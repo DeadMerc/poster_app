@@ -388,7 +388,7 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
 
         $scope.init = function () {
             console.log($scope.params.name + " Ctrl scope init");
-            $http.get("/api/v1/" + $scope.params.url + "")
+            $http.get("/api/v1/" + $scope.params.url + "", $rootScope.config)
                 .then(function (res) {
                     //console.log(res.data.response[0]);
                     if (res.data.error == false) {
@@ -481,7 +481,7 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
         $scope.data = {};
         $scope.init = function () {
             console.log($scope.params.name + " Ctrl scope init");
-            $http.get('api/v1/' + $scope.params.url + '/s/edit', {ignoreLoadingBar: true})
+            $http.get('api/v1/' + $scope.params.url + '/s/edit',$rootScope.config)
                 .then(function (res) {
                     console.log($scope.params.name + '  Ctrl loading schema');
                     //console.log(res.data.response);
@@ -496,7 +496,7 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
             if (typeof $scope.id == 'undefined') {
                 $scope.id = 'new';
             } else {
-                $http.get('/api/v1/' + $scope.params.url + '/' + $scope.id).then(function (res) {
+                $http.get('/api/v1/' + $scope.params.url + '/' + $scope.id,$rootScope.config).then(function (res) {
                     $scope.data = res.data.response;
                     $scope.photos = res.data.response.photos;
                     //console.log($scope.photos);
