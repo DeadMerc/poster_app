@@ -12,7 +12,7 @@ use Illuminate\Validation\Validator;
 use Illuminate\Http\Request;
 use App\Photo;
 use App\Http\Requests;
-
+use Log;
 class Controller extends BaseController {
     use AuthorizesRequests, AuthorizesResources, DispatchesJobs, ValidatesRequests;
 
@@ -139,10 +139,11 @@ class Controller extends BaseController {
             $arrayForResponse['message'] = $message;
         }
         $arrayForResponse['error'] = false;
+        /*
         if(!$response) {
             $arrayForResponse['error'] = true;
             $arrayForResponse['message'] = 'Resource not found';
-        }
+        }*/
 
         return $arrayForResponse;
     }
@@ -196,7 +197,7 @@ class Controller extends BaseController {
         $fields = array('registration_ids' => $device_ids, 'data' => $message);
         $headers = array(
             //'Authorization: key=AIzaSyCJb8kzYjf6vTu1gyet0ZS_4v4MoiaqVEA',
-            'Authorization: key=AIzaSyC058Lyrn0NKvEswoGBEP5Y7iNkj8edgss',
+            'Authorization: key='.env('ANDROID_KEY','AIzaSyC058Lyrn0NKvEswoGBEP5Y7iNkj8edgss'),
             'Content-Type: application/json',
         );
         $ch = curl_init();
@@ -211,6 +212,7 @@ class Controller extends BaseController {
         //dd(json_decode($result));
         curl_close($ch);
         $res = json_decode($result);
+        Log::info('Push was sended to ANDROID with token:'.$device_ids[0]);
         return $res;
     }
 
@@ -246,10 +248,10 @@ class Controller extends BaseController {
         }
 
         //.sandbox
-        $tHost = 'gateway.push.apple.com';
+        $tHost = env('IOS_PUSH_URL','gateway.push.apple.com');
         $tPort = 2195;
         $errors = false;
-        $tCert = storage_path() . '/app/dist.pem';
+        $tCert = storage_path() . '/app/'.env("IOS_CERT",'dist.pem');
         $tPassphrase = 'qwer';
         $tToken = $device_ids;
         //$tToken = '913102bc68b8cd1a65f2e5ebe39f4ccb0e03de5c25f107e14a9698d6d1be4d20';
@@ -276,6 +278,8 @@ class Controller extends BaseController {
         dump($errstr);
         dump($tResult);*/
         fclose($tSocket);
+        Log::info('Push was sended to IOS with token:'.$device_ids[0]);
+
         return $tResult;
     }
 
