@@ -16,6 +16,9 @@ Route::group([ 'prefix' => 'api' ], function () {
         }
         return $response;
     });
+    Route::post('reset/password','UsersController@resetPasswordRequest');
+    Route::post('reset/password/{token}','UsersController@resetPassword');
+
     Route::post('payment/callback','PayController@callback');
     Route::group([ 'prefix' => 'v1' ], function () {
         Route::resource('users', 'UsersController', [ 'expect' => [ 'update', 'show' ] ]);
@@ -32,6 +35,7 @@ Route::group([ 'prefix' => 'api' ], function () {
         Route::get('push/send/user/{id}','PushController@sendForUser');
         Route::group([ 'middleware' => [ \App\Http\Middleware\AuthByToken::class ] ], function () {
             Route::resource('events', 'EventsController', [ 'except' => [ 'update' ] ]);
+
             Route::post('events', 'EventsController@store_save');
             Route::post('events/{id}', 'EventsController@update_save');
             Route::get('photo/{id}/remove','EventsController@removePhoto');

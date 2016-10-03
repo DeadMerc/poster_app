@@ -6,7 +6,8 @@ use Illuminate\Http\Request;
 use App\User;
 use App\Http\Requests;
 use Illuminate\Validation\Validator;
-
+use League\Flysystem\Exception;
+use Mail;
 class UsersController extends Controller {
     /**
      * Display a listing of the resource.
@@ -120,6 +121,52 @@ class UsersController extends Controller {
         }
     }
 
+    /**
+     * @api {post} /v1/reset/password resetPassword
+     * @apiVersion 0.1.0
+     * @apiName resetPassword
+     * @apiGroup Users
+     *
+     * @apiParam {string} email
+     *
+     */
+    public function resetPasswordRequest(Request $request){
+        $user = User::where('email',$request->email)->first();
+        if($user){
+
+            $mail = mail(
+                $user->email,
+                'Reset password request',
+                $_SERVER['SERVER_NAME'].'/api/reset/password/'.$user->token
+            );
+            /*
+            Mail::raw('Text to e-mail', function ($m) use ($user) {
+                $m->from('no-reply@posterapp.com.ua', 'Your Application');
+                $m->to($user->email, $user->name)->subject('Your Reminder!');
+            });*/
+            return $this->helpInfo($mail);
+        }else{
+            return $this->helpError('Now found email');
+        }
+    }
+
+    public function resetPassword($token){
+        $user = User::where('token',$token)->first();
+        if($user){
+            $password = uniqid();
+            $user->password = md5($password . 'requestLoginEvstolia');
+            $user->token = md5(uniqid() . md5(date("h:m")));
+            mail(
+                $user->email,
+                'You new password',
+                $password
+            );
+            echo 'New password in your mailbox.';
+        }else{
+            echo 'Bad token';
+        }
+    }
+
     public function create() {
         //
     }
@@ -137,9 +184,12 @@ class UsersController extends Controller {
      *
      */
     public function store(Request $request) {
-        $rules = ['name' => 'required|min:3', 'email' => 'required|unique:users', 'password' => 'required'];
+        $rules = ['name' => 'required|min:3', 'email' => 'required', 'password' => 'required'];
         $valid = Validator($request->all(), $rules);
         if(!$valid->fails()) {
+            if(User::where('email',$request->email)->first()){
+                throw new Exception('User already was registered.',100);
+            }
             $user = new User;
             $user->name = $request->name;
             $user->email = $request->email;

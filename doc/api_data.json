@@ -764,6 +764,34 @@
   },
   {
     "type": "post",
+    "url": "/v1/reset/password",
+    "title": "resetPassword",
+    "version": "0.1.0",
+    "name": "resetPassword",
+    "group": "Users",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "email",
+            "description": ""
+          }
+        ]
+      }
+    },
+    "filename": "app/Http/Controllers/UsersController.php",
+    "groupTitle": "Users",
+    "sampleRequest": [
+      {
+        "url": "/api/v1/reset/password"
+      }
+    ]
+  },
+  {
+    "type": "post",
     "url": "/v1/users/:id",
     "title": "updateUser",
     "version": "0.1.0",

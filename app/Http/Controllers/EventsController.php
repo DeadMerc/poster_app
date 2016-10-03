@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Category;
 use App\Photo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 use App\User;
 use App\Event;
@@ -11,8 +12,9 @@ use App\Event_follow;
 use App\Http\Requests;
 use Illuminate\Validation\Validator;
 use Mockery\CountValidator\Exception;
-
+use Storage;
 class EventsController extends Controller {
+    use SoftDeletes;
     /**
      * @api {get} /v1/events/:id getEvents
      * @apiVersion 0.1.0
@@ -227,6 +229,7 @@ class EventsController extends Controller {
                         'body'  => $event->description,
                         'image' => $event->load('photos'),
                         'type'  => 'EVENT_WAS_ADDED',
+                        'creator_info' => User::find($request->user->id),
                     ]);
                 }
                 return $this->helpReturn($request->user, false, $event->id);
@@ -320,16 +323,18 @@ class EventsController extends Controller {
     }
 
     public function getImagesFromEvent(Request $request, $id) {
-        $this->helpReturn(Event::findorfail($id)->photos());
+        return $this->helpReturn(Event::findorfail($id)->photos());
     }
 
     public function removePhoto(Request $request, $id) {
         $photo = Photo::findorfail($id);
+        Storage::delete(storage_path() . '/app/public/images', $photo->image);
         $photo->delete();
-        $this->helpInfo();
+        return $this->helpInfo();
     }
 
     public function destroy($id) {
-        //
+        Event::where('id',$id)->delete();
+        return $this->helpInfo();
     }
 }

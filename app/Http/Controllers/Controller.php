@@ -238,15 +238,15 @@ class Controller extends BaseController {
                     'image' => $message['image'],
                     'link' => (!empty($message['link'])?$message['link']:null),
                     'date' => (!empty($message['date'])?$message['date']:null),
-
+                    'creator_info' => (!empty($message['creator_info'])?$message['creator_info']:null)
                 ],
                 'badge' => '0',
                 'sound' => 'default',
             ];
         }
 
-
-        $tHost = 'gateway.sandbox.push.apple.com';
+        //.sandbox
+        $tHost = 'gateway.push.apple.com';
         $tPort = 2195;
         $errors = false;
         $tCert = storage_path() . '/app/dist.pem';

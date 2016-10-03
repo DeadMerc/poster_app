@@ -468,7 +468,9 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
                 .ok('Please do it!')
                 .cancel('No');
             $mdDialog.show(confirm).then(function () {
-                console.log('first');
+                $http.delete('/api/v1/'+$scope.params.url+'/' + id+'',$rootScope.config).then(function (res) {
+                    $scope.init();
+                });
             }, function () {
                 console.log('second')
             });

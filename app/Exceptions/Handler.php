@@ -27,6 +27,10 @@ class Handler extends ExceptionHandler
             if ($e instanceof ModelNotFoundException) {
                 return \App\Http\Controllers\Controller::helpReturnS(false, false, 'Not found resource:'.$e->getMessage());
             }
+            if($e->getCode() == 100){
+                $controller = new \App\Http\Controllers\Controller();
+                return $controller->helpError($e->getMessage());
+            }
         }
         return parent::render($request, $e);
     }
