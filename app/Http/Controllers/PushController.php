@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendPush;
 use App\Push;
 use App\User;
 use Illuminate\Http\Request;
@@ -45,6 +46,7 @@ class PushController extends Controller
         //dump($push);dd();
         $users = $data['users'];
         $info = [];
+        $userForPush = [];
         foreach ($users as $user) {
             /*$push_history = new Push;
             $push_history->title = $push['title'];
@@ -53,16 +55,31 @@ class PushController extends Controller
             $push_history->send_to = $user['id'];
             $push_history->image = $push['image'];
             $push_history->save();*/
-            $info[] = $this->sendPushToUser(User::find($user['id']), [
-                'id' => false,
-                'title' => $push['title'],
-                'body' => $push['description'],
-                'image' => $push['image'],
-                'type' => (!empty($push['type'])?$push['type']:null),
-                'date' => (!empty($push['date'])?$push['date']:null),
-                'link' => (!empty($push['link'])?$push['link']:null)
-            ]);
+            $userForPush[] = User::find($user['id']);
+
         }
+        $message = [
+            'id' => false,
+            'title' => $push['title'],
+            'body' => $push['description'],
+            'image' => $push['image'],
+            'type' => (!empty($push['type'])?$push['type']:null),
+            'date' => (!empty($push['date'])?$push['date']:null),
+            'link' => (!empty($push['link'])?$push['link']:null)
+        ];
+        //$job = new SendPush($userForPush,$message);
+        //$this->dispatch($job);
+        $info = $this->sendForUser($userForPush,$message);
+        /*
+        $info = $this->sendPushToUser($userForPush, [
+            'id' => false,
+            'title' => $push['title'],
+            'body' => $push['description'],
+            'image' => $push['image'],
+            'type' => (!empty($push['type'])?$push['type']:null),
+            'date' => (!empty($push['date'])?$push['date']:null),
+            'link' => (!empty($push['link'])?$push['link']:null)
+        ]);*/
         return $this->helpInfo($info);
     }
 

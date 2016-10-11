@@ -82,7 +82,7 @@ class Controller extends BaseController {
     public function getSchemaByModel($model, $moreProtected = false) {
         $attributes = $model->getAttributes();
         $keys = [];
-        $protected = ['social_hash', 'token', 'created_at', 'updated_at', 'id', 'banned', 'imei'];
+        $protected = ['deleted_at','social_hash', 'token', 'created_at', 'updated_at', 'id', 'banned', 'imei'];
         foreach($attributes as $key => $value) {
             if(!in_array($key, $protected)) {
                 //защита специфических полей
@@ -159,7 +159,6 @@ class Controller extends BaseController {
         $arrayForResponse['error'] = false;
         if(!$response) {
             $arrayForResponse['error'] = true;
-            $arrayForResponse['message'] = 'Resource not found';
         }
 
         return $arrayForResponse;
@@ -211,9 +210,12 @@ class Controller extends BaseController {
         //print_r($result);
         //dd(json_decode($result));
         curl_close($ch);
-        $res = json_decode($result);
-        Log::info('Push was sended to ANDROID with token:'.$device_ids[0]);
-        return $res;
+        //$res = json_decode($result);
+        foreach ($device_ids as $id){
+            Log::info('PUSH to ANDROID:'.$id);
+        }
+
+        return;
     }
 
     public function sendPushToIos($device_ids = false, $message = false) {
@@ -272,13 +274,14 @@ class Controller extends BaseController {
         $tSocket = stream_socket_client('ssl://' . $tHost . ':' . $tPort, $error, $errstr, 30, STREAM_CLIENT_CONNECT | STREAM_CLIENT_PERSISTENT, $tContext);
         if(!$tSocket)
             $errors = 'Cant open socket';
+
         $tMsg = chr(0) . chr(0) . chr(32) . pack('H*', $tToken) . pack('n', strlen($tBody)) . $tBody;
         $tResult = fwrite($tSocket, $tMsg, strlen($tMsg));
         /*dump($error);
         dump($errstr);
         dump($tResult);*/
         fclose($tSocket);
-        Log::info('Push was sended to IOS with token:'.$device_ids[0]);
+        Log::info('PUSH to IOS:'.$tToken);
 
         return $tResult;
     }
@@ -288,15 +291,29 @@ class Controller extends BaseController {
      * @param message array=message,image
      */
 
-    public function sendPushToUser($user, $message) {
-
-        if($user->device_type == 'android') {
-            $response = $this->sendPushToAndroid(array($user->device_token), $message);
-        } elseif($user->device_type == 'ios') {
-            $response = $this->sendPushToIos(array($user->device_token), $message);
-        } else {
-            $response = false;
+    public function sendPushToUser(array $users, $message) {
+        $androidTokensList = [];
+        $iosTokensList = [];
+        foreach ($users as $user){
+            if($user->device_type == 'android'){
+                $this->storeHistoryPush($message,$user);
+                $androidTokensList[] = $user->device_token;
+            }elseif($user->device_type == 'ios'){
+                $this->storeHistoryPush($message,$user);
+                $iosTokensList[] = $user->device_token;
+            }
         }
+        $this->sendPushToAndroid($androidTokensList, $message);
+        foreach ($iosTokensList as $token){
+            $this->sendPushToIos($token, $message);
+
+        }
+        $response = 'Ok';
+        //$response = $user->id . ':' . $response;
+        return $response;
+    }
+
+    protected function storeHistoryPush($message,$user){
         $push_history = new Push;
         $push_history->title = $message['title'];
         $push_history->description = $message['body'];
@@ -305,9 +322,6 @@ class Controller extends BaseController {
         $push_history->image = $message['image'];
         $push_history->type = $message['type'];
         $push_history->save();
-        $response = 'Ok';
-        //$response = $user->id . ':' . $response;
-        return $response;
     }
 
     public function uploadFile(Request $request) {

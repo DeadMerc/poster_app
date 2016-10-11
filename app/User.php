@@ -17,6 +17,9 @@ class User extends Model
      */
 
     public function getTokenAttribute($v){
+        if(!is_callable('apache_request_headers')){
+            return null;
+        }
         $headers = apache_request_headers();
         if(isset($headers['Token'])){
             return null;

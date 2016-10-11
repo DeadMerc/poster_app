@@ -3,18 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Category;
-use App\Photo;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Http\Request;
-use App\User;
 use App\Event;
 use App\Event_follow;
-use App\Http\Requests;
-use Illuminate\Validation\Validator;
+use App\Jobs\SendPush;
+use App\Photo;
+use App\User;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Http\Request;
 use Mockery\CountValidator\Exception;
 use Storage;
-class EventsController extends Controller {
+
+class EventsController extends Controller
+{
     use SoftDeletes;
+
     /**
      * @api {get} /v1/events/:id getEvents
      * @apiVersion 0.1.0
@@ -30,7 +32,7 @@ class EventsController extends Controller {
 
     public function show($id) {
         //return $this->helpReturn(Event::find(2666));
-        return $this->helpReturn(Event::with('photos','user')->findorfail($id));
+        return $this->helpReturn(Event::with('photos', 'user')->findorfail($id));
     }
 
     /**
@@ -60,8 +62,8 @@ class EventsController extends Controller {
     public function showFavorite(Request $request) {
         $categories = $request->user->favorites;
         $events = [];
-        foreach($categories as $category) {
-            foreach(Event::with('photos', 'user')->where('category_id', $category->category_id)->where('type', 'public')->get() as $event) {
+        foreach ($categories as $category) {
+            foreach (Event::with('photos', 'user')->where('category_id', $category->category_id)->where('type', 'public')->get() as $event) {
                 $events[] = $event;
             }
         }
@@ -83,17 +85,18 @@ class EventsController extends Controller {
     }
 
 
-    protected function deleteDuplicateInFollows(){
+    protected function deleteDuplicateInFollows() {
         $exist = [];
-        foreach(Event_follow::all() as $follow){
-            if(in_array($follow->event_id.':'.$follow->user_id,$exist)){
+        foreach (Event_follow::all() as $follow) {
+            if(in_array($follow->event_id . ':' . $follow->user_id, $exist)) {
                 $follow->delete();
-            }else{
-                $exist [] = $follow->event_id.':'.$follow->user_id;
+            } else {
+                $exist [] = $follow->event_id . ':' . $follow->user_id;
             }
         }
         return;
     }
+
     /**
      * @api {post} /v1/users/events/follow followEvents
      * @apiVersion 0.1.0
@@ -109,13 +112,13 @@ class EventsController extends Controller {
         $this->deleteDuplicateInFollows();
         $valid = Validator($request->all(), ['event_id' => 'required']);
         if(!$valid->fails()) {
-            if(!Event_follow::where('user_id', $request->user->id)->where('event_id',$request->event_id)->first()) {
+            if(!Event_follow::where('user_id', $request->user->id)->where('event_id', $request->event_id)->first()) {
                 $follow = new Event_follow;
                 $follow->user_id = $request->user->id;
                 $follow->event_id = $request->event_id;
                 $follow->save();
                 return $this->helpInfo($follow);
-            }else{
+            } else {
                 return $this->helpInfo('Record already exists');
             }
         } else {
@@ -159,7 +162,7 @@ class EventsController extends Controller {
     public function unfollow(Request $request) {
         $valid = Validator($request->all(), ['event_id' => 'required']);
         if(!$valid->fails()) {
-            $follow = Event_follow::where('event_id',$request->event_id)->where('user_id',$request->user->id)->delete();
+            $follow = Event_follow::where('event_id', $request->event_id)->where('user_id', $request->user->id)->delete();
             return $this->helpInfo();
         } else {
             return $this->helpError('valid', $valid);
@@ -199,20 +202,25 @@ class EventsController extends Controller {
         //dump('All params');
         //dd($request->all());
         $rules = [
-            'video'       => false,
-            'user_id'     => false,
-            'date_stop'   => false,
-            'address'     => false,
-            'place_id'    => false,
+            'video' => false,
+            'user_id' => false,
+            'date_stop' => false,
+            'address' => false,
+            'place_id' => false,
             'category_id' => 'required',
-            'title'       => 'required',
+            'title' => 'required',
             'description' => 'required',
-            'date'        => 'required',
-            'time'        => 'required',
-            'type'        => 'required',
-            'price'       => 'required',
-            'images'      => false,
+            'date' => 'required',
+            'time' => 'required',
+            'type' => 'required',
+            'price' => 'required',
+            'images' => false,
         ];
+
+        if($request->date_stop < date("Y-m-d H:i:s")) {
+            throw new Exception('Date are wrong', 100);
+        }
+
         $category = Category::findorfail($request->category_id);
         if($request->user->balance > $category->post_price) {
             $request->user->balance = $request->user->balance - $category->post_price;
@@ -221,16 +229,23 @@ class EventsController extends Controller {
             //dd(get_class($event));
             if(get_class($event) == 'App\Event') {
                 $request->user->save();
-                $info = [];
-                foreach(User::all() as $user) {
-                    $info[] = $this->sendPushToUser($user, [
-                        'id'    => $event->id,
+
+                $users = [];
+                if($event->type == 'public') {
+                    foreach (User::all() as $user) {
+                        $users[] = $user;
+                    }
+                    $message = [
+                        'id' => $event->id,
                         'title' => $event->title,
-                        'body'  => $event->description,
+                        'body' => $event->description,
                         'image' => $event->load('photos'),
-                        'type'  => 'EVENT_WAS_ADDED',
+                        'type' => 'EVENT_WAS_ADDED',
                         'creator_info' => User::find($request->user->id),
-                    ]);
+                    ];
+                    $this->sendPushToUser($users, $message);
+                    //$job = new SendPush($users,$message);
+                    //$this->dispatch($job);
                 }
                 return $this->helpReturn($request->user, false, $event->id);
             } else {
@@ -265,7 +280,7 @@ class EventsController extends Controller {
     }
 
     public function edit($id) {
-        return $this->getSchemaByModel(Event::first());
+        return $this->getSchemaByModel(Event::withoutGlobalScopes()->first());
     }
 
     /**
@@ -292,23 +307,26 @@ class EventsController extends Controller {
      */
     public function update_save(Request $request, $id) {
         $rules = [
-            'video'       => false,
-            'user_id'     => false,
-            'date_stop'   => false,
-            'address'     => false,
-            'place_id'    => false,
+            'video' => false,
+            'user_id' => false,
+            'date_stop' => false,
+            'address' => false,
+            'place_id' => false,
             'category_id' => 'required',
-            'title'       => 'required',
+            'title' => 'required',
             'description' => 'required',
-            'date'        => 'required',
-            'time'        => 'required',
-            'type'        => 'required',
-            'price'       => 'required',
-            'images'      => false,
+            'date' => 'required',
+            'time' => 'required',
+            'type' => 'required',
+            'price' => 'required',
+            'images' => false,
         ];
+        if($request->date_stop < date("Y-m-d H:i:s")) {
+            throw new Exception('Date are wrong', 100);
+        }
         $request->user_id = $request->user->id;
-        if($request->images){
-            Photo::where('event_id',$id)->delete();
+        if($request->images) {
+            Photo::where('event_id', $id)->delete();
         }
 
         $event = $this->fromPostToModel($rules, Event::findorfail($id), $request, 'model');
@@ -334,7 +352,7 @@ class EventsController extends Controller {
     }
 
     public function destroy($id) {
-        Event::where('id',$id)->delete();
+        Event::where('id', $id)->delete();
         return $this->helpInfo();
     }
 }

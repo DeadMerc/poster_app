@@ -1,4 +1,10 @@
 <?php
+Route::get('listen',function(){
+    phpinfo();
+    //Artisan::call('queue:listen');
+    return;
+});
+
 Route::get('/', function () {
     return view('admin.index');
 })->middleware([\App\Http\Middleware\AuthOnce::class]);
