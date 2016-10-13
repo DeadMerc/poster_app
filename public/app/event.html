@@ -12,17 +12,41 @@
 
         <div ng-if="input.type == 'checkbox'">
             <md-input-container class="md-block">
-                <label><% input.key %></label>
-                <input  type="checkbox" ng-model="data[input.key]" ng-true-value="1" ng-false-value="0">
+                <md-checkbox ng-model="data[input.key]" aria-label="">
+                    <% input.key %>
+                </md-checkbox>
             </md-input-container>
         </div>
 
-        <div ng-if="input.type == 'selectEvent'">
+        <div ng-if="input.type == 'date_picker'">
+            <label><% input.key %></label>
+                <md-datepicker ng-model="data[input.key]" name="dateField"
+                              ></md-datepicker>
+                <md-input-container>
+                    <div ng-messages="myOtherForm.dateField.$error">
+                        <div ng-message="valid">The entered value is not a date!</div>
+                        <div ng-message="required">This date is required!</div>
+                        <div ng-message="mindate">Date is too early!</div>
+                        <div ng-message="maxdate">Date is too late!</div>
+                    </div>
+                </md-input-container>
+        </div>
+
+        <div ng-if="input.type == 'categories_select'">
             <md-input-container>
                 <label><% input.key %></label>
                 <md-select required ng-model="data[input.key]">
-                    <md-option ng-value="public">Public</md-option>
+                    <md-option ng-repeat="category in categories_select" ng-value="category.id"><% category.name %></md-option>
+                </md-select>
+            </md-input-container>
+        </div>
+
+        <div ng-if="input.type == 'select_event'">
+            <md-input-container>
+                <label><% input.key %></label>
+                <md-select required ng-model="data[input.key]">
                     <md-option ng-value="private">Private</md-option>
+                    <md-option ng-value="public">Public</md-option>
                 </md-select>
             </md-input-container>
         </div>

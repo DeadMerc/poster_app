@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Jobs\SendPush;
 use App\Push;
 use App\User;
 use Illuminate\Http\Request;
@@ -13,8 +12,8 @@ class PushController extends Controller
         return $this->getSchemaByModel(Push::first());
     }
 
-    public function index() {
-        return $this->helpReturn(Push::with('user')->orderBy('id', 'desc')->get());
+    public function index(Request $request) {
+        return $this->helpReturn(Push::with('user')->orderBy('id', 'desc')->skip($request->page * $request->per_page)->take($request->per_page)->get());
     }
 
     public function sendForUser(Request $request, $id) {
@@ -63,13 +62,13 @@ class PushController extends Controller
             'title' => $push['title'],
             'body' => $push['description'],
             'image' => $push['image'],
-            'type' => (!empty($push['type'])?$push['type']:null),
-            'date' => (!empty($push['date'])?$push['date']:null),
-            'link' => (!empty($push['link'])?$push['link']:null)
+            'type' => (!empty($push['type']) ? $push['type'] : null),
+            'date' => (!empty($push['date']) ? $push['date'] : null),
+            'link' => (!empty($push['link']) ? $push['link'] : null)
         ];
         //$job = new SendPush($userForPush,$message);
         //$this->dispatch($job);
-        $info = $this->sendPushToUser($userForPush,$message);
+        $info = $this->sendPushToUser($userForPush, $message);
         /*
         $info = $this->sendPushToUser($userForPush, [
             'id' => false,

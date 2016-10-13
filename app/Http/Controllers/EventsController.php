@@ -62,8 +62,13 @@ class EventsController extends Controller
         $categories = $request->user->favorites;
         $events = [];
         foreach ($categories as $category) {
-            foreach (Event::with('photos', 'user')->where('category_id', $category->category_id)->where('type', 'public')->where('publish',1)->get() as $event) {
-                $events[] = $event;
+            foreach (
+                Event::with('photos', 'user')
+                    ->where('category_id', $category->category_id)
+                    //->where('type', 'public')
+                    ->where('publish',1)
+                    ->get() as $event) {
+                        $events[] = $event;
             }
         }
         return $this->helpReturn($events);
@@ -215,8 +220,11 @@ class EventsController extends Controller
             'price' => 'required',
             'images' => false,
         ];
-
-        if($request->date_stop < date("Y-m-d H:i:s")) {
+        if($request->date_stop){
+            $request->date_stop = new \DateTime($request->date_stop);
+        }
+        //date("Y-m-d H:i:s")
+        if($request->date_stop < new \DateTime("now")) {
             throw new Exception('Date are wrong or less that:'.date("Y-m-d H:i:s"), 100);
         }
 

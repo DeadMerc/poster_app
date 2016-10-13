@@ -133,7 +133,6 @@ class UsersController extends Controller {
     public function resetPasswordRequest(Request $request){
         $user = User::where('email',$request->email)->first();
         if($user){
-
             $mail = mail(
                 $user->email,
                 'Reset password request',
@@ -146,7 +145,7 @@ class UsersController extends Controller {
             });*/
             return $this->helpInfo($mail);
         }else{
-            return $this->helpError('Now found email');
+            return $this->helpError('Not found email');
         }
     }
 

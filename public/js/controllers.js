@@ -495,6 +495,13 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
                     //console.log($scope.data);
                 });
             $scope.id = $routeParams.id;
+
+            $http.get('api/v1/categories',$rootScope.config)
+                .then(function (res) {
+                    console.log('Try load list of categories');
+                    $scope.categories_select = res.data.response;
+                });
+
             if (typeof $scope.id == 'undefined') {
                 $scope.id = 'new';
             } else {
@@ -502,6 +509,8 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
                     $scope.data = res.data.response;
                     $scope.photos = res.data.response.photos;
                     //console.log($scope.photos);
+                }, function (res) {
+                    $rootScope.error('Request get categories list was failed');
                 });
             }
             console.log($scope.params.name + ' Ctrl try edit id ' + $scope.id);
@@ -542,6 +551,7 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
             }
         };
         $scope.save = function () {
+            //console.log($scope.data);
             $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
             console.log($scope.params.name + ' Ctrl try save user with id:' + $scope.id);
             if ($scope.id !== 'new') {
@@ -570,7 +580,7 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
             } else {
                 //console.log($scope.data);
                 console.log($scope.params.name + ' Ctrl try save new row');
-                $http.post('/api/v1/' + $scope.params.url + '', $rootScope.transform($scope.data), $rootScope.config)
+                $http.post('/api/v1/' + $scope.params.url + '', $rootScope.serialize($scope.data), $rootScope.config)
                     .then(function (res) {
                         if (res.data.error == false) {
                             $rootScope.success('OK');
@@ -600,11 +610,25 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
         console.log($scope.params.name + " Ctrl init");
         $scope.data = {};
         $scope.search = $routeParams.search;
+        $scope.restrict_max_size = true;
+
+        $scope.page = 0;
+        $scope.per_page = 150;
+        $scope.$watch('restrict_max_size',function (new_value,old_value) {
+            if(new_value){
+                $scope.per_page = 300;
+            }else{
+                $scope.per_page = 9999999;
+            }
+            $scope.init();
+        });
+
+
         $scope.init = function () {
             console.log($scope.params.name + " Ctrl scope init");
-            $http.get("/api/v1/" + $scope.params.url + "")
+            $http.get("/api/v1/" + $scope.params.url + "?page="+$scope.page+"&per_page="+$scope.per_page)
                 .then(function (res) {
-                    //console.log(res.data.response[0]);
+                    //console.log(res.data.response[0])
                     if (res.data.error == false) {
                         console.log($scope.params.name + " Ctrl data to view");
                         $scope.users = res.data.response;

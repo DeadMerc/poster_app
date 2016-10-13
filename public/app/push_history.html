@@ -3,7 +3,13 @@
         <div class="form-group">
             <div class="input-group">
                 <div class="input-group-addon"><i class="fa fa-search"></i></div>
-                <input type="text" class="form-control" placeholder="Search in params" ng-model="search">
+                <input type="text" class="form-control" placeholder="Search in params" ng-model="search"><br>
+
+            </div>
+            <div class="input-group">
+                <md-checkbox ng-model="restrict_max_size" aria-label="">
+                    Ограничить до 300 последних записей.
+                </md-checkbox>
             </div>
         </div>
     </form>
@@ -27,7 +33,7 @@
             <td><% data.created_by || 'Not defined' %></td>
             <td><% data.user.email || 'Not defined' %></td>
             <td><% data.date || 'Date not defined' %></td>
-            <td><% data.image || 'Not defined' %></td>
+            <td><%  'Not defined' %></td>
             <td>
 
                 <md-button ng-click="delete(data.id)" class="md-raised md-warn">

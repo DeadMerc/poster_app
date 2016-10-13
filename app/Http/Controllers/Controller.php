@@ -100,7 +100,7 @@ class Controller extends BaseController {
 
     private function getTypeInputByKey($key) {
         if($key == 'category_id') {
-            //return 'categories_select';
+            return 'categories_select';
         }
         if($key == 'image') {
             return 'file';
@@ -109,13 +109,16 @@ class Controller extends BaseController {
             //return 'number';
         }
         if($key == 'date') {
-            //return 'date';
+            return 'date_picker';
         }
         if($key == 'publish') {
             return 'checkbox';
         }
         if($key == 'type'){
-            //return 'selectEvent';
+            //return 'select_event';
+        }
+        if($key == 'date_stop'){
+            return 'date_picker';
         }
         return 'text';
     }
