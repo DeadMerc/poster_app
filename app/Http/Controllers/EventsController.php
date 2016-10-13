@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Category;
 use App\Event;
 use App\Event_follow;
-use App\Jobs\SendPush;
 use App\Photo;
 use App\User;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -63,7 +62,7 @@ class EventsController extends Controller
         $categories = $request->user->favorites;
         $events = [];
         foreach ($categories as $category) {
-            foreach (Event::with('photos', 'user')->where('category_id', $category->category_id)->where('type', 'public')->get() as $event) {
+            foreach (Event::with('photos', 'user')->where('category_id', $category->category_id)->where('type', 'public')->where('publish',1)->get() as $event) {
                 $events[] = $event;
             }
         }
@@ -218,18 +217,25 @@ class EventsController extends Controller
         ];
 
         if($request->date_stop < date("Y-m-d H:i:s")) {
-            throw new Exception('Date are wrong', 100);
+            throw new Exception('Date are wrong or less that:'.date("Y-m-d H:i:s"), 100);
         }
 
         $category = Category::findorfail($request->category_id);
         if($request->user->balance > $category->post_price) {
             $request->user->balance = $request->user->balance - $category->post_price;
-            $request->user_id = $request->user->id;
+
+            if($request->user_id AND $request->header('token') == 'adm'){
+                User::findorfail($request->user_id);
+            }else{
+                $request->user_id = $request->user->id;
+            }
+
+
+
             $event = $this->fromPostToModel($rules, new Event, $request, 'model');
             //dd(get_class($event));
             if(get_class($event) == 'App\Event') {
                 $request->user->save();
-
                 $users = [];
                 if($event->type == 'public') {
                     foreach (User::all() as $user) {
@@ -244,6 +250,7 @@ class EventsController extends Controller
                         'creator_info' => User::find($request->user->id),
                     ];
                     $this->sendPushToUser($users, $message);
+                    //dump(1);
                     //$job = new SendPush($users,$message);
                     //$this->dispatch($job);
                 }

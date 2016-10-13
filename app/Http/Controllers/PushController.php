@@ -69,7 +69,7 @@ class PushController extends Controller
         ];
         //$job = new SendPush($userForPush,$message);
         //$this->dispatch($job);
-        $info = $this->sendForUser($userForPush,$message);
+        $info = $this->sendPushToUser($userForPush,$message);
         /*
         $info = $this->sendPushToUser($userForPush, [
             'id' => false,

@@ -114,6 +114,9 @@ class Controller extends BaseController {
         if($key == 'publish') {
             return 'checkbox';
         }
+        if($key == 'type'){
+            //return 'selectEvent';
+        }
         return 'text';
     }
 

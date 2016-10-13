@@ -13,9 +13,20 @@
         <div ng-if="input.type == 'checkbox'">
             <md-input-container class="md-block">
                 <label><% input.key %></label>
-                <input type="checkbox" ng-model="data[input.key]" ng-true-value="1" ng-false-value="0">
+                <input  type="checkbox" ng-model="data[input.key]" ng-true-value="1" ng-false-value="0">
             </md-input-container>
         </div>
+
+        <div ng-if="input.type == 'selectEvent'">
+            <md-input-container>
+                <label><% input.key %></label>
+                <md-select required ng-model="data[input.key]">
+                    <md-option ng-value="public">Public</md-option>
+                    <md-option ng-value="private">Private</md-option>
+                </md-select>
+            </md-input-container>
+        </div>
+
 
         <div ng-if="input.type == 'text'">
             <md-input-container class="md-block">
