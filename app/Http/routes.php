@@ -23,12 +23,13 @@ Route::group([ 'prefix' => 'api' ], function () {
         return $response;
     });
     Route::post('reset/password','UsersController@resetPasswordRequest');
-    Route::post('reset/password/{token}','UsersController@resetPassword');
+    Route::get('reset/password/{token}','UsersController@resetPassword');
 
     Route::post('payment/callback','PayController@callback');
     Route::group([ 'prefix' => 'v1' ], function () {
         Route::resource('users', 'UsersController', [ 'expect' => [ 'update', 'show' ] ]);
         Route::post('users/auth/{type}', 'UsersController@auth');
+        Route::post('users/password/change/{user}', 'UsersController@changePassword');
 
 
         Route::resource('categories', 'CategoriesController', [ 'except' => [ 'show' ] ]);

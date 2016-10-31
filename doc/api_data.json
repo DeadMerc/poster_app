@@ -933,5 +933,47 @@
         "url": "/api/v1/users/:id"
       }
     ]
+  },
+  {
+    "type": "post",
+    "url": "/v1/users/password/change/{id}",
+    "title": "userChangePassword",
+    "version": "0.1.0",
+    "name": "userChangePassword",
+    "group": "Users",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "password_old",
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "password_new_first",
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "password_new_second",
+            "description": ""
+          }
+        ]
+      }
+    },
+    "filename": "app/Http/Controllers/UsersController.php",
+    "groupTitle": "Users",
+    "sampleRequest": [
+      {
+        "url": "/api/v1/users/password/change/{id}"
+      }
+    ]
   }
 ]

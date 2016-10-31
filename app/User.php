@@ -12,6 +12,14 @@ class User extends Model
     protected $appends = array('events_count');
     protected $hidden = ['password'];
 
+    /**
+     * TODO: in future maybe
+     */
+    /*
+    public function setPasswordAttribute($v){
+        return md5($v.'requestLoginEvstolia');
+    }*/
+
     /*
      * TODO:Security problem in future partly solved
      */

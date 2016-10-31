@@ -131,18 +131,19 @@ class UsersController extends Controller {
      *
      */
     public function resetPasswordRequest(Request $request){
+
         $user = User::where('email',$request->email)->first();
         if($user){
-            $mail = mail(
+            /*
+            mail(
                 $user->email,
                 'Reset password request',
                 $_SERVER['SERVER_NAME'].'/api/reset/password/'.$user->token
-            );
-            /*
-            Mail::raw('Text to e-mail', function ($m) use ($user) {
-                $m->from('no-reply@posterapp.com.ua', 'Your Application');
-                $m->to($user->email, $user->name)->subject('Your Reminder!');
-            });*/
+            );*/
+            $mail = Mail::raw($_SERVER['SERVER_NAME'].'/api/reset/password/'.$user->token, function ($m) use ($user) {
+                $m->from('no-reply@posterapp.com.ua', 'Poster');
+                $m->to($user->email, $user->name)->subject('Reset Password Request');
+            });
             return $this->helpInfo($mail);
         }else{
             return $this->helpError('Not found email');
@@ -153,13 +154,19 @@ class UsersController extends Controller {
         $user = User::where('token',$token)->first();
         if($user){
             $password = uniqid();
-            $user->password = md5($password . 'requestLoginEvstolia');
+            //$user->password = md5($password . 'requestLoginEvstolia');
             $user->token = md5(uniqid() . md5(date("h:m")));
+            /*
             mail(
                 $user->email,
                 'You new password',
                 $password
-            );
+            );*/
+            $mail = Mail::raw($password, function ($m) use ($user) {
+                $m->from('no-reply@posterapp.com.ua', 'Poster');
+                $m->to($user->email, $user->name)->subject('You new password');
+            });
+            $user->save();
             echo 'New password in your mailbox.';
         }else{
             echo 'Bad token';
@@ -262,6 +269,33 @@ class UsersController extends Controller {
         ];
         $user = User::findorfail($id);
         return $this->fromPostToModel($rules, $user, $request);
+    }
+    /**
+     * @api {post} /v1/users/password/change/{id} userChangePassword
+     * @apiVersion 0.1.0
+     * @apiName userChangePassword
+     * @apiGroup Users
+     *
+     * @apiParam {string} password_old
+     * @apiParam {string} password_new_first
+     * @apiParam {string} password_new_second
+     *
+     */
+    public function changePassword(Request $request,User $user){
+        if($request->password_old){
+            $password = md5($request->password_old . 'requestLoginEvstolia');
+            if($user->password == $password){
+                if($request->password_new_first == $request->password_new_second){
+                    $user->password = md5($request->password_new_first . 'requestLoginEvstolia');
+                    $user->save();
+                    return $this->helpInfo();
+                }
+            }else{
+                throw new Exception('Old password is wrong',100);
+            }
+        }else{
+            throw new Exception('Not enough params',100);
+        }
     }
 
     public function ban($id) {

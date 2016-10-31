@@ -116,7 +116,9 @@ class CategoriesController extends Controller {
             'name_UA'     => 'required',
             'post_price'  => 'required',
             'image'       => 'required',
-            'description' => 'required',
+            'description_RU' => 'required',
+            'description_EN' => 'required',
+            'description_UA' => 'required',
         ];
         $category = $this->fromPostToModel($rules, new Category, $request,'model');
         $info = [];
@@ -145,7 +147,9 @@ class CategoriesController extends Controller {
             'name_EN'     => 'required',
             'name_UA'     => 'required',
             'post_price'  => 'required',
-            'description' => 'required',
+            'description_EN' =>false,
+            'description_RU' => false,
+            'description_UA' => false,
             'image'       => false,
         ];
         return $this->fromPostToModel($rules, Category::findorfail($id), $request);
