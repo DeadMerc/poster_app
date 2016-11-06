@@ -22,7 +22,7 @@ class User extends Model
 
     /*
      * TODO:Security problem in future partly solved
-     */
+
 
     public function getTokenAttribute($v){
         if(!is_callable('apache_request_headers')){
@@ -34,7 +34,7 @@ class User extends Model
         }else{
             return $v;
         }
-    }
+    }*/
 
     public function getEventsCountAttribute() {
         $events = $this->events();
@@ -42,7 +42,7 @@ class User extends Model
         return $events;
     }
     public function events(){
-        return $this->hasMany('App\Event')->with('photos');
+        return $this->hasMany('App\Event','user_id','id')->with('photos');
     }
 
     public function followsEvents(){
