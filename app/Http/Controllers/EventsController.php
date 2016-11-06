@@ -49,16 +49,16 @@ class EventsController extends Controller
     }
 
     /**
-     * @api {get} /v1/users/events/favorite getEventsByFavoriteCategories
+     * @api {get} /v1/users/events/favorite/:place_id getEventsByFavoriteCategories
      * @apiVersion 0.1.0
      * @apiName getEventsByFavoriteCategories
      * @apiGroup Events
      *
      * @apiDescription Все события из категорий на которые подписан пользователь
      * @apiHeader {string} token User token
-     *
+     * @apiParam {string} [place_id]
      */
-    public function showFavorite(Request $request) {
+    public function showFavorite(Request $request,$place_id = false) {
         $categories = $request->user->favorites;
         $events = [];
         foreach ($categories as $category) {
@@ -67,6 +67,9 @@ class EventsController extends Controller
                     ->where('category_id', $category->category_id)
                     //->where('type', 'public')
                     ->where('publish',1)
+                    ->when($place_id,function($q)use($place_id){
+                        return $q->where('place_id',$place_id);
+                    })
                     ->get() as $event) {
                         $events[] = $event;
             }

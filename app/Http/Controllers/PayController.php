@@ -5,10 +5,14 @@ namespace App\Http\Controllers;
 use App\Helpers\LiqPay;
 use Illuminate\Http\Request;
 use App\Http\Requests;
-
+use Log;
 class PayController extends Controller
 {
     public function callback(Request $request){
+        Log::info('Callback info');
+        foreach ($request->all() as $key => $value) {
+            Log::info($key.':'.$value);
+        }
         return $this->helpInfo();
     }
 
@@ -19,7 +23,7 @@ class PayController extends Controller
             'phone'          => '380950000001',
             'amount'         => '0.01',
             'currency'       => 'USD',
-            'description'    => 'description text',
+            'description'    => 'description text', 
             'order_id'       => 'order_id_1',
             'card'           => $request->card,
             'card_exp_month' => $request->card_month,

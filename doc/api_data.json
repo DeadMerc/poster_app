@@ -227,7 +227,7 @@
   },
   {
     "type": "get",
-    "url": "/v1/users/events/favorite",
+    "url": "/v1/users/events/favorite/:place_id",
     "title": "getEventsByFavoriteCategories",
     "version": "0.1.0",
     "name": "getEventsByFavoriteCategories",
@@ -246,11 +246,24 @@
         ]
       }
     },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": true,
+            "field": "place_id",
+            "description": ""
+          }
+        ]
+      }
+    },
     "filename": "app/Http/Controllers/EventsController.php",
     "groupTitle": "Events",
     "sampleRequest": [
       {
-        "url": "/api/v1/users/events/favorite"
+        "url": "/api/v1/users/events/favorite/:place_id"
       }
     ]
   },
@@ -764,7 +777,7 @@
   },
   {
     "type": "post",
-    "url": "/v1/reset/password",
+    "url": "/reset/password",
     "title": "resetPassword",
     "version": "0.1.0",
     "name": "resetPassword",
@@ -786,7 +799,7 @@
     "groupTitle": "Users",
     "sampleRequest": [
       {
-        "url": "/api/v1/reset/password"
+        "url": "/api/reset/password"
       }
     ]
   },

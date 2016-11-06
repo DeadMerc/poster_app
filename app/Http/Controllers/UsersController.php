@@ -122,7 +122,7 @@ class UsersController extends Controller {
     }
 
     /**
-     * @api {post} /v1/reset/password resetPassword
+     * @api {post} /reset/password resetPassword
      * @apiVersion 0.1.0
      * @apiName resetPassword
      * @apiGroup Users
@@ -131,7 +131,9 @@ class UsersController extends Controller {
      *
      */
     public function resetPasswordRequest(Request $request){
-
+        if(!$request->email){
+            throw new Exception('Email not found',100);
+        }
         $user = User::where('email',$request->email)->first();
         if($user){
             /*

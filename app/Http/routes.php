@@ -1,13 +1,12 @@
 <?php
-Route::get('listen',function(){
-    phpinfo();
-    //Artisan::call('queue:listen');
-    return;
-});
 
-Route::get('/', function () {
+Route::get('/',function(){
+    return view('welcome');
+});
+Route::get('/admin', function () {
     return view('admin.index');
 })->middleware([\App\Http\Middleware\AuthOnce::class]);
+
 Route::group([ 'prefix' => 'api' ], function () {
     Route::get('{code}', function ($code) {
         $response = [ 'error' => true, 'message' => null ];
@@ -26,6 +25,7 @@ Route::group([ 'prefix' => 'api' ], function () {
     Route::get('reset/password/{token}','UsersController@resetPassword');
 
     Route::post('payment/callback','PayController@callback');
+
     Route::group([ 'prefix' => 'v1' ], function () {
         Route::resource('users', 'UsersController', [ 'expect' => [ 'update', 'show' ] ]);
         Route::post('users/auth/{type}', 'UsersController@auth');
@@ -50,7 +50,7 @@ Route::group([ 'prefix' => 'api' ], function () {
             Route::post('users/events/follow', 'EventsController@follow');
             Route::post('users/events/unfollow', 'EventsController@unfollow');
             Route::get('users/events/follow','EventsController@followsEvents');
-            Route::get('users/events/favorite', 'EventsController@showFavorite');
+            Route::get('users/events/favorite/{place_id?}', 'EventsController@showFavorite');
             Route::get('events/byuser/{id}','EventsController@showByUser');
 
             Route::get('events/publish/{id}', 'EventsController@publish');
