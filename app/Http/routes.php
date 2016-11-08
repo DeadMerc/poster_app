@@ -71,6 +71,8 @@ Route::group([ 'prefix' => 'api' ], function () {
 
 
             Route::post('payments/pay','PayController@pay');
+
+            Route::post('invoice','PayController@invoice');
         });
 
 

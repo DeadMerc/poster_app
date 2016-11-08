@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Helpers;
+use InvalidArgumentException;
 class LiqPay
 {
     const CURRENCY_EUR = 'EUR';
@@ -30,13 +31,12 @@ class LiqPay
      *
      * @throws InvalidArgumentException
      */
-    public function __construct($public_key = 'i86486134497', $private_key = '0foihDsSyU2vjha4jAq5YNIwNoudMpMsy7JMqXKT')
-    {
-        if (empty($public_key)) {
+    public function __construct($public_key = 'i86486134497', $private_key = '0foihDsSyU2vjha4jAq5YNIwNoudMpMsy7JMqXKT') {
+        if(empty($public_key)) {
             throw new InvalidArgumentException('public_key is empty');
         }
 
-        if (empty($private_key)) {
+        if(empty($private_key)) {
             throw new InvalidArgumentException('private_key is empty');
         }
 
@@ -53,18 +53,17 @@ class LiqPay
      *
      * @return string
      */
-    public function api($path, $params = array())
-    {
-        if(!isset($params['version'])){
+    public function api($path, $params = array()) {
+        if(!isset($params['version'])) {
             throw new InvalidArgumentException('version is null');
         }
-        $url         = $this->_api_url . $path;
-        $public_key  = $this->_public_key;
+        $url = $this->_api_url . $path;
+        $public_key = $this->_public_key;
         $private_key = $this->_private_key;
-        $data        = base64_encode(json_encode(array_merge(compact('public_key'), $params)));
-        $signature   = base64_encode(sha1($private_key.$data.$private_key, 1));
-        $postfields  = http_build_query(array(
-            'data'  => $data,
+        $data = base64_encode(json_encode(array_merge(compact('public_key'), $params)));
+        $signature = base64_encode(sha1($private_key . $data . $private_key, 1));
+        $postfields = http_build_query(array(
+            'data' => $data,
             'signature' => $signature
         ));
 
@@ -72,8 +71,8 @@ class LiqPay
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS,$postfields);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $postfields);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         $server_output = curl_exec($ch);
         curl_close($ch);
         return json_decode($server_output);
@@ -89,16 +88,15 @@ class LiqPay
      *
      * @throws InvalidArgumentException
      */
-    public function cnb_form($params)
-    {
+    public function cnb_form($params) {
 
         $language = 'ru';
-        if (isset($params['language']) && $params['language'] == 'en') {
+        if(isset($params['language']) && $params['language'] == 'en') {
             $language = 'en';
         }
 
-        $params    = $this->cnb_params($params);
-        $data      = base64_encode( json_encode($params) );
+        $params = $this->cnb_params($params);
+        $data = base64_encode(json_encode($params));
         $signature = $this->cnb_signature($params);
 
         return sprintf('
@@ -107,18 +105,19 @@ class LiqPay
                 %s
                 <input type="image" src="//static.liqpay.com/buttons/p1%s.radius.png" name="btn_text" />
             </form>
-            ',
-            $this->_checkout_url,
-            sprintf('<input type="hidden" name="%s" value="%s" />', 'data', $data),
-            sprintf('<input type="hidden" name="%s" value="%s" />', 'signature', $signature),
-            $language
-        );
+            ', $this->_checkout_url, sprintf('<input type="hidden" name="%s" value="%s" />', 'data', $data), sprintf('<input type="hidden" name="%s" value="%s" />', 'signature', $signature), $language);
     }
 
+    public function cnb_data($params) {
+        $params = $this->cnb_params($params);
+        $data = base64_encode(json_encode($params));
+        $signature = $this->cnb_signature($params);
 
-
-
-
+        return [
+            'data' => $data,
+            'signature' => $signature
+        ];
+    }
 
 
     /**
@@ -128,18 +127,15 @@ class LiqPay
      *
      * @return string
      */
-    public function cnb_signature($params)
-    {
-        $params      = $this->cnb_params($params);
+    public function cnb_signature($params) {
+        $params = $this->cnb_params($params);
         $private_key = $this->_private_key;
 
-        $json      = base64_encode( json_encode($params) );
+        $json = base64_encode(json_encode($params));
         $signature = $this->str_to_sign($private_key . $json . $private_key);
 
         return $signature;
     }
-
-
 
 
     /**
@@ -149,27 +145,26 @@ class LiqPay
      *
      * @return array $params
      */
-    private function cnb_params($params)
-    {
+    private function cnb_params($params) {
 
         $params['public_key'] = $this->_public_key;
 
-        if (!isset($params['version'])) {
+        if(!isset($params['version'])) {
             throw new InvalidArgumentException('version is null');
         }
-        if (!isset($params['amount'])) {
+        if(!isset($params['amount'])) {
             throw new InvalidArgumentException('amount is null');
         }
-        if (!isset($params['currency'])) {
+        if(!isset($params['currency'])) {
             throw new InvalidArgumentException('currency is null');
         }
-        if (!in_array($params['currency'], $this->_supportedCurrencies)) {
+        if(!in_array($params['currency'], $this->_supportedCurrencies)) {
             throw new InvalidArgumentException('currency is not supported');
         }
-        if ($params['currency'] == self::CURRENCY_RUR) {
+        if($params['currency'] == self::CURRENCY_RUR) {
             $params['currency'] = self::CURRENCY_RUB;
         }
-        if (!isset($params['description'])) {
+        if(!isset($params['description'])) {
             throw new InvalidArgumentException('description is null');
         }
 
@@ -184,12 +179,12 @@ class LiqPay
      *
      * @return string
      */
-    public function str_to_sign($str)
-    {
+    public function str_to_sign($str) {
 
-        $signature = base64_encode(sha1($str,1));
+        $signature = base64_encode(sha1($str, 1));
 
         return $signature;
     }
 
 }
+

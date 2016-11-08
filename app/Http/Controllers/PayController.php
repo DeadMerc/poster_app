@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\LiqPay;
+use App\Invoice;
 use Illuminate\Http\Request;
 use App\Http\Requests;
+use Illuminate\Support\Facades\Input;
 use Log;
+use App\Helpers;
+
 class PayController extends Controller
 {
     public function callback(Request $request){
@@ -34,5 +38,56 @@ class PayController extends Controller
             'ip'             =>'192.168.0.1'
         ));
         return $this->helpReturn($res);
+    }
+    /**
+     * @api {get} /v1/invoice storeInvoice
+     * @apiVersion 0.1.0
+     * @apiName storeInvoice
+     * @apiGroup Invoices
+     *
+     * @apiHeader {string} token User token
+     * @apiParam {array} data
+     */
+    public function invoice(Request $request){
+        if($request->debug){
+            dump(env('LIQPAY_PUBLIC_KEY'));
+            dump(env('LIQPAY_PRIVATE_KEY'));
+            dump(Input::all());
+            dd($request->all());
+        }
+        $order_id = sha1(md5(uniqid()));
+        if(is_array($request->data)){
+
+            if(!isset($request->data['amount'])){
+                throw new \Exception('amount in array was missing',100);
+            }
+            $data = $request->data;
+            /*
+            $data['public_key'] = env('LIQPAY_PUBLIC_KEY');
+            $data['order_id'] = $order_id;
+            $data = base64_encode(json_encode($data));
+            $signature = base64_encode(
+                sha1(
+                    env('LIQPAY_PRIVATE_KEY').$data.env('LIQPAY_PRIVATE_KEY')
+                )
+            );*/
+            $liqpay = new LiqPay(env('LIQPAY_PUBLIC_KEY'), env('LIQPAY_PRIVATE_KEY'));
+            $data = $liqpay->cnb_data($data);
+
+            $invoice = new Invoice([
+                'amount'=>$request->data['amount'],
+                'order_id'=>$order_id,
+                'user_id'=>$request->user->id
+            ]);
+            $invoice->save();
+            return $this->helpReturn($data);
+            //return $this->helpReturn(['base64data'=>$data,'signature'=>$signature]);
+        }else{
+            throw new \Exception('Param data is not array',100);
+        }
+
+
+
+
     }
 }

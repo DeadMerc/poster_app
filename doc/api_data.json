@@ -595,6 +595,47 @@
     ]
   },
   {
+    "type": "get",
+    "url": "/v1/invoice",
+    "title": "storeInvoice",
+    "version": "0.1.0",
+    "name": "storeInvoice",
+    "group": "Invoices",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "string",
+            "optional": false,
+            "field": "token",
+            "description": "<p>User token</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "array",
+            "optional": false,
+            "field": "data",
+            "description": ""
+          }
+        ]
+      }
+    },
+    "filename": "app/Http/Controllers/PayController.php",
+    "groupTitle": "Invoices",
+    "sampleRequest": [
+      {
+        "url": "/api/v1/invoice"
+      }
+    ]
+  },
+  {
     "type": "post",
     "url": "/v1/users/auth/email",
     "title": "AuthByEmail",
