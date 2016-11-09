@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\LiqPay;
 use App\Invoice;
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use Illuminate\Support\Facades\Input;
@@ -17,6 +18,29 @@ class PayController extends Controller
         foreach ($request->all() as $key => $value) {
             Log::info($key.':'.$value);
         }
+        $signature = $request->signature;
+        $data = $request->data;
+        /**
+         * TODO: more security in future, but not now
+         */
+        //$liqpay = new LiqPay(env('LIQPAY_PUBLIC_KEY'), env('LIQPAY_PRIVATE_KEY'));
+        //$dataCheck = $liqpay->cnb_data($data);
+        //if($signature == $dataCheck['signature']){
+            $data = base64_decode($data);
+        $data = json_decode($data);
+        $data = (array) $data;
+        $invoice = Invoice::where('order_id',$data['order_id'])->first();
+            if($invoice){
+                $user = User::find($invoice->user_id);
+                if($user){
+                    $user->balance = $user->balance + $invoice->amount;
+                    $user->save();
+                }
+            }
+
+        //}else{
+        //    Log::warning('wrong signature');
+        //}
         return $this->helpInfo();
     }
 
@@ -62,6 +86,8 @@ class PayController extends Controller
                 throw new \Exception('amount in array was missing',100);
             }
             $data = $request->data;
+            $data['server_url'] = 'http://posterapp.com.ua/api/payment/callback';
+            $data['order_id'] = $order_id;
             /*
             $data['public_key'] = env('LIQPAY_PUBLIC_KEY');
             $data['order_id'] = $order_id;
@@ -72,6 +98,7 @@ class PayController extends Controller
                 )
             );*/
             $liqpay = new LiqPay(env('LIQPAY_PUBLIC_KEY'), env('LIQPAY_PRIVATE_KEY'));
+
             $data = $liqpay->cnb_data($data);
 
             $invoice = new Invoice([
