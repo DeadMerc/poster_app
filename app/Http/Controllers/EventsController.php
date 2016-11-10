@@ -235,11 +235,7 @@ class EventsController extends Controller
         if($request->user->balance > $category->post_price) {
             $request->user->balance = $request->user->balance - $category->post_price;
 
-            if($request->user_id AND $request->header('token') == 'adm'){
-                User::findorfail($request->user_id);
-            }else{
-                $request->user_id = $request->user->id;
-            }
+            $this->saveOriginalUserId($request);
 
 
 
@@ -342,7 +338,9 @@ class EventsController extends Controller
         if($request->date_stop < date("Y-m-d H:i:s")) {
             throw new Exception('Date are wrong', 100);
         }
-        $request->user_id = $request->user->id;
+
+        $this->saveOriginalUserId($request);
+
         if($request->images) {
             Photo::where('event_id', $id)->delete();
         }
@@ -372,5 +370,13 @@ class EventsController extends Controller
     public function destroy($id) {
         Event::where('id', $id)->delete();
         return $this->helpInfo();
+    }
+
+    private function saveOriginalUserId(Request $request){
+        if($request->user_id AND $request->header('token') == 'adm'){
+            User::findorfail($request->user_id);
+        }else{
+            $request->user_id = $request->user->id;
+        }
     }
 }
