@@ -98,6 +98,9 @@ adminApp.run(function ($rootScope, toastr) {
         var source = buffer.join( "&" ).replace( /%20/g, "+" );
         return( source );
     }
+    $rootScope.dateToISO = function(input) {
+        return new Date(input).toISOString();
+    };
 });
 adminApp.config(['cfpLoadingBarProvider', function (cfpLoadingBarProvider) {
     console.log("Spinner init");
@@ -112,6 +115,7 @@ adminApp.config(function(uiGmapGoogleMapApiProvider) {
         libraries: 'weather,geometry,visualization'
     });
 })
+
 adminApp.config(['$routeProvider',
     function ($routeProvider) {
         console.log("Route Init");

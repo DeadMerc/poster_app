@@ -516,6 +516,10 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
 
                     }
                     $scope.data = res.data.response;
+                    //transform data
+                    $scope.data.date = new Date($scope.data.date);
+                    $scope.data.date_stop = new Date($scope.data.date_stop);
+
                     $scope.photos = res.data.response.photos;
                     //console.log($scope.photos);
                 }, function (res) {

@@ -1,3 +1,16 @@
+
+.imagePreview{
+    position: relative;
+}
+.imagePreview:hover .removeButton{
+    display: block;
+    position: absolute;
+    left: 76%;
+    top: 3%;
+}
+.removeButton{
+    display: none;
+}
 /*!
  * Start Bootstrap - Simple Sidebar HTML Template (http://startbootstrap.com)
  * Code licensed under the Apache License v2.0.

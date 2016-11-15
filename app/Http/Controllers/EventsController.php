@@ -58,20 +58,15 @@ class EventsController extends Controller
      * @apiHeader {string} token User token
      * @apiParam {string} [place_id]
      */
-    public function showFavorite(Request $request,$place_id = false) {
+    public function showFavorite(Request $request, $place_id = false) {
         $categories = $request->user->favorites;
         $events = [];
         foreach ($categories as $category) {
-            foreach (
-                Event::with('photos', 'user')
-                    ->where('category_id', $category->category_id)
-                    //->where('type', 'public')
-                    ->where('publish',1)
-                    ->when($place_id,function($q)use($place_id){
-                        return $q->where('place_id',$place_id);
-                    })
-                    ->get() as $event) {
-                        $events[] = $event;
+            foreach (Event::with('photos', 'user')->where('category_id', $category->category_id)//->where('type', 'public')
+                ->where('publish', 1)->when($place_id, function($q) use ($place_id) {
+                    return $q->where('place_id', $place_id);
+                })->get() as $event) {
+                $events[] = $event;
             }
         }
         return $this->helpReturn($events);
@@ -223,18 +218,20 @@ class EventsController extends Controller
             'price' => 'required',
             'images' => false,
         ];
-        if($request->images){
-            if(!is_array($request->images)){
-                $request->images = explode(',',$request->images);
+        if($request->images) {
+            if(!is_array($request->images)) {
+                $request->images = explode(',', $request->images);
             }
         }
 
-        if($request->date_stop){
+
+
+        if($request->date_stop) {
             $request->date_stop = new \DateTime($request->date_stop);
         }
         //date("Y-m-d H:i:s")
         if($request->date_stop < new \DateTime("now")) {
-            //throw new Exception('Date are wrong or less that:'.date("Y-m-d H:i:s"), 100);
+            throw new Exception('Date are wrong or less that:' . date("Y-m-d H:i:s"), 100);
         }
 
         $category = Category::findorfail($request->category_id);
@@ -259,7 +256,7 @@ class EventsController extends Controller
                         'type' => 'EVENT_WAS_ADDED',
                         'creator_info' => User::find($request->user->id),
                     ];
-                    //$this->sendPushToUser($users, $message);
+                    $this->sendPushToUser($users, $message);
                     //dump(1);
                     //$job = new SendPush($users,$message);
                     //$this->dispatch($job);
@@ -340,14 +337,17 @@ class EventsController extends Controller
             'images' => false,
         ];
 
-        if($request->images){
-            if(!is_array($request->images)){
-                $request->images = explode(',',$request->images);
+        if($request->images) {
+            if(!is_array($request->images)) {
+                $request->images = explode(',', $request->images);
             }
         }
+        if($request->date){
+            $request->date = new \DateTime($request->date);
+        }
 
-        if($request->date_stop < date("Y-m-d H:i:s")) {
-            throw new Exception('Date are wrong', 100);
+        if(strtotime($request->date_stop)) {
+            $request->date_stop = new \DateTime($request->date_stop);
         }
 
         $this->saveOriginalUserId($request);
@@ -383,10 +383,10 @@ class EventsController extends Controller
         return $this->helpInfo();
     }
 
-    private function saveOriginalUserId(Request $request){
-        if($request->user_id AND $request->header('token') == 'adm'){
+    private function saveOriginalUserId(Request $request) {
+        if($request->user_id AND $request->header('token') == 'adm') {
             User::findorfail($request->user_id);
-        }else{
+        } else {
             $request->user_id = $request->user->id;
         }
     }

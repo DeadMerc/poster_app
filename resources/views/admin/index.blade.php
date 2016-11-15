@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="stylesheet" href="https://dl.dropboxusercontent.com/u/105655494/css/theme.css">
+
     <title>PosterApp admin panel</title>
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.css"
@@ -53,7 +53,8 @@
     <script src="js/app.js"></script>
     <script src="js/controllers.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
+    <!--https://dl.dropboxusercontent.com/u/105655494/-->
+    <link rel="stylesheet" href="css/theme.css">
 
 </head>
 

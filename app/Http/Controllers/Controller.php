@@ -123,6 +123,9 @@ class Controller extends BaseController {
         if($key == 'date_stop'){
             return 'date_picker';
         }
+        if($key == 'description'){
+            //return 'text_area';
+        }
         return 'text';
     }
 

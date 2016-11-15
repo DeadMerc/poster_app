@@ -80,8 +80,9 @@
     </div>
     <div>
         <div ng-if="photos">
-            <div ng-repeat="photo in photos">
-                <img width="90%" height="200px" ng-src="/images/<% photo.image %>"><a ng-click="removePhoto(photo)">[x]</a>
+            <div ng-repeat="photo in photos" class="imagePreview">
+                <!-- width="90%" height="400px" -->
+                <img  ng-src="/images/<% photo.image %>"><a class="removeButton" ng-click="removePhoto(photo)">[REMOVE]</a>
             </div>
         </div>
 
