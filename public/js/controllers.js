@@ -3,56 +3,56 @@
  */
 var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
     .controller('CategoriesCtrl', function ($rootScope, $scope, $http, $location, $mdDialog) {
-            console.log("Categories Ctrl init");
-            $scope.params = {name: 'category', url: 'categories'};
-            $scope.init = function () {
-                console.log("Categories Ctrl scope init");
-                $http.get("/api/v1/categories")
+        console.log("Categories Ctrl init");
+        $scope.params = {name: 'category', url: 'categories'};
+        $scope.init = function () {
+            console.log("Categories Ctrl scope init");
+            $http.get("/api/v1/categories")
+                .then(function (res) {
+                    if (res.data.error == false) {
+                        console.log("Categories Ctrl data to view");
+                        $scope.categories = res.data.response;
+                    } else {
+                        console.log("Categories Ctrl data have error");
+                        $rootScope.warning('Request return error');
+                    }
+                }, function (res) {
+                    console.log("Categories Ctrl bad request");
+                    $rootScope.error('Request failed');
+                });
+        };
+        $scope.edit = function (id) {
+            console.log('Categories Ctrl try edit ' + id);
+            $location.path('/category/' + id);
+        };
+
+        $scope.delete = function (id) {
+            console.log($scope.params.name + ' Ctrl try delete ' + id);
+            var confirm = $mdDialog.confirm()
+                .title('Really?')
+                .textContent('Your want delete item with id:' + id + '?')
+                .ariaLabel('Lucky day')
+                .ok('Please do it!')
+                .cancel('No');
+            $mdDialog.show(confirm).then(function () {
+                $http.delete('/api/v1/' + $scope.params.url + '/' + id, $rootScope.config)
                     .then(function (res) {
-                        if (res.data.error == false) {
-                            console.log("Categories Ctrl data to view");
-                            $scope.categories = res.data.response;
-                        } else {
-                            console.log("Categories Ctrl data have error");
-                            $rootScope.warning('Request return error');
+                        if (res.data.error !== true) {
+                            $rootScope.success('Request is done');
+                            $scope.init();
+                        } else if (res.data.error == true) {
+                            console.log(res);
+                            $rootScope.warning('Request return error try with:' + res.data.response + '<br>' + res.data.message);
                         }
                     }, function (res) {
-                        console.log("Categories Ctrl bad request");
-                        $rootScope.error('Request failed');
+                        console.log(res);
+                        $rootScope.error('Request return error code');
                     });
-            };
-            $scope.edit = function (id) {
-                console.log('Categories Ctrl try edit ' + id);
-                $location.path('/category/' + id);
-            };
-
-            $scope.delete = function (id) {
-                console.log($scope.params.name + ' Ctrl try delete ' + id);
-                var confirm = $mdDialog.confirm()
-                    .title('Really?')
-                    .textContent('Your want delete item with id:' + id + '?')
-                    .ariaLabel('Lucky day')
-                    .ok('Please do it!')
-                    .cancel('No');
-                $mdDialog.show(confirm).then(function () {
-                    $http.delete('/api/v1/' + $scope.params.url + '/' + id, $rootScope.config)
-                        .then(function (res) {
-                            if (res.data.error !== true) {
-                                $rootScope.success('Request is done');
-                                $scope.init();
-                            } else if (res.data.error == true) {
-                                console.log(res);
-                                $rootScope.warning('Request return error try with:' + res.data.response + '<br>' + res.data.message);
-                            }
-                        }, function (res) {
-                            console.log(res);
-                            $rootScope.error('Request return error code');
-                        });
-                }, function () {
-                    $rootScope.info('Request was aborted');
-                });
-            };
-        })
+            }, function () {
+                $rootScope.info('Request was aborted');
+            });
+        };
+    })
     .controller('CategoryCtrl', function ($rootScope, $scope, $http, $routeParams, $location, Upload, $timeout) {
         /*PARAMS FOR CONTROLLER*/
         $scope.params = {name: 'category', url: 'categories'};
@@ -468,7 +468,7 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
                 .ok('Please do it!')
                 .cancel('No');
             $mdDialog.show(confirm).then(function () {
-                $http.delete('/api/v1/'+$scope.params.url+'/' + id+'',$rootScope.config).then(function (res) {
+                $http.delete('/api/v1/' + $scope.params.url + '/' + id + '', $rootScope.config).then(function (res) {
                     $scope.init();
                 });
             }, function () {
@@ -481,9 +481,10 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
         $scope.params = {name: 'Event', url: 'events'};
         console.log($scope.params.name + " Ctrl init");
         $scope.data = {};
+        $scope.photos = [];
         $scope.init = function () {
             console.log($scope.params.name + " Ctrl scope init");
-            $http.get('api/v1/' + $scope.params.url + '/s/edit',$rootScope.config)
+            $http.get('api/v1/' + $scope.params.url + '/s/edit', $rootScope.config)
                 .then(function (res) {
                     console.log($scope.params.name + '  Ctrl loading schema');
                     //console.log(res.data.response);
@@ -496,7 +497,7 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
                 });
             $scope.id = $routeParams.id;
 
-            $http.get('api/v1/categories',$rootScope.config)
+            $http.get('api/v1/categories', $rootScope.config)
                 .then(function (res) {
                     console.log('Try load list of categories');
                     $scope.categories_select = res.data.response;
@@ -505,7 +506,15 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
             if (typeof $scope.id == 'undefined') {
                 $scope.id = 'new';
             } else {
-                $http.get('/api/v1/' + $scope.params.url + '/' + $scope.id,$rootScope.config).then(function (res) {
+                $http.get('/api/v1/' + $scope.params.url + '/' + $scope.id, $rootScope.config).then(function (res) {
+                    console.log(res);
+                    if(res.data.error == true){
+                        $rootScope.error('Event not found, you were redirected to created new.');
+                        $timeout(function(){
+                            $location.path('/event/');
+                        },3000);
+
+                    }
                     $scope.data = res.data.response;
                     $scope.photos = res.data.response.photos;
                     //console.log($scope.photos);
@@ -516,11 +525,17 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
             console.log($scope.params.name + ' Ctrl try edit id ' + $scope.id);
         };
 
-        $scope.removePhoto = function (photoId) {
+        $scope.removePhoto = function (photo) {
             //console.log(photoId);
-            $http.get('/api/v1/photo/' + photoId+'/remove',$rootScope.config).then(function (res) {
+            if (photo.id == null) {
+                var index = $scope.photos.indexOf(photo);
+                $scope.photos.splice(index, 1);
+            } else {
+                $http.get('/api/v1/photo/' + photo.id + '/remove', $rootScope.config).then(function (res) {
                     $scope.init();
-            });
+                });
+            }
+
 
         }
         /*upload image*/
@@ -535,15 +550,18 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
                     Upload.upload({
                         url: '/images/upload',
                         data: {
-                            image: file,
-                            event:$scope.id
+                            image: file
+                            //event:$scope.id
                         }
                     }).then(function (res) {
                         //console.log(res);
                         if (res.status == 200) {
                             //$scope.uploadedFile = res.data;
                             $rootScope.success('OK');
-                            $scope.init();
+                            $scope.photos.push({"image": res.data, "id": null});
+
+                            //console.log($scope.photos);
+                            //$scope.init();
                         }
                     });
                 }
@@ -554,10 +572,19 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
             //console.log($scope.data);
             $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
             console.log($scope.params.name + ' Ctrl try save user with id:' + $scope.id);
+
+            var photos = [];
+            angular.forEach($scope.photos, function (v, i) {
+                //console.log(v);
+                photos.push(v.image);
+            });
+            //console.log(photos);
+            $scope.data.images = photos;
+
             if ($scope.id !== 'new') {
                 //console.log($scope.data);
                 //$rootScope.transform(
-                $http.post('/api/v1/' + $scope.params.url + '/' + $scope.id,$rootScope.serialize($scope.data), $rootScope.config)
+                $http.post('/api/v1/' + $scope.params.url + '/' + $scope.id, $rootScope.serialize($scope.data), $rootScope.config)
                     .then(function (res) {
                         if (res.data.error == false) {
                             //$scope.id
@@ -580,11 +607,12 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
             } else {
                 //console.log($scope.data);
                 console.log($scope.params.name + ' Ctrl try save new row');
-                $http.post('/api/v1/' + $scope.params.url + '', $rootScope.serialize($scope.data), $rootScope.config)
+
+                $http.post('/api/v1/' + $scope.params.url + '',$rootScope.serialize($scope.data), $rootScope.config)
                     .then(function (res) {
                         if (res.data.error == false) {
                             $rootScope.success('OK');
-                            $location.path('/event/'+res.data.message);
+                            $location.path('/event/' + res.data.message);
 
                         } else {
                             if (res.data.message == 'valid') {
@@ -614,10 +642,10 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
 
         $scope.page = 0;
         $scope.per_page = 150;
-        $scope.$watch('restrict_max_size',function (new_value,old_value) {
-            if(new_value){
+        $scope.$watch('restrict_max_size', function (new_value, old_value) {
+            if (new_value) {
                 $scope.per_page = 300;
-            }else{
+            } else {
                 $scope.per_page = 9999999;
             }
             $scope.init();
@@ -626,7 +654,7 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
 
         $scope.init = function () {
             console.log($scope.params.name + " Ctrl scope init");
-            $http.get("/api/v1/" + $scope.params.url + "?page="+$scope.page+"&per_page="+$scope.per_page)
+            $http.get("/api/v1/" + $scope.params.url + "?page=" + $scope.page + "&per_page=" + $scope.per_page)
                 .then(function (res) {
                     //console.log(res.data.response[0])
                     if (res.data.error == false) {

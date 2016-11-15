@@ -97,6 +97,7 @@ Route::post('/images/upload', 'Controller@uploadFile');
     }
     return $response;
 });
+
 Route::get('images/{filename}/thumbnail',function($filename){
     $pathOriginal = storage_path() . '/app/public/images/' . $filename;
     $pathThumbnail = storage_path() . '/app/public/images/thumbnail_200_' . $filename.'';

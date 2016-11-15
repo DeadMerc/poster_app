@@ -223,24 +223,27 @@ class EventsController extends Controller
             'price' => 'required',
             'images' => false,
         ];
+        if($request->images){
+            if(!is_array($request->images)){
+                $request->images = explode(',',$request->images);
+            }
+        }
+
         if($request->date_stop){
             $request->date_stop = new \DateTime($request->date_stop);
         }
         //date("Y-m-d H:i:s")
         if($request->date_stop < new \DateTime("now")) {
-            throw new Exception('Date are wrong or less that:'.date("Y-m-d H:i:s"), 100);
+            //throw new Exception('Date are wrong or less that:'.date("Y-m-d H:i:s"), 100);
         }
 
         $category = Category::findorfail($request->category_id);
         if($request->user->balance > $category->post_price) {
             $request->user->balance = $request->user->balance - $category->post_price;
-
             $this->saveOriginalUserId($request);
-
-
-
             $event = $this->fromPostToModel($rules, new Event, $request, 'model');
-            //dd(get_class($event));
+            //dd();
+            //dd($event);
             if(get_class($event) == 'App\Event') {
                 $request->user->save();
                 $users = [];
@@ -256,11 +259,12 @@ class EventsController extends Controller
                         'type' => 'EVENT_WAS_ADDED',
                         'creator_info' => User::find($request->user->id),
                     ];
-                    $this->sendPushToUser($users, $message);
+                    //$this->sendPushToUser($users, $message);
                     //dump(1);
                     //$job = new SendPush($users,$message);
                     //$this->dispatch($job);
                 }
+                //dd($event);
                 return $this->helpReturn($request->user, false, $event->id);
             } else {
                 return $this->helpError('valid', $event);
@@ -335,6 +339,13 @@ class EventsController extends Controller
             'price' => 'required',
             'images' => false,
         ];
+
+        if($request->images){
+            if(!is_array($request->images)){
+                $request->images = explode(',',$request->images);
+            }
+        }
+
         if($request->date_stop < date("Y-m-d H:i:s")) {
             throw new Exception('Date are wrong', 100);
         }

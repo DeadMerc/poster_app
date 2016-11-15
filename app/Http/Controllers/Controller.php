@@ -27,7 +27,7 @@ class Controller extends BaseController {
         $manyImages = false;
         if(!$valid->fails()) {
             foreach($rules as $key => $value) {
-                if($key == 'image' || $key == 'images') {
+                if($key == 'image' OR $key == 'images') {
                     if(is_array($request->images)) {
                         $manyImages = true;
                     } else {
@@ -53,15 +53,18 @@ class Controller extends BaseController {
 
             if($manyImages) {
                 foreach($request->images as $image) {
-                    if($image) {
+                    if(is_string($image)){
+                        $fileName = $image;
+                    }else{
                         $fileName = md5(rand(999, 99999) . date('d m Y')) . '.jpg';
                         $image->move(storage_path() . '/app/public/images', $fileName);
-                        $photo = new Photo;
-                        $photo->event_id = $model->id;
-                        $photo->image = $fileName;
-                        $photo->save();
-                        unset($photo);
+
                     }
+                    $photo = new Photo;
+                    $photo->event_id = $model->id;
+                    $photo->image = $fileName;
+                    $photo->save();
+                    unset($photo);
                 }
             }
             if($bool == 'model') {
