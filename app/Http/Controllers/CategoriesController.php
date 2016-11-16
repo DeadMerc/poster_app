@@ -122,15 +122,18 @@ class CategoriesController extends Controller {
         ];
         $category = $this->fromPostToModel($rules, new Category, $request,'model');
         $info = [];
+        $users = [];
         foreach(User::all() as $user){
-            $info[] = $this->sendPushToUser($user,[
-                'id'    => $category->id,
-                'title' => $category->name,
-                'body'  => $category->description,
-                'image' => $category->image,
-                'type'  => 'CATEGORY_WAS_ADDED',
-            ]);
+            $users[] = $user;
         }
+        $message = [
+            'id'    => $category->id,
+            'title' => $category->name,
+            'body'  => $category->description,
+            'image' => $category->image,
+            'type'  => 'CATEGORY_WAS_ADDED',
+        ];
+        $info[] = $this->sendPushToUser($users,$message);
 
         return $this->helpReturn($category,$info);
     }
