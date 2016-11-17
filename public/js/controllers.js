@@ -379,6 +379,7 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
         }
     })
     .controller('EventsCtrl', function ($rootScope, $scope, $http, $location, $mdDialog, $routeParams) {
+
         $scope.params = {name: 'Events', url: 'events', editurl: 'event'};
         console.log($scope.params.name + " Ctrl init");
 
@@ -507,7 +508,7 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
                 $scope.id = 'new';
             } else {
                 $http.get('/api/v1/' + $scope.params.url + '/' + $scope.id, $rootScope.config).then(function (res) {
-                    console.log(res);
+                    //console.log(res);
                     if(res.data.error == true){
                         $rootScope.error('Event not found, you were redirected to created new.');
                         $timeout(function(){

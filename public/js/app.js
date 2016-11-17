@@ -14,17 +14,48 @@ var adminApp = angular.module('adminApp', [
     $interpolateProvider.endSymbol('%>');
 });
 
+adminApp.factory('$myElementInkRipple', function($mdInkRipple) {
+    return {
+        attach: function (scope, element, options) {
+            return $mdInkRipple.attach(scope, element, angular.extend({
+                center: false,
+                dimBackground: true
+            }, options));
+        }
+    };
+});
 
-adminApp.run(function ($rootScope, toastr) {
+adminApp.run(function ($rootScope, toastr,$myElementInkRipple) {
     console.log("App started");
+    $rootScope.onClick = function (ev) {
+        $myElementInkRipple.attach($scope, angular.element(ev.target), { center: true });
+    };
     /* config for http*/
     $rootScope.config = {
         headers: {
             'token': 'adm',
             'Content-Type': 'application/x-www-form-urlencoded'
         }
-    }
-
+    };
+    $rootScope.keyToText = function (text){
+        data = {
+            "user_id":"User id",
+            "publish":"Publish?",
+            "category_id":"Choose category please",
+            "place_id":"Place id",
+            "title":"Title",
+            "description":"Description",
+            "date":"Date when start event",
+            "time":"Time",
+            "date_stop":"Date when event was hidded from app"
+        };
+        if(data.hasOwnProperty(text)){
+            return data[text];
+        }else{
+            //console.log("Not found:"+text);
+            return text;
+        }
+    };
     /* toasts */
     $rootScope.success = function ($text) {
         //success warning info error

@@ -118,7 +118,7 @@ class Controller extends BaseController {
             return 'checkbox';
         }
         if($key == 'type'){
-            //return 'select_event';
+            return 'type_select';
         }
         if($key == 'date_stop'){
             return 'date_picker';

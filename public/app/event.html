@@ -1,101 +1,105 @@
 <div ng-init="init()">
-    <div ng-repeat="input in schema">
+    <md-card>
+        <md-card-content>
+            <div ng-repeat="input in schema">
 
-        <div ng-if="input.type == 'file'">
-            <div class="md-button md-raised md-primary" ngf-select="upload($file)" ng-model="file" ngf-multiple="false">
-                Select Image
-            </div>
-            <div ng-if="uploadedFile">
-                <img width="300px" height="100px" ng-src="/images/<% uploadedFile %>">
-            </div>
-        </div>
-
-        <div ng-if="input.type == 'checkbox'">
-            <md-input-container class="md-block">
-                <md-checkbox ng-model="data[input.key]" aria-label="">
-                    <% input.key %>
-                </md-checkbox>
-            </md-input-container>
-        </div>
-
-        <div ng-if="input.type == 'date_picker'">
-            <label><% input.key %></label>
-                <md-datepicker ng-model="data[input.key]" name="dateField"
-                              ></md-datepicker>
-                <md-input-container>
-                    <div ng-messages="myOtherForm.dateField.$error">
-                        <div ng-message="valid">The entered value is not a date!</div>
-                        <div ng-message="required">This date is required!</div>
-                        <div ng-message="mindate">Date is too early!</div>
-                        <div ng-message="maxdate">Date is too late!</div>
+                <div ng-if="input.type == 'file'">
+                    <div class="md-button md-raised md-primary" ngf-select="upload($file)" ng-model="file"
+                         ngf-multiple="false">
+                        Select Image
                     </div>
-                </md-input-container>
-        </div>
-
-        <div ng-if="input.type == 'categories_select'">
-            <md-input-container>
-                <label><% input.key %></label>
-                <md-select required ng-model="data[input.key]">
-                    <md-option ng-repeat="category in categories_select" ng-value="category.id"><% category.name %></md-option>
-                </md-select>
-            </md-input-container>
-        </div>
-
-        <div ng-if="input.type == 'select_event'">
-            <md-input-container>
-                <label><% input.key %></label>
-                <md-select required ng-model="data[input.key]">
-                    <md-option ng-value="private">Private</md-option>
-                    <md-option ng-value="public">Public</md-option>
-                </md-select>
-            </md-input-container>
-        </div>
-
-
-        <div ng-if="input.type == 'text'">
-            <md-input-container class="md-block">
-                <label><% input.key %></label>
-                <input type="text" required name="input.key" ng-model="data[input.key]">
-                <div ng-messages="user.key.$error">
-                    <div ng-message="required">This is required.</div>
+                    <div ng-if="uploadedFile">
+                        <img width="300px" height="100px" ng-src="/images/<% uploadedFile %>">
+                    </div>
                 </div>
-            </md-input-container>
-        </div>
 
-        <div ng-if="input.type == 'number'">
-            <md-input-container class="md-block">
-                <label><% input.key %></label>
-                <input type="number" required name="input.key" ng-model="data[input.key]">
-                <div ng-messages="user.key.$error">
-                    <div ng-message="required">This is required.</div>
+                <div ng-if="input.type == 'checkbox'">
+                    <md-input-container class="md-block">
+                        <md-checkbox ng-model="data[input.key]" aria-label="">
+                            <% (input.key) %>
+                        </md-checkbox>
+                    </md-input-container>
                 </div>
-            </md-input-container>
-        </div>
+
+                <div ng-if="input.type == 'date_picker'">
+                    <label><%keyToText(input.key)%></label>
+                    <md-datepicker ng-model="data[input.key]" name="dateField"
+                    ></md-datepicker>
+                    <md-input-container>
+                        <div ng-messages="myOtherForm.dateField.$error">
+                            <div ng-message="valid">The entered value is not a date!</div>
+                            <div ng-message="required">This date is required!</div>
+                            <div ng-message="mindate">Date is too early!</div>
+                            <div ng-message="maxdate">Date is too late!</div>
+                        </div>
+                    </md-input-container>
+                </div>
+
+                <div ng-if="input.type == 'categories_select'">
+                    <md-input-container>
+                        <label>Category</label>
+                        <md-select required ng-model="data[input.key]">
+                            <md-option ng-repeat="category in categories_select" ng-value="category.id"><% category.name
+                                %>
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
+                <div ng-if="input.type == 'type_select'">
+                    <md-input-container>
+                        <label>Type of event</label>
+                        <md-select required ng-model="data[input.key]">
+                            <md-option value="private"><em>Private</em></md-option>
+                            <md-option value="public"><em>Public</em></md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
 
 
+                <div ng-if="input.type == 'text'">
+                    <md-input-container class="md-block">
+                        <label><% keyToText(input.key) %></label>
+                        <input type="text" required name="input.key" ng-model="data[input.key]">
+                        <div ng-messages="user.key.$error">
+                            <div ng-message="required">This is required.</div>
+                        </div>
+                    </md-input-container>
+                </div>
+
+                <div ng-if="input.type == 'number'">
+                    <md-input-container class="md-block">
+                        <label><%keyToText(input.key)%></label>
+                        <input type="number" required name="input.key" ng-model="data[input.key]">
+                        <div ng-messages="user.key.$error">
+                            <div ng-message="required">This is required.</div>
+                        </div>
+                    </md-input-container>
+                </div>
 
 
-
-
-    </div>
-    <div>
-        <div ng-if="photos">
-            <div ng-repeat="photo in photos" class="imagePreview">
-                <!-- width="90%" height="400px" -->
-                <img  ng-src="/images/<% photo.image %>"><a class="removeButton" ng-click="removePhoto(photo)">[REMOVE]</a>
             </div>
-        </div>
-
-        <div class="md-button md-raised md-primary" ngf-select="upload($file)" ng-model="file" ngf-multiple="false">
-            Select Image
-        </div>
-        <div ng-if="uploadedFile">
-            <img width="300px" height="100px" ng-src="/images/<% uploadedFile %>">
-        </div>
-    </div>
-
-    <section layout="row" layout-align="end" layout-wrap>
-        <md-button class="md-raised md-primary" ng-click="save()">Save</md-button>
-        <md-button class="md-raised md-warn" onclick="window.history.back();">Back</md-button>
-    </section>
+            <hr>
+            <div>
+                <div ng-if="photos" class="photos">
+                    <h3>Images</h3>
+                    <div ng-repeat="photo in photos" class="imagePreview">
+                        <!-- width="90%" height="400px" -->
+                        <img ng-src="/images/<% photo.image %>">
+                        <!--<a class="removeButton" ng-click="removePhoto(photo)">[REMOVE]</a>-->
+                        <md-button class="md-raised md-warn removeButton" ng-click="removePhoto(photo)">Remove image
+                        </md-button>
+                    </div>
+                </div>
+                <div class="md-button md-raised md-primary" ngf-select="upload($file)" ng-model="file"
+                     ngf-multiple="false">
+                    Select Image
+                </div>
+            </div>
+            <hr>
+            <section layout="row" layout-align="end" layout-wrap>
+                <md-button class="md-raised md-primary" ng-click="save()">Save</md-button>
+                <md-button class="md-raised md-warn" onclick="window.history.back();">Back</md-button>
+            </section>
+        </md-card-content>
+    </md-card>
 </div>
