@@ -11,6 +11,7 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
                 .then(function (res) {
                     if (res.data.error == false) {
                         console.log("Categories Ctrl data to view");
+                        console.log(res.data);
                         $scope.categories = res.data.response;
                     } else {
                         console.log("Categories Ctrl data have error");

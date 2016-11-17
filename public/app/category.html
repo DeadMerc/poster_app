@@ -13,7 +13,7 @@
 
         <div ng-if="input.type == 'text'">
             <md-input-container class="md-block">
-                <label><% input.key %></label>
+                <label><% keyToText(input.key) %></label>
                 <input type="text" required name="input.key" ng-model="data[input.key]">
                 <div ng-messages="user.key.$error">
                     <div ng-message="required">This is required.</div>
@@ -23,7 +23,7 @@
 
         <div ng-if="input.type == 'number'">
             <md-input-container class="md-block">
-                <label><% input.key %></label>
+                <label><% keyToText(input.key) %></label>
                 <input type="number" required name="input.key" ng-model="data[input.key]">
                 <div ng-messages="user.key.$error">
                     <div ng-message="required">This is required.</div>
@@ -33,7 +33,7 @@
 
     </div>
     <section layout="row" layout-align="end" layout-wrap>
-        <md-button class="md-raised md-primary" ng-click="save()">Save</md-button>
-        <md-button class="md-raised md-warn" onclick="window.history.back();">Back</md-button>
+        <md-button class="md-raised md-primary" ng-click="save()"><%keyToText('save')%></md-button>
+        <md-button class="md-raised md-warn" onclick="window.history.back();"><%keyToText('back')%></md-button>
     </section>
 </div>

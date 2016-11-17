@@ -67,21 +67,21 @@
         <ul class="sidebar-nav">
             <li class="sidebar-brand">
 
-                PosterApp Menu
+                PosterApp Меню
 
             </li>
             <li>
-                <a class="sidebar-link" href="#/categories">Categories</a><a class="sub-menu" href="#/category"><i
+                <a class="sidebar-link" href="#/categories">Категории</a><a class="sub-menu" href="#/category"><i
                             class="material-icons correct_icon">add_box</i></a>
             </li>
             <li>
-                <a class="sidebar-link" href="#/users">Users</a><a class="sub-menu" href="#/user"><i class="material-icons correct_icon">add_box</i></a>
+                <a class="sidebar-link" href="#/users">Пользователи</a><a class="sub-menu" href="#/user"><i class="material-icons correct_icon">add_box</i></a>
             </li>
             <li>
-                <a class="sidebar-link" href="#/events">Events</a><a class="sub-menu" href="#/event"><i class="material-icons correct_icon">add_box</i></a>
+                <a class="sidebar-link" href="#/events">События</a><a class="sub-menu" href="#/event"><i class="material-icons correct_icon">add_box</i></a>
             </li>
             <li>
-                <a class="sidebar-link" href="#/push">Push</a><a class="sub-menu" href="#/push/history"><i
+                <a class="sidebar-link" href="#/push">Пуши</a><a class="sub-menu" href="#/push/history"><i
                             class="material-icons correct_icon">history</i></a>
             </li>
         </ul>

@@ -23,12 +23,12 @@
         <tbody>
         <tr ng-repeat="data in users | filter:search">
             <td><% data.id %></td>
-            <td><% data.user.email || 'Not defined' %></td>
-            <td><% data.type || 'Not defined' %></td>
-            <td><% data.title || 'Not defined' %></td>
+            <td><% data.user.email || keyToText('not defined') %></td>
+            <td><% data.type || keyToText('not defined') %></td>
+            <td><% data.title || keyToText('not defined') %></td>
             <td><% data.date || 'Date not defined' %> <% data.time || 'Time not defined' %></td>
-            <td><% data.price || 'Not defined' %></td>
-            <td><% data.follow_count || 'Not defined' %></td>
+            <td><% data.price || keyToText('not defined') %></td>
+            <td><% data.follow_count || keyToText('not defined') %></td>
             <td>
                 <md-button ng-if="data.publish !== 1" ng-click="publish(data)" class="md-raised md-primary">
                     Publish

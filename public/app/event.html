@@ -16,7 +16,7 @@
                 <div ng-if="input.type == 'checkbox'">
                     <md-input-container class="md-block">
                         <md-checkbox ng-model="data[input.key]" aria-label="">
-                            <% (input.key) %>
+                            <% keyToText(input.key) %>
                         </md-checkbox>
                     </md-input-container>
                 </div>
@@ -37,7 +37,7 @@
 
                 <div ng-if="input.type == 'categories_select'">
                     <md-input-container>
-                        <label>Category</label>
+                        <label><% keyToText('category_id') %></label>
                         <md-select required ng-model="data[input.key]">
                             <md-option ng-repeat="category in categories_select" ng-value="category.id"><% category.name
                                 %>
@@ -47,10 +47,10 @@
                 </div>
                 <div ng-if="input.type == 'type_select'">
                     <md-input-container>
-                        <label>Type of event</label>
+                        <label><% keyToText('type') %></label>
                         <md-select required ng-model="data[input.key]">
-                            <md-option value="private"><em>Private</em></md-option>
-                            <md-option value="public"><em>Public</em></md-option>
+                            <md-option value="private"><em><% keyToText('private') %></em></md-option>
+                            <md-option value="public"><em><% keyToText('public') %></em></md-option>
                         </md-select>
                     </md-input-container>
                 </div>
@@ -81,24 +81,24 @@
             <hr>
             <div>
                 <div ng-if="photos" class="photos">
-                    <h3>Images</h3>
+                    <h3><%keyToText('images')%></h3>
                     <div ng-repeat="photo in photos" class="imagePreview">
                         <!-- width="90%" height="400px" -->
                         <img ng-src="/images/<% photo.image %>">
                         <!--<a class="removeButton" ng-click="removePhoto(photo)">[REMOVE]</a>-->
-                        <md-button class="md-raised md-warn removeButton" ng-click="removePhoto(photo)">Remove image
+                        <md-button class="md-raised md-warn removeButton" ng-click="removePhoto(photo)"><%keyToText('remove image')%>
                         </md-button>
                     </div>
                 </div>
                 <div class="md-button md-raised md-primary" ngf-select="upload($file)" ng-model="file"
                      ngf-multiple="false">
-                    Select Image
+                    <%keyToText('select image')%>
                 </div>
             </div>
             <hr>
             <section layout="row" layout-align="end" layout-wrap>
-                <md-button class="md-raised md-primary" ng-click="save()">Save</md-button>
-                <md-button class="md-raised md-warn" onclick="window.history.back();">Back</md-button>
+                <md-button class="md-raised md-primary" ng-click="save()"><%keyToText('save')%></md-button>
+                <md-button class="md-raised md-warn" onclick="window.history.back();"><%keyToText('back')%></md-button>
             </section>
         </md-card-content>
     </md-card>

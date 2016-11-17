@@ -16,14 +16,14 @@
                 <td><% category.description || 'Not defined' %></td>
                 <td>
                     <% category.image ? '' : 'Not defined' %>
-                    <img ng-if="category.image" width="300px" height="100px" ng-src="/images/<% category.image %>">
+                    <img ng-if="category.image" width="100px" height="100px" ng-src="/images/<% category.image %>">
                 </td>
                 <td>
                     <md-button ng-click="edit(category.id)" class="md-raised md-primary">
-                        Edit
+                        <%keyToText('edit')%>
                     </md-button>
                     <md-button ng-click="delete(category.id)" class="md-raised md-warn">
-                        Delete
+                        <%keyToText('delete')%>
                     </md-button>
                 </td>
             </tr>

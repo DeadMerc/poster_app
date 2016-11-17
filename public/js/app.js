@@ -39,20 +39,38 @@ adminApp.run(function ($rootScope, toastr,$myElementInkRipple) {
     };
     $rootScope.keyToText = function (text){
         data = {
-            "user_id":"User id",
-            "publish":"Publish?",
-            "category_id":"Choose category please",
-            "place_id":"Place id",
-            "title":"Title",
-            "description":"Description",
-            "date":"Date when start event",
-            "time":"Time",
-            "date_stop":"Date when event was hidded from app"
+            "user_id":"ID пользователя",
+            "publish":"Опубликовать?",
+            "category_id":"Категория",
+            "place_id":"ID места",
+            "title":"Загаловок",
+            "description":"Описание",
+            "date":"Дата начала события",
+            "time":"Время события",
+            "date_stop":"Дата, когда событие будет скрыто с приложения",
+            "address":"Адресс",
+            "type":"Тип",
+            "video":"Ссылка на видео",
+            "price":"Стоимость",
+            "private":"Приватное",
+            "public":"Публичное",
+            "images":"Изображения",
+            "back":"Назад",
+            "save":"Сохранить",
+            "upload":"Загрузить",
+            "remove image":"Удалить",
+            "select image":"Выбрать изображение",
+            "edit":"Редактировать",
+            "delete":"Удалить",
+            "events":"События",
+            "ban":"Заблокировать",
+            "unban":"Разблокировать",
+            "not defined":"Не установлено"
         };
         if(data.hasOwnProperty(text)){
             return data[text];
         }else{
-            //console.log("Not found:"+text);
+            console.log("Not found:"+text);
             return text;
         }
     };

@@ -44,32 +44,32 @@
         <tbody>
         <tr ng-repeat="user in users | orderBy:sortType:sortReverse | filter:search">
             <td><% user.id %></td>
-            <td><% user.name || 'Not defined' %></td>
-            <td><% user.email || 'Not defined' %></td>
+            <td><% user.name || keyToText('not defined') %></td>
+            <td><% user.email || keyToText('not defined') %></td>
             <td>
-                <% user.phone_1 || 'Not defined' %><br>
-                <% user.phone_2 || 'Not defined' %><br>
-                <% user.phone_3 || 'Not defined' %>
+                <% user.phone_1 || keyToText('not defined') %><br>
+                <% user.phone_2 || keyToText('not defined') %><br>
+                <% user.phone_3 || keyToText('not defined') %>
             </td>
-            <td><% user.balance || 'Not defined' %></td>
-            <td><% user.location || 'Not defined' %></td>
+            <td><% user.balance || keyToText('not defined') %></td>
+            <td><% user.location || keyToText('not defined') %></td>
             <td>
                 <md-button ng-click="events(user.email)" class="md-raised md-primary">
-                    Events
+                    <%keyToText('events')%>
                 </md-button>
                 <md-button ng-click="edit(user.id)" class="md-raised md-primary">
-                    Edit
+                    <%keyToText('edit')%>
                 </md-button>
 
                 <md-button ng-if="user.banned !== 1" ng-click="ban(user)" class="md-raised md-warn">
-                    Ban
+                    <%keyToText('ban')%>
                 </md-button>
                 <md-button ng-if="user.banned == 1" ng-click="unban(user)" class="md-raised md-primary">
-                    UnBan
+                    <%keyToText('unban')%>
                 </md-button>
 
                 <md-button ng-click="delete(user.id)" class="md-raised md-warn">
-                    Delete
+                    <%keyToText('delete')%>
                 </md-button>
             </td>
         </tr>
