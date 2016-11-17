@@ -3,7 +3,7 @@
         <thead>
             <tr>
                 <td>ID</td>
-                <td>Название EN</td>
+                <td>Название</td>
                 <td>Описание</td>
                 <td>Картинка</td>
                 <td>Действия</td>
@@ -12,7 +12,7 @@
         <tbody>
             <tr ng-repeat="category in categories">
                 <td><% category.id %></td>
-                <td><% category.name_EN %></td>
+                <td><% category.name_RU %></td>
                 <td><% category.description || keyToText('not defined') %></td>
                 <td>
                     <% category.image ? '' : keyToText('not defined') %>

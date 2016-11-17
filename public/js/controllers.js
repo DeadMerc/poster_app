@@ -7,7 +7,13 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
         $scope.params = {name: 'category', url: 'categories'};
         $scope.init = function () {
             console.log("Categories Ctrl scope init");
-            $http.get("/api/v1/categories")
+            $http.get("/api/v1/categories",{
+                headers: {
+                    'token': 'adm',
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'lang':"RU"
+                }
+            })
                 .then(function (res) {
                     if (res.data.error == false) {
                         console.log("Categories Ctrl data to view");

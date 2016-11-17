@@ -44,7 +44,7 @@ adminApp.run(function ($rootScope, toastr,$myElementInkRipple,$routeParams) {
             "publish":"Опубликовать",
             "category_id":"Категория",
             "place_id":"ID места",
-            "title":"Загаловок",
+            "title":"Заголовок",
             "description":"Описание",
             "date":"Дата начала события",
             "time":"Время события",
