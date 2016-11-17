@@ -1,12 +1,12 @@
 <div ng-init="init()">
     <form>
-        Choose category for send push<br>
+        Выберите категорию<br>
 
         <div class="form-group">
             <div class="input-group">
                 <select type="text" class="form-control" placeholder="Search in params" ng-model="category_selected"
                         ng-change="showUsersInMap()">
-                    <option value="all">In all categories</option>
+                    <option value="all">Во всех</option>
                     <option ng-repeat="category in categories" ng-value="category.id">
                         <% category.name_EN %>
                     </option>
@@ -25,11 +25,11 @@
             </ui-gmap-google-map>
         </div>
         <br>
-        Push will be sended for <% sendFor.length %> users<br>
+        Пуши будут отправлены <% sendFor.length %> пользователям<br>
 
 
         <md-input-container class="md-block">
-            <label>Title<FONT color="red">*</FONT> </label>
+            <label><% keyToText('title') %><FONT color="red">*</FONT> </label>
             <input type="text"  name="input.key" ng-model="push.title">
             <div ng-messages="user.key.$error">
                 <div ng-message="required">This is required.</div>
@@ -37,7 +37,7 @@
         </md-input-container>
 
         <md-input-container class="md-block">
-            <label>Description<FONT color="red">*</FONT></label>
+            <label><% keyToText('description') %><FONT color="red">*</FONT></label>
             <input type="text"  name="input.key" ng-model="push.description">
             <div ng-messages="user.key.$error">
                 <div ng-message="required">This is required.</div>
@@ -45,17 +45,17 @@
         </md-input-container>
 
         <md-input-container class="md-block">
-            <label>Date</label>
+            <label><% keyToText('date') %></label>
             <input type="date" placeholder="optional"  name="input.key" ng-model="push.date">
         </md-input-container>
 
         <md-input-container class="md-block">
-            <label>Link</label>
+            <label><% keyToText('link') %></label>
             <input type="text" placeholder="http://www.yandex.ru"  name="input.key" ng-model="push.link">
         </md-input-container>
 
         <md-input-container class="md-block">
-            <label>Type<FONT color="red">*</FONT></label>
+            <label><% keyToText('type') %><FONT color="red">*</FONT></label>
             <select ng-model="push.type" name="input.key" placeholder="Type of push" class="no-underline">
                 <option selected value="ADVERTISING">Advertising</option>
                 <option value="INFORMATION">Information</option>
@@ -66,12 +66,12 @@
 
         <% push.image || 'Image not uploaded' %><FONT color="red">*</FONT><br>
         <div class="md-button md-raised md-primary" ngf-select="upload($file)" ng-model="push.image" ngf-multiple="false">
-            Select Image
+            Выбрать изображение
         </div>
 
         <section layout="row" layout-align="end" layout-wrap>
             <md-button ng-click="sendPushes()" data-ng-disabled="checkMarkers()" class="md-raised md-primary">
-                Send
+                Отправить
             </md-button>
         </section>
 

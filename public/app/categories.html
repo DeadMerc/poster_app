@@ -3,19 +3,19 @@
         <thead>
             <tr>
                 <td>ID</td>
-                <td>Name EN</td>
-                <td>Description</td>
-                <td>Image</td>
-                <td>Actions</td>
+                <td>Название EN</td>
+                <td>Описание</td>
+                <td>Картинка</td>
+                <td>Действия</td>
             </tr>
         </thead>
         <tbody>
             <tr ng-repeat="category in categories">
                 <td><% category.id %></td>
                 <td><% category.name_EN %></td>
-                <td><% category.description || 'Not defined' %></td>
+                <td><% category.description || keyToText('not defined') %></td>
                 <td>
-                    <% category.image ? '' : 'Not defined' %>
+                    <% category.image ? '' : keyToText('not defined') %>
                     <img ng-if="category.image" width="100px" height="100px" ng-src="/images/<% category.image %>">
                 </td>
                 <td>

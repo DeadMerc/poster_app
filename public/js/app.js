@@ -40,7 +40,7 @@ adminApp.run(function ($rootScope, toastr,$myElementInkRipple) {
     $rootScope.keyToText = function (text){
         data = {
             "user_id":"ID пользователя",
-            "publish":"Опубликовать?",
+            "publish":"Опубликовать",
             "category_id":"Категория",
             "place_id":"ID места",
             "title":"Загаловок",
@@ -65,7 +65,8 @@ adminApp.run(function ($rootScope, toastr,$myElementInkRipple) {
             "events":"События",
             "ban":"Заблокировать",
             "unban":"Разблокировать",
-            "not defined":"Не установлено"
+            "not defined":"Не установлено",
+            "unpublish":"Снять с публикации"
         };
         if(data.hasOwnProperty(text)){
             return data[text];

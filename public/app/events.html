@@ -11,13 +11,13 @@
         <thead>
         <tr>
             <td>ID</td>
-            <td>Author</td>
-            <td>Type</td>
-            <td>Title</td>
-            <td>DateTime</td>
-            <td>Price</td>
-            <td>Follow Count</td>
-            <td>Actions</td>
+            <td>Автор</td>
+            <td>Тип</td>
+            <td>Заголовок</td>
+            <td>Дата</td>
+            <td>Цена</td>
+            <td>Фоловеры</td>
+            <td>Действия</td>
         </tr>
         </thead>
         <tbody>
@@ -31,16 +31,16 @@
             <td><% data.follow_count || keyToText('not defined') %></td>
             <td>
                 <md-button ng-if="data.publish !== 1" ng-click="publish(data)" class="md-raised md-primary">
-                    Publish
+                    <% keyToText('publish') %>
                 </md-button>
                 <md-button ng-if="data.publish == 1" ng-click="unpublish(data)" class="md-raised md-warn">
-                    UnPublish
+                    <% keyToText('unpublish') %>
                 </md-button>
                 <md-button ng-click="edit(data.id)" class="md-raised md-primary">
-                    Edit
+                    <% keyToText('edit') %>
                 </md-button>
                 <md-button ng-click="delete(data.id)" class="md-raised md-warn">
-                    Delete
+                    <% keyToText('delete') %>
                 </md-button>
             </td>
         </tr>
