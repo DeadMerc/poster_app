@@ -25,7 +25,7 @@ adminApp.factory('$myElementInkRipple', function($mdInkRipple) {
     };
 });
 
-adminApp.run(function ($rootScope, toastr,$myElementInkRipple) {
+adminApp.run(function ($rootScope, toastr,$myElementInkRipple,$routeParams) {
     console.log("App started");
     $rootScope.onClick = function (ev) {
         $myElementInkRipple.attach($scope, angular.element(ev.target), { center: true });
@@ -38,6 +38,7 @@ adminApp.run(function ($rootScope, toastr,$myElementInkRipple) {
         }
     };
     $rootScope.keyToText = function (text){
+
         data = {
             "user_id":"ID пользователя",
             "publish":"Опубликовать",
@@ -68,7 +69,7 @@ adminApp.run(function ($rootScope, toastr,$myElementInkRipple) {
             "not defined":"Не установлено",
             "unpublish":"Снять с публикации"
         };
-        if(data.hasOwnProperty(text)){
+        if(data.hasOwnProperty(text) && $routeParams.lang != 'en'){
             return data[text];
         }else{
             console.log("Not found:"+text);
