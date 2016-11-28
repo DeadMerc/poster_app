@@ -61,6 +61,7 @@ class EventsController extends Controller
     public function showFavorite(Request $request, $place_id = false) {
         $categories = $request->user->favorites;
         $events = [];
+        //dd($categories);
         foreach ($categories as $category) {
             foreach (Event::with('photos', 'user')->where('category_id', $category->category_id)//->where('type', 'public')
                 ->where('publish', 1)->when($place_id, function($q) use ($place_id) {
@@ -224,7 +225,9 @@ class EventsController extends Controller
             }
         }
 
-
+        if($request->date) {
+            $request->date = new \DateTime($request->date);
+        }
 
         if($request->date_stop) {
             $request->date_stop = new \DateTime($request->date_stop);

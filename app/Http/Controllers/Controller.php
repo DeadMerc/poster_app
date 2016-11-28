@@ -40,7 +40,7 @@ class Controller extends BaseController {
                         }
                     }
                 } else {
-                    if($model->$key != $request->$key AND !empty($request->$key)) {
+                    if($model->$key != $request->$key AND (!empty($request->$key) OR is_numeric($request->$key))) {
                         if($key == 'password') {
                             $request->$key = md5($request->$key . 'requestLoginEvstolia');
                         }

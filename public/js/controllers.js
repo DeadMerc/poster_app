@@ -527,9 +527,9 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
                     //transform data
                     $scope.data.date = new Date($scope.data.date);
                     $scope.data.date_stop = new Date($scope.data.date_stop);
-
+                    $scope.data.publish = $scope.data.publish ? true : false;
                     $scope.photos = res.data.response.photos;
-                    //console.log($scope.photos);
+                    //console.log($scope.data.publish);
                 }, function (res) {
                     $rootScope.error('Request get categories list was failed');
                 });

@@ -15,9 +15,8 @@
 
                 <div ng-if="input.type == 'checkbox'">
                     <md-input-container class="md-block">
-                        <md-checkbox ng-model="data[input.key]" aria-label="">
-                            <% keyToText(input.key) %>
-                        </md-checkbox>
+                        <% keyToText(input.key) %>
+                        <input type="checkbox" ng-model="data[input.key]" aria-label="">
                     </md-input-container>
                 </div>
 

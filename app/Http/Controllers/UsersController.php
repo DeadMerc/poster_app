@@ -269,6 +269,7 @@ class UsersController extends Controller {
                   'password'     => false,
                   'place_id'     => false,
         ];
+
         $user = User::findorfail($id);
         return $this->fromPostToModel($rules, $user, $request);
     }
