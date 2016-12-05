@@ -226,7 +226,10 @@ class EventsController extends Controller
         }
 
         if($request->date) {
-            $request->date = new \DateTime($request->date);
+            if(strtotime($request->date)){
+                $request->date = new \DateTime($request->date);
+            }
+
         }
 
         if($request->date_stop) {
@@ -257,7 +260,7 @@ class EventsController extends Controller
                         'body' => $event->description,
                         'image' => $event->load('photos'),
                         'type' => 'EVENT_WAS_ADDED',
-                        'creator_info' => User::find($request->user->id),
+                        'creator_info' => User::find($request->user_id),
                     ];
                     $this->sendPushToUser($users, $message);
                     //dump(1);

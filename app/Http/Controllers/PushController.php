@@ -17,7 +17,7 @@ class PushController extends Controller
     }
 
     public function sendForUser(Request $request, $id) {
-        $info[] = $this->sendPushToUser(User::findorfail($id), [
+        $info[] = $this->sendPushToUser([User::findorfail($id)], [
             'id' => 'PUSH TITLE hey',
             'title' => 'TEST TITLE',
             'body' => 'PUSH DESC',
