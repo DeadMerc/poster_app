@@ -112,7 +112,7 @@ class Controller extends BaseController {
             //return 'number';
         }
         if($key == 'date') {
-            return 'date_picker';
+            //return 'date_picker';
         }
         if($key == 'publish') {
             return 'checkbox';
@@ -121,7 +121,7 @@ class Controller extends BaseController {
             return 'type_select';
         }
         if($key == 'date_stop'){
-            return 'date_picker';
+            //return 'date_picker';
         }
         if($key == 'description'){
             //return 'text_area';

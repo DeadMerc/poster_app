@@ -149,7 +149,11 @@ adminApp.run(function ($rootScope, toastr,$myElementInkRipple,$routeParams) {
         var source = buffer.join( "&" ).replace( /%20/g, "+" );
         return( source );
     }
+    /*
+    TODO: ISO disabled
+     */
     $rootScope.dateToISO = function(input) {
+        return input;
         return new Date(input).toISOString();
     };
 });
