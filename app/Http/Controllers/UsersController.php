@@ -156,7 +156,7 @@ class UsersController extends Controller {
         $user = User::where('token',$token)->first();
         if($user){
             $password = uniqid();
-            //$user->password = md5($password . 'requestLoginEvstolia');
+            $user->password = md5($password . 'requestLoginEvstolia');
             $user->token = md5(uniqid() . md5(date("h:m")));
             /*
             mail(

@@ -153,7 +153,7 @@ adminApp.run(function ($rootScope, toastr,$myElementInkRipple,$routeParams) {
     TODO: ISO disabled
      */
     $rootScope.dateToISO = function(input) {
-        return input;
+        //return input;
         return new Date(input).toISOString();
     };
 });

@@ -65,6 +65,13 @@
                     </md-input-container>
                 </div>
 
+                <div ng-if="input.type == 'text_area'">
+                    <md-input-container class="md-block">
+                        <label><% keyToText(input.key) %></label>
+                        <textarea ng-model="data[input.key]" md-maxlength="10000" rows="5"></textarea>
+                    </md-input-container>
+                </div>
+
                 <div ng-if="input.type == 'number'">
                     <md-input-container class="md-block">
                         <label><%keyToText(input.key)%></label>
@@ -85,7 +92,8 @@
                         <!-- width="90%" height="400px" -->
                         <img ng-src="/images/<% photo.image %>">
                         <!--<a class="removeButton" ng-click="removePhoto(photo)">[REMOVE]</a>-->
-                        <md-button class="md-raised md-warn removeButton" ng-click="removePhoto(photo)"><%keyToText('remove image')%>
+                        <md-button class="md-raised md-warn removeButton" ng-click="removePhoto(photo)">
+                            <%keyToText('remove image')%>
                         </md-button>
                     </div>
                 </div>

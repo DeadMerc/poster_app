@@ -239,7 +239,7 @@ class EventsController extends Controller
         }*/
         //date("Y-m-d H:i:s")
         if($request->date_stop < new \DateTime("now")) {
-            throw new Exception('Date are wrong or less that:' . date("Y-m-d H:i:s"), 100);
+            //throw new Exception('Date are wrong or less that:' . date("Y-m-d H:i:s"), 100);
         }
 
         $category = Category::findorfail($request->category_id);
@@ -264,7 +264,7 @@ class EventsController extends Controller
                         'type' => 'EVENT_WAS_ADDED',
                         'creator_info' => User::find($request->user_id),
                     ];
-                    $this->sendPushToUser($users, $message);
+                    //$this->sendPushToUser($users, $message);
                     //dump(1);
                     //$job = new SendPush($users,$message);
                     //$this->dispatch($job);
@@ -348,7 +348,7 @@ class EventsController extends Controller
         if($request->images) {
             if(!is_array($request->images)) {
                 $request->images = explode(',', $request->images);
-            }
+            } 
         }
         /*
         if($request->date){
