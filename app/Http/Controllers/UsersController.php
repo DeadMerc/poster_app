@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Category;
 use Illuminate\Http\Request;
 use App\User;
 use App\Http\Requests;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Validator;
 use League\Flysystem\Exception;
 use Mail;
@@ -32,9 +34,28 @@ class UsersController extends Controller {
 
     public function forPush(Request $request, $category_id) {
         if($category_id == 'all') {
-            return $this->helpReturn(User::where('lon', '>', "0")->where('lat', '>', "0")->get());
+            //dd(User::where('lon', '>', 0)->where('lat', '>', 0)->get());
+            return $this->helpReturn(DB::table('users')
+                ->select('users.*')
+                ->where('users.lat','>',0)
+                ->where('users.lon','>',0)
+                ->get());
         } else {
-            return $this->helpReturn(User::where('lon', '>', "0")->where('lat', '>', "0")->where('category_id', $category_id)->get());
+            $users = DB::table('users')
+                ->join('categories_favorite', 'categories_favorite.user_id', '=', 'users.id')
+                ->select('users.*', 'categories_favorite.category_id')
+                ->where('categories_favorite.category_id',$category_id)
+                ->where('users.lat','>',0)
+                ->where('users.lon','>',0)
+                ->get();
+
+            /*SELECT  `users` . * ,  `categories_favorite`.`category_id`
+FROM  `users`
+INNER JOIN  `categories_favorite` ON  `categories_favorite`.`user_id` =  `users`.`id`
+WHERE  `categories_favorite`.`category_id` =  '100'*/
+            //dd($users);
+            return $this->helpReturn($users);
+            //return $this->helpReturn(User::where('lon', '>', "0")->where('lat', '>', "0")->where('category_id', $category_id)->get());
         }
 
     }

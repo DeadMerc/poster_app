@@ -34,7 +34,8 @@ adminApp.run(function ($rootScope, toastr,$myElementInkRipple,$routeParams) {
     $rootScope.config = {
         headers: {
             'token': 'adm',
-            'Content-Type': 'application/x-www-form-urlencoded'
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'lang':'RU'
         }
     };
     $rootScope.keyToText = function (text){

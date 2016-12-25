@@ -62,6 +62,10 @@ class EventsController extends Controller
         $categories = $request->user->favorites;
         $events = [];
         //dd($categories);
+        /*
+         * TODO: REMOVE THIS RESTRICTION
+         */
+        //$place_id = false;
         foreach ($categories as $category) {
             foreach (Event::with('photos', 'user')->where('category_id', $category->category_id)//->where('type', 'public')
                 ->where('publish', 1)->when($place_id, function($q) use ($place_id) {
@@ -224,7 +228,7 @@ class EventsController extends Controller
                 $request->images = explode(',', $request->images);
             }
         }
-        /*
+
         if($request->date) {
             if(strtotime($request->date)){
                 $request->date = new \DateTime($request->date);
@@ -236,10 +240,10 @@ class EventsController extends Controller
             if(strtotime($request->date_stop)){
                 $request->date_stop = new \DateTime($request->date_stop);
             }
-        }*/
+        }
         //date("Y-m-d H:i:s")
         if($request->date_stop < new \DateTime("now")) {
-            //throw new Exception('Date are wrong or less that:' . date("Y-m-d H:i:s"), 100);
+            throw new Exception('Date are wrong or less that:' . date("Y-m-d H:i:s"), 100);
         }
 
         $category = Category::findorfail($request->category_id);
@@ -350,7 +354,7 @@ class EventsController extends Controller
                 $request->images = explode(',', $request->images);
             } 
         }
-        /*
+
         if($request->date){
             if(strtotime($request->date)){
                 $request->date = new \DateTime($request->date);
@@ -359,7 +363,11 @@ class EventsController extends Controller
 
         if(strtotime($request->date_stop)) {
             $request->date_stop = new \DateTime($request->date_stop);
-        }*/
+        }
+
+        if($request->date_stop < new \DateTime("now")) {
+            throw new Exception('Date are wrong or less that:' . date("Y-m-d H:i:s"), 100);
+        }
 
         $this->saveOriginalUserId($request);
 

@@ -211,6 +211,7 @@ class Controller extends BaseController {
             'Authorization: key='.env('ANDROID_KEY','AIzaSyC058Lyrn0NKvEswoGBEP5Y7iNkj8edgss'),
             'Content-Type: application/json',
         );
+
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, 'https://android.googleapis.com/gcm/send');
         curl_setopt($ch, CURLOPT_POST, true);
@@ -223,6 +224,7 @@ class Controller extends BaseController {
         //dd(json_decode($result));
         curl_close($ch);
         //$res = json_decode($result);
+        Log::info('ANDROID JSON:'.json_encode($fields));
         foreach ($device_ids as $id){
             Log::info('PUSH to ANDROID:'.$id);
         }
@@ -276,6 +278,7 @@ class Controller extends BaseController {
         $tBody ['payload'] = $tPayload;
         $tBody['acme2'] = ["bang", "whiz"];
         $tBody = json_encode($tBody);
+        Log::info('IOS JSON:'.json_encode($tBody));
         if(is_array($tToken)) {
             $tToken = $tToken[0];
         }
@@ -307,6 +310,9 @@ class Controller extends BaseController {
         $androidTokensList = [];
         $iosTokensList = [];
         foreach ($users as $user){
+            if($user == null){
+                continue;
+            }
             if($user->device_type == 'android'){
                 $this->storeHistoryPush($message,$user);
                 $androidTokensList[] = $user->device_token;

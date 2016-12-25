@@ -18,11 +18,13 @@ class PushController extends Controller
 
     public function sendForUser(Request $request, $id) {
         $info[] = $this->sendPushToUser([User::findorfail($id)], [
-            'id' => 'PUSH TITLE hey',
-            'title' => 'TEST TITLE',
-            'body' => 'PUSH DESC',
-            'image' => 'PUSH IMAGE',
-            'type' => 'TEST TYPE',
+            'id' => false,
+            'title' => 'TITLE',
+            'body' => 'BODY',
+            'image' => 'IMAGE',
+            'type' => (!empty($push['type']) ? $push['type'] : null),
+            'date' => (!empty($push['date']) ? $push['date'] : null),
+            'link' => (!empty($push['link']) ? $push['link'] : null)
         ]);
         return $info;
     }

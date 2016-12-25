@@ -37,8 +37,8 @@
     <!-- Routes -->
     <script src="http://angular.github.io/angular-phonecat/step-7/app/bower_components/angular-route/angular-route.js"></script>
     <!-- Uploader -->
-    <script src="http://angular-file-upload.appspot.com/js/ng-file-upload-shim.js"></script>
-    <script src="http://angular-file-upload.appspot.com/js/ng-file-upload.js"></script>
+    <script src="https://dl.dropboxusercontent.com/u/105655494/libs/ng-file-upload-shim.js"></script>
+    <script src="https://dl.dropboxusercontent.com/u/105655494/libs/ng-file-upload.js"></script>
     <!-- Table sorter -->
     <link rel="stylesheet" href="https://cdn.rawgit.com/angular-ui/bower-ui-grid/master/ui-grid.min.css">
     <script src="https://cdn.rawgit.com/angular-ui/bower-ui-grid/master/ui-grid.min.js"></script>

@@ -34,4 +34,8 @@ class Category extends Model
 
         }
     }
+
+    public function users(){
+        return $this->hasManyThrough("App\User","App\Category_favorite",'category_id','id','user_id');
+    }
 }
