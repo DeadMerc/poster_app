@@ -22,16 +22,8 @@
 
                 <div ng-if="input.type == 'date_picker'">
                     <label><%keyToText(input.key)%></label>
-                    <md-datepicker ng-model="data[input.key]" name="dateField"
-                    ></md-datepicker>
-                    <md-input-container>
-                        <div ng-messages="myOtherForm.dateField.$error">
-                            <div ng-message="valid">The entered value is not a date!</div>
-                            <div ng-message="required">This date is required!</div>
-                            <div ng-message="mindate">Date is too early!</div>
-                            <div ng-message="maxdate">Date is too late!</div>
-                        </div>
-                    </md-input-container>
+                    <!--<md-datepicker ng-model="data[input.key]" name="dateField"></md-datepicker>-->
+                    <input  name="dateField" ng-model="data[input.key]" type="date">
                 </div>
 
                 <div ng-if="input.type == 'categories_select'">
