@@ -49,6 +49,9 @@ Route::group([ 'prefix' => 'api' ], function () {
 
             Route::post('events', 'EventsController@store_save');
             Route::post('events/{id}', 'EventsController@update_save');
+
+            Route::post('events/{id}/comment','EventsController@comment');
+
             Route::get('photo/{id}/remove','EventsController@removePhoto');
 
             Route::post('users/events/follow', 'EventsController@follow');

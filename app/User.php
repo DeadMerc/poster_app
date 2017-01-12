@@ -42,11 +42,11 @@ class User extends Model
         return $events;
     }
     public function events(){
-        return $this->hasMany('App\Event','user_id','id')->with('photos');
+        return $this->hasMany('App\Event','user_id','id')->with('photos','comments');
     }
 
     public function followsEvents(){
-        return $this->belongsToMany('App\Event','events_follow','user_id','event_id')->with('photos','user');
+        return $this->belongsToMany('App\Event','events_follow','user_id','event_id')->with('photos','user','comments');
     }
 
 

@@ -8,7 +8,8 @@ var adminApp = angular.module('adminApp', [
     'ngAnimate',
     'ngFileUpload',
     'ui.grid',
-    'uiGmapgoogle-maps'
+    'uiGmapgoogle-maps',
+    'cl.paging'
 ], function ($interpolateProvider) {
     $interpolateProvider.startSymbol('<%');
     $interpolateProvider.endSymbol('%>');

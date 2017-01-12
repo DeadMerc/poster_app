@@ -15,6 +15,10 @@ class Event extends Model
         return $this->hasMany('App\Photo');
     }
 
+    public function comments(){
+        return $this->hasMany('App\Comment');
+    }
+
     public function follows() {
         return $this->hasMany('App\Event_follow');
     }

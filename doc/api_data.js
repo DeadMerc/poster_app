@@ -157,6 +157,47 @@ define({ "api": [
   },
   {
     "type": "post",
+    "url": "/v1/events/:id/comment",
+    "title": "commentEvent",
+    "version": "0.1.0",
+    "name": "commentEvent",
+    "group": "Events",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "string",
+            "optional": false,
+            "field": "token",
+            "description": "<p>User token</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "body",
+            "description": "<p>Max 3k symbols</p>"
+          }
+        ]
+      }
+    },
+    "filename": "app/Http/Controllers/EventsController.php",
+    "groupTitle": "Events",
+    "sampleRequest": [
+      {
+        "url": "/api/v1/events/:id/comment"
+      }
+    ]
+  },
+  {
+    "type": "post",
     "url": "/v1/users/events/follow",
     "title": "followEvents",
     "version": "0.1.0",

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Category;
+use App\Comment;
 use App\Event;
 use App\Event_follow;
 use App\Photo;
@@ -25,8 +26,22 @@ class EventsController extends Controller
      * @apiParam {string} [id]
      *
      */
-    public function index() {
-        return $this->helpReturn(Event::with('photos')->with('user')->get());
+    public function index(Request $request) {
+        return $this->helpReturn(Event::with('photos')->with('user')->orderBy('id', 'desc')->when($request->unpublish, function($q) use ($request) {
+            if($request->unpublish == 'true') {
+                return $q->where('publish', "0");
+            } else {
+                return $q;
+            }
+        })->whereHas('user', function($q) use ($request) {
+            if($request->search){
+                $q->where('email', 'like', '%' . $request->search . '%');
+            }
+        })->when($request->search,function($q)use($request){
+            $q->orWhere('title','like','%'.$request->search.'%');
+        })
+            ->paginate(($request->per_page ? $request->per_page : "50")));
+        //return $this->helpReturn(Event::with('photos')->with('user')->get());
     }
 
     public function show($id) {
@@ -67,10 +82,10 @@ class EventsController extends Controller
          */
         //$place_id = false;
         foreach ($categories as $category) {
-            foreach (Event::with('photos', 'user')->where('category_id', $category->category_id)//->where('type', 'public')
-                ->where('publish', 1)->when($place_id, function($q) use ($place_id) {
-                    return $q->where('place_id', $place_id);
-                })->get() as $event) {
+            foreach (Event::with('photos', 'user', 'comments')->where('category_id', $category->category_id)//->where('type', 'public')
+            ->where('publish', 1)->when($place_id, function($q) use ($place_id) {
+                return $q->where('place_id', $place_id);
+            })->get() as $event) {
                 $events[] = $event;
             }
         }
@@ -203,6 +218,30 @@ class EventsController extends Controller
      * @apiParam {datetime} date_stop Дата окончания показа в приложении
      *
      */
+    /**
+     * @api {post} /v1/events storeEvents
+     * @apiVersion 0.1.1
+     * @apiName storeEvents
+     * @apiGroup Events
+     * @apiDescription add Event object
+     *
+     * @apiHeader {string} token User token
+     * @apiParam {string} category_id
+     * @apiParam {string} title
+     * @apiParam {string} description
+     * @apiParam {string} date
+     * @apiParam {string} time
+     * @apiParam {string='private','public'} type
+     * @apiParam {string} price
+     * @apiParam {array} images
+     * @apiParam {string} [place_id]
+     * @apiParam {string} [address]
+     * @apiParam {string} [phone_1]
+     * @apiParam {string} [phone_2]
+     *
+     * @apiParam {datetime} date_stop Дата окончания показа в приложении
+     *
+     */
     public function store_save(Request $request) {
         //dump('Files');
         //dump($request->allFiles());
@@ -222,6 +261,8 @@ class EventsController extends Controller
             'type' => 'required',
             'price' => 'required',
             'images' => false,
+            'phone_1' => false,
+            'phone_2' => false
         ];
         if($request->images) {
             if(!is_array($request->images)) {
@@ -230,14 +271,14 @@ class EventsController extends Controller
         }
 
         if($request->date) {
-            if(strtotime($request->date)){
+            if(strtotime($request->date)) {
                 $request->date = new \DateTime($request->date);
             }
 
         }
 
         if($request->date_stop) {
-            if(strtotime($request->date_stop)){
+            if(strtotime($request->date_stop)) {
                 $request->date_stop = new \DateTime($request->date_stop);
             }
         }
@@ -245,7 +286,6 @@ class EventsController extends Controller
         if($request->date_stop < new \DateTime("now")) {
             throw new Exception('Date are wrong or less that:' . date("Y-m-d H:i:s"), 100);
         }
-
         $category = Category::findorfail($request->category_id);
         if($request->user->balance > $category->post_price) {
             $request->user->balance = $request->user->balance - $category->post_price;
@@ -342,7 +382,7 @@ class EventsController extends Controller
             'category_id' => 'required',
             'title' => 'required',
             'description' => 'required',
-            'date' => 'required',
+            'date' => false,
             'time' => 'required',
             'type' => 'required',
             'price' => 'required',
@@ -352,14 +392,18 @@ class EventsController extends Controller
         if($request->images) {
             if(!is_array($request->images)) {
                 $request->images = explode(',', $request->images);
-            } 
-        }
-
-        if($request->date){
-            if(strtotime($request->date)){
-                $request->date = new \DateTime($request->date);
             }
         }
+
+        if($request->date) {
+            if(strtotime($request->date)) {
+                $request->date = new \DateTime($request->date);
+            }
+            if($request->user->type != 'admin') {
+                $request->date = null;
+            }
+        }
+
 
         if(strtotime($request->date_stop)) {
             $request->date_stop = new \DateTime($request->date_stop);
@@ -408,5 +452,27 @@ class EventsController extends Controller
         } else {
             $request->user_id = $request->user->id;
         }
+    }
+
+    /**
+     * @api {post} /v1/events/:id/comment commentEvent
+     * @apiVersion 0.1.0
+     * @apiName commentEvent
+     * @apiGroup Events
+     *
+     * @apiHeader {string} token User token
+     *
+     * @apiParam {string} body Max 3k symbols
+     *
+     *
+     */
+    public function comment(Request $request, $event_id) {
+        $event = Event::findorfail($event_id);
+        $comment = new Comment;
+        $comment->event_id = $event_id;
+        $comment->user_id = $request->user->id;
+        $comment->body = $request->body;
+        $comment->save();
+        return $this->helpReturn($comment);
     }
 }

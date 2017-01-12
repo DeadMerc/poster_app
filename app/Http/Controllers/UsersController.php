@@ -24,8 +24,23 @@ class UsersController extends Controller {
      * @apiHeader {string} token User token
      *
      */
-    public function index() {
-        return $this->helpReturn(User::with('events')->with('favorites')->get());
+    public function index(Request $request) {
+        return $this->helpReturn(
+            User::with('events')
+                ->with('favorites')
+                ->when($request->search,function($q)use($request){
+                    $request->search = urldecode($request->search);
+                    //dd($request->search);
+                    return $q->orWhere('location','like','%'.$request->search.'%')
+                        ->orWhere('phone_1','like','%'.$request->search.'%')
+                        ->orWhere('phone_2','like','%'.$request->search.'%')
+                        ->orWhere('phone_3','like','%'.$request->search.'%')
+                        ->orWhere('email','like','%'.$request->search.'%')
+                        ->orWhere('name','like','%'.$request->search.'%');
+                })
+                ->orderBy('id','desc')
+                ->paginate(50)
+        );
     }
 
     public function show($id) {

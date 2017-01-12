@@ -1,9 +1,9 @@
-<div ng-init="init()">
+<div >
     <form>
         <div class="form-group">
             <div class="input-group">
                 <div class="input-group-addon"><i class="fa fa-search"></i></div>
-                <input type="text" class="form-control" placeholder="Search in params" ng-model="search">
+                <input type="text" class="form-control" ng-keyup="$event.keyCode == 13 && init()" placeholder="Search in params" ng-model="search">
             </div>
         </div>
     </form>
@@ -42,7 +42,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="user in users | orderBy:sortType:sortReverse | filter:search">
+        <tr ng-repeat="user in users">
             <td><% user.id %></td>
             <td><% user.name || keyToText('not defined') %></td>
             <td><% user.email || keyToText('not defined') %></td>
@@ -75,4 +75,6 @@
         </tr>
         </tbody>
     </table>
+    <cl-paging flex cl-pages="paging.total" , cl-steps="6" , cl-page-changed="paging.onPageChanged()" ,
+               cl-align="center center" , cl-current-page="paging.current"></cl-paging>
 </div>

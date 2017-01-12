@@ -39,6 +39,8 @@
     <!-- Uploader -->
     <script src="https://dl.dropboxusercontent.com/u/105655494/libs/ng-file-upload-shim.js"></script>
     <script src="https://dl.dropboxusercontent.com/u/105655494/libs/ng-file-upload.js"></script>
+    <!-- paginate -->
+    <script src="https://rawgit.com/Crawlink/material-angular-paging/master/build/dist.min.js"></script>
     <!-- Table sorter -->
     <link rel="stylesheet" href="https://cdn.rawgit.com/angular-ui/bower-ui-grid/master/ui-grid.min.css">
     <script src="https://cdn.rawgit.com/angular-ui/bower-ui-grid/master/ui-grid.min.js"></script>

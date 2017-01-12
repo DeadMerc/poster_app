@@ -7,11 +7,11 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
         $scope.params = {name: 'category', url: 'categories'};
         $scope.init = function () {
             console.log("Categories Ctrl scope init");
-            $http.get("/api/v1/categories",{
+            $http.get("/api/v1/categories", {
                 headers: {
                     'token': 'adm',
                     'Content-Type': 'application/x-www-form-urlencoded',
-                    'lang':"RU"
+                    'lang': "RU"
                 }
             })
                 .then(function (res) {
@@ -167,13 +167,26 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
         $scope.sortReverse = false;  // set the default sort order
         $scope.search = $routeParams.search;
 
+        $scope.paging = {
+            total: 1,
+            current: 1,
+            onPageChanged: function () {
+                $scope.init();
+            }
+        };
+
         $scope.init = function () {
             console.log($scope.params.name + " Ctrl scope init");
-            $http.get("/api/v1/" + $scope.params.url + "")
+            if(typeof $scope.search == 'undefined'){
+                $scope.search = '';
+            }
+            $http.get("/api/v1/" + $scope.params.url + "?page="+$scope.paging.current+"&search="+$scope.search)
                 .then(function (res) {
+                    $scope.paging.total = res.data.response.last_page;
+                    $scope.paging.current = res.data.response.current_page;
                     if (res.data.error == false) {
                         console.log($scope.params.name + " Ctrl data to view");
-                        $scope.users = res.data.response;
+                        $scope.users = res.data.response.data;
                     } else {
                         console.log($scope.params.name + " Ctrl data have error");
                         $rootScope.warning('Request return error');
@@ -390,18 +403,31 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
         $scope.params = {name: 'Events', url: 'events', editurl: 'event'};
         console.log($scope.params.name + " Ctrl init");
 
+        $scope.paging = {
+            total: 1,
+            current: 1,
+            onPageChanged: function () {
+                $scope.init();
+            }
+        };
+
         $scope.sortType = 'name'; // set the default sort type
         $scope.sortReverse = false;  // set the default sort order
         $scope.search = $routeParams.search;
 
         $scope.init = function () {
             console.log($scope.params.name + " Ctrl scope init");
-            $http.get("/api/v1/" + $scope.params.url + "", $rootScope.config)
+            if(typeof $scope.search == 'undefined'){
+                $scope.search = '';
+            }
+            $http.get("/api/v1/" + $scope.params.url + "?page=" + $scope.paging.current + "&unpublish=" + $scope.unPublishedEvents + "&search=" + $scope.search, $rootScope.config)
                 .then(function (res) {
-                    //console.log(res.data.response[0]);
+                    //console.log(res.data.response);
+                    $scope.paging.total = res.data.response.last_page;
+                    $scope.paging.current = res.data.response.current_page;
                     if (res.data.error == false) {
                         console.log($scope.params.name + " Ctrl data to view");
-                        $scope.users = res.data.response;
+                        $scope.users = res.data.response.data;
                     } else {
                         console.log($scope.params.name + " Ctrl data have error");
                         $rootScope.warning('Request return error');
@@ -411,6 +437,8 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
                     $rootScope.error('Request failed');
                 });
         };
+
+
         $scope.publish = function (event) {
             var id = event.id;
             console.log($scope.params.name + " Ctrl try publish event with id" + id);
@@ -516,11 +544,11 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
             } else {
                 $http.get('/api/v1/' + $scope.params.url + '/' + $scope.id, $rootScope.config).then(function (res) {
                     //console.log(res);
-                    if(res.data.error == true){
+                    if (res.data.error == true) {
                         $rootScope.error('Event not found, you were redirected to created new.');
-                        $timeout(function(){
+                        $timeout(function () {
                             $location.path('/event/');
-                        },3000);
+                        }, 3000);
 
                     }
                     $scope.data = res.data.response;
@@ -621,7 +649,7 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
                 //console.log($scope.data);
                 console.log($scope.params.name + ' Ctrl try save new row');
 
-                $http.post('/api/v1/' + $scope.params.url + '',$rootScope.serialize($scope.data), $rootScope.config)
+                $http.post('/api/v1/' + $scope.params.url + '', $rootScope.serialize($scope.data), $rootScope.config)
                     .then(function (res) {
                         if (res.data.error == false) {
                             $rootScope.success('OK');
