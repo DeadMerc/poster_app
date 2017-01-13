@@ -267,7 +267,7 @@ class EventsController extends Controller
             'publish' => false,
         ];
 
-        if($request->category_id == '100'){
+        if($request->category_id == '100' OR $request->user->type == 'admin'){
             $request->publish = 1;
         }
 
@@ -396,7 +396,7 @@ class EventsController extends Controller
             'images' => false,
             'publish'=>false,
         ];
-        if($request->category_id == '100'){
+        if($request->category_id == '100'  OR $request->user->type == 'admin'){
             $request->publish = 1;
         }
 

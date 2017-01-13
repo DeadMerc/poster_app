@@ -71,7 +71,9 @@ adminApp.run(function ($rootScope, toastr,$myElementInkRipple,$routeParams) {
             "not defined":"Не установлено",
             "unpublish":"Снять с публикации",
             "phone_1":"Первый телефон",
-            "phone_2":"Второй телефон"
+            "phone_2":"Второй телефон",
+            "show":"Показ",
+            "users":"Пользователи"
         };
         if(data.hasOwnProperty(text) && $routeParams.lang != 'en'){
             return data[text];

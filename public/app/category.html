@@ -21,6 +21,16 @@
             </md-input-container>
         </div>
 
+        <div ng-if="input.type == 'show_select'">
+            <md-input-container>
+                <label><% keyToText('show') %></label>
+                <md-select ng-model="data[input.key]">
+                    <md-option value="events"><em><% keyToText('events') %></em></md-option>
+                    <md-option value="users"><em><% keyToText('users') %></em></md-option>
+                </md-select>
+            </md-input-container>
+        </div>
+
         <div ng-if="input.type == 'number'">
             <md-input-container class="md-block">
                 <label><% keyToText(input.key) %></label>
