@@ -368,6 +368,165 @@ define({ "api": [
   },
   {
     "type": "post",
+    "url": "/v1/category/:id/users",
+    "title": "getPostedUsersInCategory",
+    "version": "0.1.0",
+    "name": "getPostedUsersInCategory",
+    "group": "Events",
+    "description": "<p>Получаем пользователей вместо эвентов в категории ( кинотеатр )</p>",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "string",
+            "optional": false,
+            "field": "token",
+            "description": "<p>User token</p>"
+          }
+        ]
+      }
+    },
+    "filename": "app/Http/Controllers/EventsController.php",
+    "groupTitle": "Events",
+    "sampleRequest": [
+      {
+        "url": "/api/v1/category/:id/users"
+      }
+    ]
+  },
+  {
+    "type": "post",
+    "url": "/v1/events",
+    "title": "storeEvents",
+    "version": "0.1.1",
+    "name": "storeEvents",
+    "group": "Events",
+    "description": "<p>add Event object</p>",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "string",
+            "optional": false,
+            "field": "token",
+            "description": "<p>User token</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "category_id",
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "title",
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "description",
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "date",
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "time",
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "allowedValues": [
+              "'private'",
+              "'public'"
+            ],
+            "optional": false,
+            "field": "type",
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "price",
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "array",
+            "optional": false,
+            "field": "images",
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": true,
+            "field": "place_id",
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": true,
+            "field": "address",
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": true,
+            "field": "phone_1",
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": true,
+            "field": "phone_2",
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "datetime",
+            "optional": false,
+            "field": "date_stop",
+            "description": "<p>Дата окончания показа в приложении</p>"
+          }
+        ]
+      }
+    },
+    "filename": "app/Http/Controllers/EventsController.php",
+    "groupTitle": "Events",
+    "sampleRequest": [
+      {
+        "url": "/api/v1/events"
+      }
+    ]
+  },
+  {
+    "type": "post",
     "url": "/v1/events",
     "title": "storeEvents",
     "version": "0.1.0",

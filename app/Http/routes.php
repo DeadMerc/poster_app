@@ -39,6 +39,8 @@ Route::group([ 'prefix' => 'api' ], function () {
         Route::resource('categories', 'CategoriesController', [ 'except' => [ 'show' ] ]);
         Route::get('category/{id}','CategoriesController@show');
 
+        Route::get('category/{id}/users','EventsController@getPostedUsersInCategory');
+
 
         Route::get('event/{id}/images','EventsController@getImagesFromEvent');
 
@@ -49,6 +51,7 @@ Route::group([ 'prefix' => 'api' ], function () {
 
             Route::post('events', 'EventsController@store_save');
             Route::post('events/{id}', 'EventsController@update_save');
+
 
             Route::post('events/{id}/comment','EventsController@comment');
 

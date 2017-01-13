@@ -528,7 +528,7 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
                     //console.log($scope.schema);
                     angular.forEach(res.data.response, function (v, i) {
                         $scope.data[v.key];
-                    })
+                    });
                     //console.log($scope.data);
                 });
             $scope.id = $routeParams.id;

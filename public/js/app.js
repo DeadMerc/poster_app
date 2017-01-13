@@ -69,7 +69,9 @@ adminApp.run(function ($rootScope, toastr,$myElementInkRipple,$routeParams) {
             "ban":"Заблокировать",
             "unban":"Разблокировать",
             "not defined":"Не установлено",
-            "unpublish":"Снять с публикации"
+            "unpublish":"Снять с публикации",
+            "phone_1":"Первый телефон",
+            "phone_2":"Второй телефон"
         };
         if(data.hasOwnProperty(text) && $routeParams.lang != 'en'){
             return data[text];

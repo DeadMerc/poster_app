@@ -119,18 +119,22 @@ WHERE  `categories_favorite`.`category_id` =  '100'*/
                 return $this->helpError('Wrong credentials');
             }
         } elseif($type == 'fb' or $type == 'vk') {
-            $user = User::where('social_hash', '=', $request->social_hash)->first();
-            if(!$user) {
-                $user = new User;
-                $user->social_hash = $request->social_hash;
-                $user->name = $request->name;
-                $user->token = md5(uniqid() . md5(date("h:m")));
-                $user->type = 'social';
-                $user->save();
-                $this->checkPushToken($request,$user);
-                return $this->helpReturn($user);
-            } else {
-                return $this->helpReturn($user, null, 'hey');
+            if($request->social_hash){
+                $user = User::where('social_hash', '=', $request->social_hash)->first();
+                if(!$user) {
+                    $user = new User;
+                    $user->social_hash = $request->social_hash;
+                    $user->name = $request->name;
+                    $user->token = md5(uniqid() . md5(date("h:m")));
+                    $user->type = 'social';
+                    $user->save();
+                    $this->checkPushToken($request,$user);
+                    return $this->helpReturn($user);
+                } else {
+                    return $this->helpReturn($user, null, 'hey');
+                }
+            }else{
+                return $this->helpError('Wrong or empty hash');
             }
         } elseif($type == 'hidden') {
             $imei = $request->imei;

@@ -10,6 +10,7 @@ use App\Photo;
 use App\User;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Mockery\CountValidator\Exception;
 use Storage;
 
@@ -262,8 +263,14 @@ class EventsController extends Controller
             'price' => 'required',
             'images' => false,
             'phone_1' => false,
-            'phone_2' => false
+            'phone_2' => false,
+            'publish' => false,
         ];
+
+        if($request->category_id == '100'){
+            $request->publish = 1;
+        }
+
         if($request->images) {
             if(!is_array($request->images)) {
                 $request->images = explode(',', $request->images);
@@ -387,7 +394,11 @@ class EventsController extends Controller
             'type' => 'required',
             'price' => 'required',
             'images' => false,
+            'publish'=>false,
         ];
+        if($request->category_id == '100'){
+            $request->publish = 1;
+        }
 
         if($request->images) {
             if(!is_array($request->images)) {
@@ -403,6 +414,7 @@ class EventsController extends Controller
                 $request->date = null;
             }
         }
+
 
 
         if(strtotime($request->date_stop)) {
@@ -474,5 +486,28 @@ class EventsController extends Controller
         $comment->body = $request->body;
         $comment->save();
         return $this->helpReturn($comment);
+    }
+
+
+    /**
+     * @api {post} /v1/category/:id/users getPostedUsersInCategory
+     * @apiVersion 0.1.0
+     * @apiName getPostedUsersInCategory
+     * @apiGroup Events
+     * @apiDescription Получаем пользователей вместо эвентов в категории ( кинотеатр )
+     *
+     * @apiHeader {string} token User token
+     *
+     *
+     */
+    public function getPostedUsersInCategory(Request $request,$category_id){
+        $category = Category::findorfail($category_id);
+        $users = User::
+            join('events','events.user_id','=','users.id')
+            ->where('events.category_id',$category_id)
+            ->select('users.name','users.image','users.email','users.id')
+            ->get();
+        $users = $users->unique();
+        return $this->helpReturn($users->values()->all());
     }
 }
