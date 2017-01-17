@@ -6,6 +6,7 @@ use App\Category;
 use App\Comment;
 use App\Event;
 use App\Event_follow;
+use App\EventCinemaUser;
 use App\Photo;
 use App\User;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -13,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Mockery\CountValidator\Exception;
 use Storage;
+
 
 class EventsController extends Controller
 {
@@ -35,19 +37,18 @@ class EventsController extends Controller
                 return $q;
             }
         })->whereHas('user', function($q) use ($request) {
-            if($request->search){
+            if($request->search) {
                 $q->where('email', 'like', '%' . $request->search . '%');
             }
-        })->when($request->search,function($q)use($request){
-            $q->orWhere('title','like','%'.$request->search.'%');
-        })
-            ->paginate(($request->per_page ? $request->per_page : "50")));
+        })->when($request->search, function($q) use ($request) {
+            $q->orWhere('title', 'like', '%' . $request->search . '%');
+        })->paginate(($request->per_page ? $request->per_page : "50")));
         //return $this->helpReturn(Event::with('photos')->with('user')->get());
     }
 
     public function show($id) {
         //return $this->helpReturn(Event::find(2666));
-        return $this->helpReturn(Event::with('photos', 'user')->findorfail($id));
+        return $this->helpReturn(Event::with('photos', 'user','cinema')->findorfail($id));
     }
 
     /**
@@ -75,21 +76,24 @@ class EventsController extends Controller
      * @apiParam {string} [place_id]
      */
     public function showFavorite(Request $request, $place_id = false) {
-        $categories = $request->user->favorites;
-        $events = [];
+        //DB::enableQueryLog();
         //dd($categories);
-        /*
-         * TODO: REMOVE THIS RESTRICTION
-         */
         //$place_id = false;
+        /*
+        Listener::listen('illuminate.query', function($query, $params, $time, $conn)
+        {
+            dd(array($query, $params, $time, $conn));
+        });
+        $search = [];
         foreach ($categories as $category) {
-            foreach (Event::with('photos', 'user', 'comments')->where('category_id', $category->category_id)//->where('type', 'public')
+            $search[] = $category->category_id;
+        }*/
+        $events = Event::with('photos', 'user', 'comments')->where('category_id', $request->category_id)//->where('type', 'public')
             ->where('publish', 1)->when($place_id, function($q) use ($place_id) {
                 return $q->where('place_id', $place_id);
-            })->get() as $event) {
-                $events[] = $event;
-            }
-        }
+            })->paginate(7);
+        //dd($events);
+        //dd(DB::getQueryLog());
         return $this->helpReturn($events);
     }
 
@@ -267,7 +271,7 @@ class EventsController extends Controller
             'publish' => false,
         ];
 
-        if($request->category_id == '100' OR $request->user->type == 'admin'){
+        if($request->category_id == '100' OR $request->user->type == 'admin') {
             $request->publish = 1;
         }
 
@@ -394,9 +398,12 @@ class EventsController extends Controller
             'type' => 'required',
             'price' => 'required',
             'images' => false,
-            'publish'=>false,
+            'publish' => false,
+            'phone_1' => false,
+            'phone_2' => false,
+
         ];
-        if($request->category_id == '100'  OR $request->user->type == 'admin'){
+        if($request->category_id == '100' OR $request->user->type == 'admin') {
             $request->publish = 1;
         }
 
@@ -416,7 +423,6 @@ class EventsController extends Controller
         }
 
 
-
         if(strtotime($request->date_stop)) {
             $request->date_stop = new \DateTime($request->date_stop);
         }
@@ -432,6 +438,22 @@ class EventsController extends Controller
         }
 
         $event = $this->fromPostToModel($rules, Event::findorfail($id), $request, 'model');
+        if($request->cinema){
+            EventCinemaUser::where('event_id',$id)->delete();
+            $cinemas = json_decode($request->cinema);
+            foreach ($cinemas as $cinema){
+                foreach ($cinema->sessions as $session){
+                    $eventCinema = new EventCinemaUser;
+                    $eventCinema->event_id = $id;
+                    $eventCinema->user_id = $cinema->id;
+                    $eventCinema->price = $session->price;
+                    $eventCinema->date = $session->date;
+                    $eventCinema->save();
+                }
+            }
+
+        }
+
         //dd(get_class($event));
         if(get_class($event) == 'App\Event') {
             $request->user->save();
@@ -490,7 +512,7 @@ class EventsController extends Controller
 
 
     /**
-     * @api {post} /v1/category/:id/users getPostedUsersInCategory
+     * @api {get} /v1/category/:id/users getPostedUsersInCategory
      * @apiVersion 0.1.0
      * @apiName getPostedUsersInCategory
      * @apiGroup Events
@@ -500,14 +522,47 @@ class EventsController extends Controller
      *
      *
      */
-    public function getPostedUsersInCategory(Request $request,$category_id){
+    public function getPostedUsersInCategory(Request $request, $category_id) {
         $category = Category::findorfail($category_id);
         $users = User::
-            join('events','events.user_id','=','users.id')
-            ->where('events.category_id',$category_id)
-            ->select('users.name','users.image','users.email','users.id')
-            ->get();
+        join('events', 'events.user_id', '=', 'users.id')->where('events.category_id', $category_id)->select('users.name', 'users.image', 'users.email', 'users.id')->get();
         $users = $users->unique();
         return $this->helpReturn($users->values()->all());
+    }
+
+    /**
+     * @api {get} /v1/events/:id/cinema getEventForCinema
+     * @apiVersion 0.1.0
+     * @apiName getEventForCinema
+     * @apiGroup Events
+     *
+     * @apiHeader {string} token User token
+     *
+     * @apiParam {date} [date] For example=2017-01-19
+     *
+     *
+     */
+    public function getCinemaByEvent(Request $request, $event_id) {
+        //DB::enableQueryLog();
+        $event = $this->helpReturn(
+            Event::with('comments')->where('id',$event_id)
+                ->with(['cinema' => function($query) use ($request){
+                    $query->when($request->date,function($q)use($request){
+                        $q->where('date','>=',$request->date.' 00:00:00')
+                            ->where('date','<=',$request->date.' 23:59:59');
+                    });
+                }])
+                /*
+            ->whereHas('cinema',function($q)use($request){
+                $q->when($request->date,function($q)use($request){
+                    $q->where('event_cinema_users.date','=',$request->date.' 00:00:00')
+                        //->where('event_cinema_users.date','<=',$request->date.' 23:59:59')
+                    ;
+                });
+            })*/
+                ->first()
+        );
+        //dd(DB::getQueryLog());
+        return $event;
     }
 }

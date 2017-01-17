@@ -54,7 +54,7 @@ adminApp.run(function ($rootScope, toastr,$myElementInkRipple,$routeParams) {
             "address":"Адресс",
             "type":"Тип",
             "video":"Ссылка на видео",
-            "price":"Стоимость",
+            "price":"Стоимость, диапазон цен:\"10..50\" ",
             "private":"Приватное",
             "public":"Публичное",
             "images":"Изображения",

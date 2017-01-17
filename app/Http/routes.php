@@ -49,6 +49,8 @@ Route::group([ 'prefix' => 'api' ], function () {
         Route::group([ 'middleware' => [ \App\Http\Middleware\AuthByToken::class ] ], function () {
             Route::resource('events', 'EventsController', [ 'except' => [ 'update' ] ]);
 
+            Route::get('events/{id}/cinema','EventsController@getCinemaByEvent');
+
             Route::post('events', 'EventsController@store_save');
             Route::post('events/{id}', 'EventsController@update_save');
 

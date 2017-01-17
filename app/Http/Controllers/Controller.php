@@ -227,9 +227,9 @@ class Controller extends BaseController {
         //dd(json_decode($result));
         curl_close($ch);
         //$res = json_decode($result);
-        Log::info('ANDROID JSON:'.json_encode($fields));
+        //Log::info('ANDROID JSON:'.json_encode($fields));
         foreach ($device_ids as $id){
-            Log::info('PUSH to ANDROID:'.$id);
+            //Log::info('PUSH to ANDROID:'.$id);
         }
 
         return;
@@ -281,7 +281,7 @@ class Controller extends BaseController {
         $tBody ['payload'] = $tPayload;
         $tBody['acme2'] = ["bang", "whiz"];
         $tBody = json_encode($tBody);
-        Log::info('IOS JSON:'.json_encode($tBody));
+        //Log::info('IOS JSON:'.json_encode($tBody));
         if(is_array($tToken)) {
             $tToken = $tToken[0];
         }
@@ -299,7 +299,7 @@ class Controller extends BaseController {
         dump($errstr);
         dump($tResult);*/
         fclose($tSocket);
-        Log::info('PUSH to IOS:'.$tToken);
+        //Log::info('PUSH to IOS:'.$tToken);
 
         return $tResult;
     }

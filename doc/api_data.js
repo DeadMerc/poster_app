@@ -240,6 +240,47 @@ define({ "api": [
   },
   {
     "type": "get",
+    "url": "/v1/events/:id/cinema",
+    "title": "getEventForCinema",
+    "version": "0.1.0",
+    "name": "getEventForCinema",
+    "group": "Events",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "string",
+            "optional": false,
+            "field": "token",
+            "description": "<p>User token</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "date",
+            "optional": true,
+            "field": "date",
+            "description": "<p>For example=2017-01-19</p>"
+          }
+        ]
+      }
+    },
+    "filename": "app/Http/Controllers/EventsController.php",
+    "groupTitle": "Events",
+    "sampleRequest": [
+      {
+        "url": "/api/v1/events/:id/cinema"
+      }
+    ]
+  },
+  {
+    "type": "get",
     "url": "/v1/events/:id",
     "title": "getEvents",
     "version": "0.1.0",
@@ -367,7 +408,7 @@ define({ "api": [
     ]
   },
   {
-    "type": "post",
+    "type": "get",
     "url": "/v1/category/:id/users",
     "title": "getPostedUsersInCategory",
     "version": "0.1.0",

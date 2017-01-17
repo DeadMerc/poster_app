@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\User;
 use App\Http\Requests;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Validator;
 use League\Flysystem\Exception;
 use Mail;
@@ -120,6 +121,7 @@ WHERE  `categories_favorite`.`category_id` =  '100'*/
             }
         } elseif($type == 'fb' or $type == 'vk') {
             if($request->social_hash){
+                Log::info('GET NEW SOCIAL_HASH:'.$request->social_hash);
                 $user = User::where('social_hash', '=', $request->social_hash)->first();
                 if(!$user) {
                     $user = new User;
@@ -232,23 +234,25 @@ WHERE  `categories_favorite`.`category_id` =  '100'*/
      *
      */
     public function store(Request $request) {
-        $rules = ['name' => 'required|min:3', 'email' => 'required', 'password' => 'required'];
-        $valid = Validator($request->all(), $rules);
-        if(!$valid->fails()) {
-            if(User::where('email',$request->email)->first()){
-                throw new Exception('User already was registered.',100);
-            }
-            $user = new User;
-            $user->name = $request->name;
-            $user->email = $request->email;
-            $user->password = md5($request->password . 'requestLoginEvstolia');
-            $user->token = md5(uniqid() . md5(date("h:m")));
-            $user->type = 'email';
-            $user->save();
-            return $this->helpReturn($user);
-        } else {
-            return $this->helpError('valid', $valid);
-        }
+        $rules = ['device_type'  => false,
+            'device_token' => false,
+            'balance'      => false,
+            'description'  => false,
+            'image'        => false,
+            'phone_1'      => false,
+            'phone_2'      => false,
+            'phone_3'      => false,
+            'name'         => 'required|min:3',
+            'location'     => false,
+            'lon'          => false,
+            'lat'          => false,
+            'category_id'  => false,
+            'email'        => 'required|unique:users,email',
+            'password'     => 'required',
+            'place_id'     => false,
+        ];
+
+        return $this->fromPostToModel($rules, new User, $request);
     }
 
     /**
@@ -296,7 +300,6 @@ WHERE  `categories_favorite`.`category_id` =  '100'*/
                   'balance'      => false,
                   'description'  => false,
                   'image'        => false,
-                  'description'  => false,
                   'phone_1'      => false,
                   'phone_2'      => false,
                   'phone_3'      => false,

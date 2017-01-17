@@ -177,10 +177,10 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
 
         $scope.init = function () {
             console.log($scope.params.name + " Ctrl scope init");
-            if(typeof $scope.search == 'undefined'){
+            if (typeof $scope.search == 'undefined') {
                 $scope.search = '';
             }
-            $http.get("/api/v1/" + $scope.params.url + "?page="+$scope.paging.current+"&search="+$scope.search)
+            $http.get("/api/v1/" + $scope.params.url + "?page=" + $scope.paging.current + "&search=" + $scope.search)
                 .then(function (res) {
                     $scope.paging.total = res.data.response.last_page;
                     $scope.paging.current = res.data.response.current_page;
@@ -269,20 +269,7 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
                     .then(function (res) {
                         if (res.data.error !== true) {
                             $rootScope.success('Request is done');
-                            $http.get("/api/v1/" + $scope.params.url + "")
-                                .then(function (res) {
-                                    //console.log(res.data.response[0]);
-                                    if (res.data.error == false) {
-                                        console.log($scope.params.name + " Ctrl data to view");
-                                        $scope.users = res.data.response;
-                                    } else {
-                                        console.log($scope.params.name + " Ctrl data have error");
-                                        $rootScope.warning('Request return error');
-                                    }
-                                }, function (res) {
-                                    console.log($scope.params.name + " Ctrl bad request");
-                                    $rootScope.error('Request failed');
-                                });
+                            $scope.init();
                         } else if (res.data.error == true) {
                             console.log(res);
                             $rootScope.warning('Request return error try with:' + res.data.response + '<br>' + res.data.message);
@@ -417,7 +404,7 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
 
         $scope.init = function () {
             console.log($scope.params.name + " Ctrl scope init");
-            if(typeof $scope.search == 'undefined'){
+            if (typeof $scope.search == 'undefined') {
                 $scope.search = '';
             }
             $http.get("/api/v1/" + $scope.params.url + "?page=" + $scope.paging.current + "&unpublish=" + $scope.unPublishedEvents + "&search=" + $scope.search, $rootScope.config)
@@ -512,13 +499,18 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
             });
         };
     })
-    .controller('EventCtrl', function ($rootScope, $scope, $http, $routeParams, $location, Upload, $timeout) {
+    .controller('EventCtrl', function ($rootScope, $scope, $http, $routeParams, $location, Upload, $timeout, $mdDialog) {
         /*PARAMS FOR CONTROLLER*/
         $scope.params = {name: 'Event', url: 'events'};
+
+
+        $scope.cinema = [];
+
         console.log($scope.params.name + " Ctrl init");
         $scope.data = {};
         $scope.photos = [];
         $scope.init = function () {
+            $scope.cinema_block = false;
             console.log($scope.params.name + " Ctrl scope init");
             $http.get('api/v1/' + $scope.params.url + '/s/edit', $rootScope.config)
                 .then(function (res) {
@@ -537,6 +529,7 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
                 .then(function (res) {
                     console.log('Try load list of categories');
                     $scope.categories_select = res.data.response;
+                    $scope.changeCategory($scope.data.category_id);
                 });
 
             if (typeof $scope.id == 'undefined') {
@@ -555,8 +548,40 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
                     //transform data
                     $scope.data.date = new Date($scope.data.date);
                     //$scope.data.date = $rootScope.dateToISO($scope.data.date);
+                    angular.forEach($scope.data.cinema, function (v, i) {
+                        var findUser = false;
+                        var user = v;
+                        angular.forEach($scope.cinema, function (v, i) {
+                            if (v.id == user.user_id) {
+                                v.sessions.push(
+                                    {
+                                        date: new Date(user.date),
+                                        price: user.price
+                                    });
+                                findUser = true;
+                            }
+                        });
+                        if (findUser == false) {
+                            $scope.cinema.push(
+                                {
+                                    id: user.user_id,
+                                    sessions: [
+                                        {
+                                            date: new Date(user.date),
+                                            price: user.price
+                                        }
+                                    ]
+                                }
+                            );
+                        }
+                    });
+
                     $scope.data.date_stop = new Date($scope.data.date_stop);
                     $scope.data.publish = $scope.data.publish ? true : false;
+                    if ($scope.data.price_range.from !== $scope.data.price_range.to) {
+                        $scope.data.price = $scope.data.price_range.from + '..' + $scope.data.price_range.to;
+                    }
+
                     $scope.photos = res.data.response.photos;
                     //console.log($scope.data.publish);
                 }, function (res) {
@@ -564,6 +589,68 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
                 });
             }
             console.log($scope.params.name + ' Ctrl try edit id ' + $scope.id);
+        };
+        $scope.changeCategory = function (category_id) {
+
+            var keepGoing = true;
+            angular.forEach($scope.categories_select, function (v, i) {
+                if (keepGoing) {
+                    if (v.id == category_id) {
+                        if (v.show == 'cinema') {
+                            $scope.cinema_block = true;
+                            keepGoing = false;
+                        } else {
+                            $scope.cinema_block = false;
+                        }
+                    }
+                }
+            });
+
+        };
+        $scope.addUserToCinema = function (ev) {
+            var confirm = $mdDialog.prompt()
+                .title('Введите ID кинотеатра')
+                .ok('ОК');
+            $mdDialog.show(confirm).then(function (result) {
+                var double = false;
+                angular.forEach($scope.cinema, function (v, i) {
+                    if (v.id == result) {
+                        double = true;
+                    }
+                });
+                if (double || typeof result == "undefined") {
+                    $rootScope.warning('ID Этого кинотеатра уже существует либо id повреждён.');
+                } else {
+                    $scope.cinema.push(
+                        {
+                            id: result,
+                            sessions: [
+                                {date: "2017-01-03", price: 10}
+                            ]
+                        }
+                    );
+                }
+
+            });
+
+        };
+        $scope.removeCinema = function (item) {
+            var index = $scope.cinema.indexOf(item);
+            $scope.cinema.splice(index, 1);
+        };
+        $scope.addSession = function (cinema) {
+            var index = $scope.cinema.indexOf(cinema);
+            $scope.cinema[index].sessions.push({
+                date: null,
+                price: 10
+            });
+        };
+
+        $scope.removeSession = function (cinema, session) {
+            var cinemaIndex = $scope.cinema.indexOf(cinema);
+            cinema = $scope.cinema[cinemaIndex];
+            var sessionIndex = cinema.sessions.indexOf(session);
+            $scope.cinema[cinemaIndex].sessions.splice(sessionIndex, 1);
         };
 
         $scope.removePhoto = function (photo) {
@@ -578,7 +665,7 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
             }
 
 
-        }
+        };
         /*upload image*/
         $scope.upload = function (file) {
             //console.log(file);
@@ -621,6 +708,10 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
             });
             //console.log(photos);
             $scope.data.images = photos;
+
+            if ($scope.cinema_block) {
+                $scope.data.cinema = angular.toJson($scope.cinema);
+            }
 
             if ($scope.id !== 'new') {
                 //console.log($scope.data);
