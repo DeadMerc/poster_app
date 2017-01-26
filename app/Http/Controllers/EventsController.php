@@ -545,7 +545,7 @@ class EventsController extends Controller
     public function getCinemaByEvent(Request $request, $event_id) {
         //DB::enableQueryLog();
         $event = $this->helpReturn(
-            Event::with('comments')->where('id',$event_id)
+            Event::with('comments','photos')->where('id',$event_id)
                 ->with(['cinema' => function($query) use ($request){
                     $query->when($request->date,function($q)use($request){
                         $q->where('date','>=',$request->date.' 00:00:00')
