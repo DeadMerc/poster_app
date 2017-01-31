@@ -4,13 +4,13 @@
 
         <div class="form-group">
             <div class="input-group">
-                <select type="text" class="form-control" placeholder="Search in params" ng-model="category_selected"
+                <md-select  placeholder="Search in params" ng-model="category_selected"
                         ng-change="showUsersInMap()">
-                    <option value="all">Во всех</option>
-                    <option ng-repeat="category in categories" ng-value="category.id">
+                    <md-option value="all">Во всех</md-option>
+                    <md-option ng-repeat="category in categories" ng-value="category.id">
                         <% category.name_EN %>
-                    </option>
-                </select>
+                    </md-option>
+                </md-select>
             </div>
         </div>
         <div id="map_canvas">
@@ -56,11 +56,11 @@
 
         <md-input-container class="md-block">
             <label><% keyToText('type') %><FONT color="red">*</FONT></label>
-            <select ng-model="push.type" name="input.key" placeholder="Type of push" class="no-underline">
-                <option selected value="ADVERTISING">Advertising</option>
-                <option value="INFORMATION">Information</option>
-                <option value="ANNOUNCEMENT">Announcement</option>
-            </select>
+            <md-select ng-model="push.type" name="input.key" placeholder="Type of push" class="no-underline">
+                <md-option selected value="ADVERTISING">Advertising</md-option>
+                <md-option value="INFORMATION">Information</md-option>
+                <md-option value="ANNOUNCEMENT">Announcement</md-option>
+            </md-select>
         </md-input-container>
 
 

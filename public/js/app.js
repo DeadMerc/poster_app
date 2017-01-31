@@ -2,6 +2,7 @@ var adminApp = angular.module('adminApp', [
     'ngRoute',
     'adminControllers',
     'ngMaterial',
+    'material.svgAssetsCache',
     'ngMessages',
     'toastr',
     'angular-loading-bar',
@@ -26,7 +27,7 @@ adminApp.factory('$myElementInkRipple', function($mdInkRipple) {
     };
 });
 
-adminApp.run(function ($rootScope, toastr,$myElementInkRipple,$routeParams) {
+adminApp.run(function ($rootScope, toastr,$myElementInkRipple,$routeParams, $mdSidenav) {
     console.log("App started");
     $rootScope.onClick = function (ev) {
         $myElementInkRipple.attach($scope, angular.element(ev.target), { center: true });
@@ -39,6 +40,16 @@ adminApp.run(function ($rootScope, toastr,$myElementInkRipple,$routeParams) {
             'lang':'RU'
         }
     };
+    $rootScope.$on('$routeChangeStart', function(next, current) {
+        $mdSidenav('left').close()
+    });
+    $rootScope.toggleLeft = buildToggler('left');
+
+    function buildToggler(componentId) {
+        return function() {
+            $mdSidenav(componentId).toggle();
+        }
+    }
     $rootScope.keyToText = function (text){
 
         data = {
@@ -69,7 +80,7 @@ adminApp.run(function ($rootScope, toastr,$myElementInkRipple,$routeParams) {
             "ban":"Заблокировать",
             "unban":"Разблокировать",
             "not defined":"Не установлено",
-            "unpublish":"Снять с публикации",
+            "unpublish":"Скрыть",
             "phone_1":"Первый телефон",
             "phone_2":"Второй телефон",
             "show":"Показ",

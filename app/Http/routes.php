@@ -11,7 +11,7 @@ Route::get('/admin', function () {
     return view('admin.index');
 })->middleware([\App\Http\Middleware\AuthOnce::class]);
 
-Route::group([ 'prefix' => 'api' ], function () {
+Route::group([ 'prefix' => 'api','middleware' =>\App\Http\Middleware\Cors::class ], function () {
     Route::get('{code}', function ($code) {
         $response = [ 'error' => true, 'message' => null ];
         if ($code == 404) {

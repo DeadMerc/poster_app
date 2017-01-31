@@ -26,6 +26,7 @@
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-aria.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-messages.min.js"></script>
+    <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/t-114/svg-assets-cache.js"></script>
     <!-- Toasts -->
     <script src="https://unpkg.com/angular-toastr/dist/angular-toastr.tpls.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/angular-toastr/dist/angular-toastr.css"/>
@@ -64,7 +65,62 @@
 
 <div id="wrapper">
 
-    <!-- Sidebar -->
+    <md-content>
+        <md-toolbar class="md-hue-2">
+            <div class="md-toolbar-tools">
+                <md-button class="md-icon-button" aria-label="Settings" ng-click="toggleLeft()">
+                    <md-icon md-svg-icon="img/icons/menu.svg"></md-icon>
+                </md-button>
+                <h2>
+                    <span>Poster</span>
+                </h2>
+                <span flex></span>
+            </div>
+        </md-toolbar>
+    </md-content>
+
+    <md-sidenav class="md-sidenav-left" md-component-id="left"
+                md-whiteframe="4">
+
+        <md-toolbar class="md-theme-indigo">
+            <h1 class="md-toolbar-tools">Меню</h1>
+        </md-toolbar>
+
+        <md-content layout-margin>
+            <md-list flex>
+                <md-list-item class="md-3-line">
+                    <div class="md-list-item-text" layout="column">
+                        <h3><a href="#/categories">Категории</a><a class="sub-menu" href="#/category"><i
+                                        class="material-icons correct_icon">add_box</i></a></h3>
+                    </div>
+
+                </md-list-item>
+
+                <md-list-item class="md-3-line">
+                    <div class="md-list-item-text" layout="column">
+                        <h3><a href="#/users">Пользователи</a><a class="sub-menu" href="#/user"><i
+                                    class="material-icons correct_icon">add_box</i></a></h3>
+                    </div>
+                </md-list-item>
+
+                <md-list-item class="md-3-line">
+                    <div class="md-list-item-text" layout="column">
+                        <h3><a href="#/events">События</a><a class="sub-menu" href="#/event"><i
+                                    class="material-icons correct_icon">add_box</i></a></h3>
+                    </div>
+                </md-list-item>
+
+                <md-list-item class="md-3-line">
+                    <div class="md-list-item-text" layout="column">
+                        <h3><a href="#/push">Пуши</a><a class="sub-menu" href="#/push/history"><i
+                                    class="material-icons correct_icon">history</i></a></h3>
+                    </div>
+                </md-list-item>
+            </md-list>
+        </md-content>
+
+    </md-sidenav>
+    <!-- Sidebar
     <div id="sidebar-wrapper">
         <ul class="sidebar-nav">
             <li class="sidebar-brand">
@@ -87,7 +143,7 @@
                             class="material-icons correct_icon">history</i></a>
             </li>
         </ul>
-    </div>
+    </div>-->
     <!-- /#sidebar-wrapper -->
 
     <!-- Page Content -->
@@ -96,7 +152,7 @@
 
         <div class="container-fluid">
             <div class="row">
-                <div class="col-lg-12 ">
+                <div flex>
                     <div ng-view></div>
                 </div>
             </div>

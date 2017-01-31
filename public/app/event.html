@@ -29,7 +29,7 @@
                 <div ng-if="input.type == 'categories_select'">
                     <md-input-container>
                         <label><% keyToText('category_id') %></label>
-                        <md-select  ng-change="changeCategory(data[input.key])" required ng-model="data[input.key]">
+                        <md-select ng-change="changeCategory(data[input.key])" required ng-model="data[input.key]">
                             <md-option ng-repeat="category in categories_select" ng-value="category.id"><% category.name
                                 %>
                             </md-option>
@@ -39,14 +39,20 @@
                         <hr>
                         <a ng-click="addUserToCinema($event)">Добавить Кинотеатр</a>
                         <hr>
-                        <div ng-repeat="user in cinema">
-                            ID Кинотеатра:"<% user.id %>", <a ng-click="removeCinema(user)">Удалить кинотеатр,</a> <a ng-click="addSession(user)">Добавить ещё сеанс</a>
+                        <div ng-repeat="user in cinema" layout-sx="column">
+                            ID Кинотеатра:"<% user.id %>", <a ng-click="removeCinema(user)"><i class="material-icons md-18">delete</i></a>
+                            <a ng-click="addSession(user)"><i class="material-icons">plus_one</i></a>
                             <div ng-repeat="session in user.sessions">
-                                <label>Дата</label>
-                                <input ng-model="session.date" type="datetime-local">
-                                <label>Стоимость</label>
-                                <input ng-model="session.price">
-                                <a ng-click="removeSession(user,session)">X</a>
+                                <md-input-container>
+                                    <label>Дата</label>
+                                    <input ng-model="session.date" type="datetime-local">
+                                </md-input-container>
+
+                                <md-input-container>
+                                    <label>Стоимость</label>
+                                    <input ng-model="session.price">
+                                </md-input-container>
+                                <a class="remove-session" ng-click="removeSession(user,session)"><i class="material-icons">delete</i></a>
                             </div>
 
                         </div>

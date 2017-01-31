@@ -860,6 +860,7 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
                     if (res.data.error == false) {
                         console.log("Push Ctrl data to view");
                         $scope.categories = res.data.response;
+                        $scope.$apply();
                         //console.log($scope.categories);
                     } else {
                         console.log("Push Ctrl data have error");

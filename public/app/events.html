@@ -16,25 +16,25 @@
     <table  class="table table-striped">
         <thead>
         <tr>
-            <td>ID</td>
-            <td>Автор</td>
-            <td>Тип</td>
-            <td>Заголовок</td>
+            <td  class="hide-xs">ID</td>
+            <td class="hide-xs">Автор</td>
+            <td class="hide-xs">Тип</td>
+            <td flex-sx="10">Заголовок</td>
             <td>Дата</td>
-            <td>Цена</td>
-            <td>Фоловеры</td>
+            <td class="hide-xs">Цена</td>
+            <td class="hide-xs">Фоловеры</td>
             <td>Действия</td>
         </tr>
         </thead>
         <tbody>
         <tr ng-repeat="data in users">
-            <td><% data.id %></td>
-            <td><% data.user.email || keyToText('not defined') %></td>
-            <td><% data.type || keyToText('not defined') %></td>
-            <td><% data.title || keyToText('not defined') %></td>
+            <td  class="hide-xs"><% data.id %></td>
+            <td class="hide-xs"><% data.user.email || keyToText('not defined') %></td>
+            <td class="hide-xs"><% data.type || keyToText('not defined') %></td>
+            <td flex-sx="10"><% data.title || keyToText('not defined') %></td>
             <td><% data.date || 'Date not defined' %> <% data.time || 'Time not defined' %></td>
-            <td><% data.price || keyToText('not defined') %></td>
-            <td><% data.follow_count || keyToText('not defined') %></td>
+            <td class="hide-xs"><% data.price || keyToText('not defined') %></td>
+            <td class="hide-xs"><% data.follow_count || keyToText('not defined') %></td>
             <td>
                 <md-button ng-if="data.publish !== 1" ng-click="publish(data)" class="md-raised md-primary">
                     <% keyToText('publish') %>
