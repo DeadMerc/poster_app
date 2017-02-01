@@ -578,4 +578,28 @@ class EventsController extends Controller
             $event
         );
     }
+    /**
+     * @api {get} /v1/users/:id/sessions getSessionsForCinema
+     * @apiVersion 0.1.0
+     * @apiName getSessionsForCinema
+     * @apiGroup Events
+     *
+     * @apiHeader {string} token User token
+     *
+     * @apiParam {date} [date] For example=2017-01-19
+     *
+     *
+     */
+    public function getSessionsByUser(Request $request,$user_id){
+        $cinema= User_hidden_fields::
+        with(['sessions' => function($query) use ($request){
+            $query->when($request->date,function($q)use($request){
+                $q->where('date','>=',$request->date.' 00:00:00')
+                    ->where('date','<=',$request->date.' 23:59:59');
+            });
+        }])
+            ->where('id',$user_id)
+            ->first();
+        return $this->helpReturn($cinema);
+    }
 }

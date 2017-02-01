@@ -437,6 +437,47 @@ define({ "api": [
     ]
   },
   {
+    "type": "get",
+    "url": "/v1/users/:id/sessions",
+    "title": "getSessionsForCinema",
+    "version": "0.1.0",
+    "name": "getSessionsForCinema",
+    "group": "Events",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "string",
+            "optional": false,
+            "field": "token",
+            "description": "<p>User token</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "date",
+            "optional": true,
+            "field": "date",
+            "description": "<p>For example=2017-01-19</p>"
+          }
+        ]
+      }
+    },
+    "filename": "app/Http/Controllers/EventsController.php",
+    "groupTitle": "Events",
+    "sampleRequest": [
+      {
+        "url": "/api/v1/users/:id/sessions"
+      }
+    ]
+  },
+  {
     "type": "post",
     "url": "/v1/events",
     "title": "storeEvents",

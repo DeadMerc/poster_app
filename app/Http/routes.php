@@ -50,6 +50,7 @@ Route::group([ 'prefix' => 'api','middleware' =>\App\Http\Middleware\Cors::class
             Route::resource('events', 'EventsController', [ 'except' => [ 'update' ] ]);
 
             Route::get('events/{id}/cinema','EventsController@getCinemaByEvent');
+            Route::get('users/{id}/sessions','EventsController@getSessionsByUser');
 
             Route::post('events', 'EventsController@store_save');
             Route::post('events/{id}', 'EventsController@update_save');

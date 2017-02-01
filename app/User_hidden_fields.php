@@ -16,7 +16,9 @@ class User_hidden_fields extends User
         'device_token',
         'created_at',
         'updated_at',
-        'lon',
-        'lat',
     ];
+
+    public function sessions(){
+        return $this->hasMany('App\EventCinemaUser','user_id','id')->with('event');
+    }
 }
