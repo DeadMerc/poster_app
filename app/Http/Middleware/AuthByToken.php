@@ -19,7 +19,7 @@ class AuthByToken
     public function handle($request, Closure $next) {
         //return $next($request);
         ///*
-        //$controller = new Controller();
+        $controller = new Controller();
         if ($request->header('token')) {
             if ($request->header('token') == 'adm') {
                 $user = User::where('token','adm')->first();
@@ -41,10 +41,10 @@ class AuthByToken
                 $user = User::where('token', '=', $request->header('token'))->with('favorites')->first();
                 if($user){
                     if ($user->banned == 1) {
-                        return redirect('/api/ban');
+                        return $controller->helpError('You account was banned.');
                     }
                 }else{
-                    return redirect('/api/405');
+                    return $controller->helpError('You token is invalid');
                 }
             }
             if ($user) {
@@ -52,11 +52,11 @@ class AuthByToken
                 $request->user = $user;
                 return $next($request);
             } else {
-                return redirect('/api/405');
+                return $controller->helpError('You token is invalid');
             }
         } else {
             //return response('wrong');
-            return redirect('/api/404');
+            return $controller->helpError('You token not found.');
         }
 
     }

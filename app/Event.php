@@ -49,6 +49,9 @@ class Event extends Model
             ->with('user')
             ;
     }
+    public function cinemaWithoutUser(){
+        return $this->hasMany('App\EventCinemaUser','event_id','id');
+    }
 
     public function getFollowCountAttribute() {
         $events = $this->follows();

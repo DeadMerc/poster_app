@@ -12,7 +12,6 @@ use App\User;
 use App\User_hidden_fields;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Mockery\CountValidator\Exception;
 use Storage;
 
@@ -49,7 +48,7 @@ class EventsController extends Controller
 
     public function show($id) {
         //return $this->helpReturn(Event::find(2666));
-        return $this->helpReturn(Event::with('photos', 'user','cinema')->findorfail($id));
+        return $this->helpReturn(Event::with('photos', 'user', 'cinema')->findorfail($id));
     }
 
     /**
@@ -90,9 +89,9 @@ class EventsController extends Controller
             $search[] = $category->category_id;
         }*/
         $events = Event::with('photos', 'user', 'comments')->where('category_id', $request->category_id)//->where('type', 'public')
-            ->where('publish', 1)->when($place_id, function($q) use ($place_id) {
-                return $q->where('place_id', $place_id);
-            })->paginate(7);
+        ->where('publish', 1)->when($place_id, function($q) use ($place_id) {
+            return $q->where('place_id', $place_id);
+        })->paginate(7);
         //dd($events);
         //dd(DB::getQueryLog());
         return $this->helpReturn($events);
@@ -439,11 +438,11 @@ class EventsController extends Controller
         }
 
         $event = $this->fromPostToModel($rules, Event::findorfail($id), $request, 'model');
-        if($request->cinema){
-            EventCinemaUser::where('event_id',$id)->delete();
+        if($request->cinema) {
+            EventCinemaUser::where('event_id', $id)->delete();
             $cinemas = json_decode($request->cinema);
-            foreach ($cinemas as $cinema){
-                foreach ($cinema->sessions as $session){
+            foreach ($cinemas as $cinema) {
+                foreach ($cinema->sessions as $session) {
                     $eventCinema = new EventCinemaUser;
                     $eventCinema->event_id = $id;
                     $eventCinema->user_id = $cinema->id;
@@ -546,38 +545,39 @@ class EventsController extends Controller
     public function getCinemaByEvent(Request $request, $event_id) {
         //DB::enableQueryLog();
         $event = Event::
-        with('comments','photos')->
-            where('id',$event_id)
-            /*
+        with('comments', 'photos')->where('id', $event_id)/*
             ->with(['cinema' => function($query) use ($request){
                 $query->when($request->date,function($q)use($request){
                     $q->where('date','>=',$request->date.' 00:00:00')
                         ->where('date','<=',$request->date.' 23:59:59');
                 });
             }])*/
-            ->first();
+        ->first();
         $event = $event->toArray();
         $event['cinema'] = [];
-        foreach (EventCinemaUser::where('event_id',$event_id)->get() as $session){
+        $sessions = EventCinemaUser::
+        when($request->date, function($q) use ($request) {
+            $q->where('date', '>=', $request->date . ' 00:00:00')->where('date', '<=', $request->date . ' 23:59:59');
+        })->where('event_id', $event_id)->get();
+        foreach ($sessions as $session) {
             $cinemaFound = false;
-            for($i=0;$i<count($event['cinema']);$i++){
-                if($session->user_id == $event['cinema'][$i]['id']){
+            for ($i = 0; $i < count($event['cinema']); $i++) {
+                if($session->user_id == $event['cinema'][$i]['id']) {
                     $event['cinema'][$i]['sessions'][] = $session->toArray();
                     $cinemaFound = true;
                 }
             }
-            if($cinemaFound == false){
+            if($cinemaFound == false) {
                 $cinemaNew = User_hidden_fields::find($session->user_id)->toArray();
                 $cinemaNew['sessions'] = [$session];
-                $event['cinema'][] =  $cinemaNew;
+                $event['cinema'][] = $cinemaNew;
             }
         }
         //dd($event['cinema']);
         //dd(DB::getQueryLog());
-        return $this->helpReturn(
-            $event
-        );
+        return $this->helpReturn($event);
     }
+
     /**
      * @api {get} /v1/users/:id/sessions getSessionsForCinema
      * @apiVersion 0.1.0
@@ -590,16 +590,28 @@ class EventsController extends Controller
      *
      *
      */
-    public function getSessionsByUser(Request $request,$user_id){
-        $cinema= User_hidden_fields::
-        with(['sessions' => function($query) use ($request){
-            $query->when($request->date,function($q)use($request){
-                $q->where('date','>=',$request->date.' 00:00:00')
-                    ->where('date','<=',$request->date.' 23:59:59');
-            });
-        }])
-            ->where('id',$user_id)
-            ->first();
-        return $this->helpReturn($cinema);
+    public function getSessionsByUser(Request $request, $user_id) {
+        $cinema = User_hidden_fields::where('id', $user_id)->first();
+        $cinema = $cinema->toArray();
+        $event = $cinema;
+        $event['event'] = [];
+        foreach (EventCinemaUser::when($request->date, function($q) use ($request) {
+            $q->where('date', '>=', $request->date . ' 00:00:00')->where('date', '<=', $request->date . ' 23:59:59');
+        })->where('user_id', $user_id)->get() as $session) {
+            $cinemaFound = false;
+            for ($i = 0; $i < count($event['event']); $i++) {
+                if($session->event_id == $event['event'][$i]['id']) {
+                    $event['event'][$i]['sessions'][] = $session->toArray();
+                    $cinemaFound = true;
+                }
+            }
+            if($cinemaFound == false) {
+                $cinemaNew = Event::with('photos')->find($session->event_id)->toArray();
+                $cinemaNew['sessions'] = [$session];
+                $event['event'][] = $cinemaNew;
+            }
+        }
+
+        return $this->helpReturn($event);
     }
 }

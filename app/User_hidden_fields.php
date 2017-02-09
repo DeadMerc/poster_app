@@ -21,4 +21,8 @@ class User_hidden_fields extends User
     public function sessions(){
         return $this->hasMany('App\EventCinemaUser','user_id','id')->with('event');
     }
+
+    public function eventsWithSessions(){
+        return $this->hasMany('App\Event','user_id','id')->with('photos','comments','cinema');
+    }
 }
