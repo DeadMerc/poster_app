@@ -74,6 +74,8 @@ class EventsController extends Controller
      * @apiDescription Все события из категорий на которые подписан пользователь
      * @apiHeader {string} token User token
      * @apiParam {string} [place_id]
+     * @apiParam {int} category_id
+     * @apiParam {int} [page]
      */
     public function showFavorite(Request $request, $place_id = false) {
         //DB::enableQueryLog();

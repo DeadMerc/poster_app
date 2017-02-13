@@ -337,6 +337,20 @@ define({ "api": [
             "optional": true,
             "field": "place_id",
             "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "int",
+            "optional": false,
+            "field": "category_id",
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "int",
+            "optional": true,
+            "field": "page",
+            "description": ""
           }
         ]
       }
