@@ -40,7 +40,7 @@ class Controller extends BaseController {
                         }
                     }
                 } else {
-                    if($model->$key != $request->$key AND (!empty($request->$key) OR is_numeric($request->$key))) {
+                    if($model->$key !== $request->$key AND (!empty($request->$key) OR is_numeric($request->$key))) {
                         if($key == 'password') {
                             $request->$key = md5($request->$key . 'requestLoginEvstolia');
                         }
@@ -345,6 +345,18 @@ class Controller extends BaseController {
         $push_history->save();
     }
 
+
+    /**
+     * @api {post} /images/upload uploadFile
+     * @apiVersion 0.1.0
+     * @apiName uploadFile
+     * @apiGroup Upload
+     *
+     * @apiParam {file} image
+     * @apiParam {string} [event] ID ивента, если отправить этот параметр, то картинка автоматически прикрепится к ивенту
+     *
+     *
+     */
     public function uploadFile(Request $request) {
         if($request->hasFile('image')) {
             $fileName = md5(rand(9999, 99999) . date('d m Y') . rand(9999, 99999)) . '.jpg';
@@ -358,6 +370,24 @@ class Controller extends BaseController {
             }
             return $fileName;
         }
+    }
+    /**
+     * @api {post} /images/uploadFiles uploadFiles
+     * @apiVersion 0.1.0
+     * @apiName uploadFiles
+     * @apiGroup Upload
+     * @apiDescription Название параметра не имеет значение, главное чтобы это были файлы.
+     *
+     *
+     */
+    public function uploadFiles(Request $request){
+        $names = [];
+        foreach ($request->allFiles() as $file) {
+            $fileName = md5(rand(9999, 99999) . date('d m Y') . rand(9999, 99999)) . '.jpg';
+            $file->move(storage_path() . '/app/public/images', $fileName);
+            $names[] = $fileName;
+        }
+        return $this->helpInfo($names);
     }
 
 }

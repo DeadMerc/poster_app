@@ -381,6 +381,7 @@ class EventsController extends Controller
      * @apiParam {string} price
      * @apiParam {string} [place_id]
      * @apiParam {string} [address]
+     * @apiParam {string} [images]
      *
      * @apiParam {datetime} date_stop Дата окончания показа в приложении
      *
@@ -438,7 +439,6 @@ class EventsController extends Controller
         if($request->images) {
             Photo::where('event_id', $id)->delete();
         }
-
         $event = $this->fromPostToModel($rules, Event::findorfail($id), $request, 'model');
         if($request->cinema) {
             EventCinemaUser::where('event_id', $id)->delete();
@@ -455,7 +455,6 @@ class EventsController extends Controller
             }
 
         }
-
         //dd(get_class($event));
         if(get_class($event) == 'App\Event') {
             $request->user->save();
@@ -555,6 +554,9 @@ class EventsController extends Controller
                 });
             }])*/
         ->first();
+        if(!$event){
+            return $this->helpError('Event not found');
+        }
         $event = $event->toArray();
         $event['cinema'] = [];
         $sessions = EventCinemaUser::

@@ -874,6 +874,13 @@
           },
           {
             "group": "Parameter",
+            "type": "string",
+            "optional": true,
+            "field": "images",
+            "description": ""
+          },
+          {
+            "group": "Parameter",
             "type": "datetime",
             "optional": false,
             "field": "date_stop",
@@ -928,6 +935,57 @@
     "sampleRequest": [
       {
         "url": "/api/v1/invoice"
+      }
+    ]
+  },
+  {
+    "type": "post",
+    "url": "/images/upload",
+    "title": "uploadFile",
+    "version": "0.1.0",
+    "name": "uploadFile",
+    "group": "Upload",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "file",
+            "optional": false,
+            "field": "image",
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": true,
+            "field": "event",
+            "description": "<p>ID ивента, если отправить этот параметр, то картинка автоматически прикрепится к ивенту</p>"
+          }
+        ]
+      }
+    },
+    "filename": "app/Http/Controllers/Controller.php",
+    "groupTitle": "Upload",
+    "sampleRequest": [
+      {
+        "url": "/api/images/upload"
+      }
+    ]
+  },
+  {
+    "type": "post",
+    "url": "/images/uploadFiles",
+    "title": "uploadFiles",
+    "version": "0.1.0",
+    "name": "uploadFiles",
+    "group": "Upload",
+    "description": "<p>Название параметра не имеет значение, главное чтобы это были файлы.</p>",
+    "filename": "app/Http/Controllers/Controller.php",
+    "groupTitle": "Upload",
+    "sampleRequest": [
+      {
+        "url": "/api/images/uploadFiles"
       }
     ]
   },

@@ -25,6 +25,9 @@ Route::group([ 'prefix' => 'api','middleware' =>\App\Http\Middleware\Cors::class
         }
         return $response;
     });
+    Route::post('/images/uploadFiles', 'Controller@uploadFiles');
+
+
     Route::post('reset/password','UsersController@resetPasswordRequest');
     Route::get('reset/password/{token}','UsersController@resetPassword');
 
@@ -94,7 +97,8 @@ Route::group([ 'prefix' => 'api','middleware' =>\App\Http\Middleware\Cors::class
 });
 
 Route::post('/images/upload', 'Controller@uploadFile');
-    Route::get('images/{filename}', function ($filename) {
+
+Route::get('images/{filename}', function ($filename) {
     $path = storage_path() . '/app/public/images/' . $filename;
     if (file_exists($path)) {
         $file = File::get($path);
