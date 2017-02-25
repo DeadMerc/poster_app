@@ -706,7 +706,6 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
                 //console.log(v);
                 photos.push(v.image);
             });
-            //console.log(photos);
             $scope.data.images = photos;
 
             if ($scope.cinema_block) {

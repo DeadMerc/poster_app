@@ -12,6 +12,7 @@ use App\User;
 use App\User_hidden_fields;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Mockery\CountValidator\Exception;
 use Storage;
 
@@ -425,13 +426,14 @@ class EventsController extends Controller
             }
         }
 
-
         if(strtotime($request->date_stop)) {
+            Log::info($request->date_stop);
             $request->date_stop = new \DateTime($request->date_stop);
         }
 
         if($request->date_stop < new \DateTime("now")) {
-            throw new Exception('Date are wrong or less that:' . date("Y-m-d H:i:s"), 100);
+            Log::warning("DATE ARE WRONG");
+            throw new Exception('Дата не верна либо меньше чем:' . date("Y-m-d H:i:s"), 100);
         }
 
         $this->saveOriginalUserId($request);
