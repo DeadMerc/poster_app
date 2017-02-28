@@ -717,6 +717,7 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
                 $scope.data.cinema = angular.toJson($scope.cinema);
             }
 
+            //console.log(date);
             if ($scope.id !== 'new') {
                 //console.log($scope.data);
                 //$rootScope.transform(

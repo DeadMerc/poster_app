@@ -476,6 +476,8 @@ class EventsController extends Controller
         }
 
         if($request->date) {
+            $pos = strpos($request->date, '(');
+            $request->date = substr($request->date,0,$pos);
             if(strtotime($request->date)) {
                 $request->date = new \DateTime($request->date);
             }
@@ -484,11 +486,16 @@ class EventsController extends Controller
             }
         }
         Log::info($request->date_stop);
-        if(strtotime($request->date_stop)) {
+        //dd(new \DateTime($request->date_stop));
+
+        if($request->date_stop) {
+            $pos = strpos($request->date_stop, '(');
+            $request->date_stop = substr($request->date_stop,0,$pos);
             $request->date_stop = new \DateTime($request->date_stop);
         }
 
         if($request->date_stop < new \DateTime("now")) {
+
             Log::warning("DATE ARE WRONG");
             throw new Exception('Дата не верна либо меньше чем:' . date("Y-m-d H:i:s"), 100);
         }
