@@ -84,7 +84,9 @@ adminApp.run(function ($rootScope, toastr,$myElementInkRipple,$routeParams, $mdS
             "phone_1":"Первый телефон",
             "phone_2":"Второй телефон",
             "show":"Показ",
-            "users":"Пользователи"
+            "users":"Пользователи",
+            "lat":"Широта",
+            "lon":"Долгота"
         };
         if(data.hasOwnProperty(text) && $routeParams.lang != 'en'){
             return data[text];

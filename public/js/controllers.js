@@ -503,6 +503,7 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
         /*PARAMS FOR CONTROLLER*/
         $scope.params = {name: 'Event', url: 'events'};
 
+        $scope.requiredFields = ['title','description','time','date','type','category_id','date_stop'];
 
         $scope.cinema = [];
 
@@ -510,6 +511,7 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
         $scope.data = {};
         $scope.photos = [];
         $scope.init = function () {
+            $scope.hideFields = [];
             $scope.cinema_block = false;
             console.log($scope.params.name + " Ctrl scope init");
             $http.get('api/v1/' + $scope.params.url + '/s/edit', $rootScope.config)
@@ -548,7 +550,7 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
                     //transform data
                     $scope.data.date = new Date($scope.data.date);
                     //$scope.data.date = $rootScope.dateToISO($scope.data.date);
-                    console.log($scope.data.cinema);
+                    //console.log($scope.data.cinema);
                     angular.forEach($scope.data.cinema, function (v, i) {
                         var findUser = false;
                         var user = v;
@@ -599,9 +601,11 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
                     if (v.id == category_id) {
                         if (v.show == 'cinema') {
                             $scope.cinema_block = true;
+                            $scope.hideFields = ['address','phone_1','phone_2','price'];
                             keepGoing = false;
                         } else {
                             $scope.cinema_block = false;
+                            $scope.hideFields = [];
                         }
                     }
                 }

@@ -53,15 +53,17 @@ class Controller extends BaseController {
 
             if($manyImages) {
                 foreach($request->images as $image) {
-                    if(empty($image)){
-                        continue;
-                    }
                     if(is_string($image)){
+                        $image = trim($image);
                         $fileName = $image;
+                        if(!file_exists(storage_path() . '/app/public/images/'.$fileName) OR empty($fileName)){
+                            Log::info('Image with name:"'.$fileName.'" not found in server.');
+                            $info[] = 'Image with name:"'.$fileName.'" not found in server.';
+                            continue;
+                        }
                     }else{
                         $fileName = md5(rand(999, 99999) . date('d m Y')) . '.jpg';
                         $image->move(storage_path() . '/app/public/images', $fileName);
-
                     }
                     $photo = new Photo;
                     $photo->event_id = $model->id;

@@ -1,7 +1,7 @@
 <div ng-init="init()">
     <md-card>
         <md-card-content>
-            <div ng-repeat="input in schema">
+            <div ng-repeat="input in schema" ng-show="hideFields.indexOf(input.key) === -1">
 
                 <div ng-if="input.type == 'file'">
                     <div class="md-button md-raised md-primary" ngf-select="upload($file)" ng-model="file"
@@ -16,13 +16,13 @@
                 <div ng-if="input.type == 'checkbox'">
                     <md-input-container class="md-block">
                         <% keyToText(input.key) %>
-                        <input type="checkbox" ng-model="data[input.key]" aria-label="">
+                        <input ng-required="requiredFields.indexOf(input.key) !== -1" type="checkbox" ng-model="data[input.key]" aria-label="">
                     </md-input-container>
                 </div>
 
                 <div ng-if="input.type == 'date_picker'">
                     <label><%keyToText(input.key)%></label>
-                    <md-datepicker ng-model="data[input.key]" name="dateField"></md-datepicker>
+                    <md-datepicker required ng-model="data[input.key]" name="dateField"></md-datepicker>
                     <!--<input name="dateField" ng-model="data[input.key]" type="date">-->
                 </div>
 
@@ -65,7 +65,7 @@
                 <div ng-if="input.type == 'type_select'">
                     <md-input-container>
                         <label><% keyToText('type') %></label>
-                        <md-select required ng-model="data[input.key]">
+                        <md-select  ng-model="data[input.key]">
                             <md-option value="private"><em><% keyToText('private') %></em></md-option>
                             <md-option value="public"><em><% keyToText('public') %></em></md-option>
                         </md-select>
@@ -76,7 +76,7 @@
                 <div ng-if="input.type == 'text'">
                     <md-input-container class="md-block">
                         <label><% keyToText(input.key) %></label>
-                        <input type="text" required name="input.key" ng-model="data[input.key]">
+                        <input type="text" ng-required="requiredFields.indexOf(input.key) !== -1" name="input.key" ng-model="data[input.key]">
                         <div ng-messages="user.key.$error">
                             <div ng-message="required">This is required.</div>
                         </div>
@@ -86,14 +86,14 @@
                 <div ng-if="input.type == 'text_area'">
                     <md-input-container class="md-block">
                         <label><% keyToText(input.key) %></label>
-                        <textarea ng-model="data[input.key]" md-maxlength="10000" rows="5"></textarea>
+                        <textarea ng-required="requiredFields.indexOf(input.key) !== -1" ng-model="data[input.key]" md-maxlength="10000" rows="5"></textarea>
                     </md-input-container>
                 </div>
 
                 <div ng-if="input.type == 'number'">
                     <md-input-container class="md-block">
                         <label><%keyToText(input.key)%></label>
-                        <input type="number" required name="input.key" ng-model="data[input.key]">
+                        <input type="number" ng-required="requiredFields.indexOf(input.key) !== -1"  name="input.key" ng-model="data[input.key]">
                         <div ng-messages="user.key.$error">
                             <div ng-message="required">This is required.</div>
                         </div>

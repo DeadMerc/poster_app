@@ -295,7 +295,7 @@ class EventsController extends Controller
             'date' => 'required',
             'time' => 'required',
             'type' => 'required',
-            'price' => 'required',
+            'price' => false,
             'images' => false,
             'phone_1' => false,
             'phone_2' => false,
@@ -308,7 +308,7 @@ class EventsController extends Controller
             $request->publish = 1;
         }
 
-        if($request->images) {
+        if(isset($request->images)) {
             if(!is_array($request->images)) {
                 $request->images = explode(',', $request->images);
             }
@@ -443,6 +443,7 @@ class EventsController extends Controller
      *
      */
     public function update_save(Request $request, $id) {
+        //Log::info("Info".json_encode($request->all()));
         $rules = [
             'video' => false,
             'user_id' => false,
@@ -455,7 +456,7 @@ class EventsController extends Controller
             'date' => false,
             'time' => 'required',
             'type' => 'required',
-            'price' => 'required',
+            'price' => false,
             'images' => false,
             'publish' => false,
             'phone_1' => false,
