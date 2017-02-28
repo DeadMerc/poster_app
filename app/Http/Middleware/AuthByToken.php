@@ -41,10 +41,10 @@ class AuthByToken
                 $user = User::where('token', '=', $request->header('token'))->with('favorites')->first();
                 if($user){
                     if ($user->banned == 1) {
-                        return $controller->helpError('You account was banned.');
+                        return response($controller->helpError('You account was banned.'));
                     }
                 }else{
-                    return $controller->helpError('You token is invalid');
+                    return response($controller->helpError('You token is invalid'));
                 }
             }
             if ($user) {
@@ -52,11 +52,11 @@ class AuthByToken
                 $request->user = $user;
                 return $next($request);
             } else {
-                return $controller->helpError('You token is invalid');
+                return response($controller->helpError('You token is invalid'));
             }
         } else {
             //return response('wrong');
-            return $controller->helpError('You token not found.');
+            return response($controller->helpError('You token not found.'));
         }
 
     }

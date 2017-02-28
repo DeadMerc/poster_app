@@ -548,6 +548,7 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
                     //transform data
                     $scope.data.date = new Date($scope.data.date);
                     //$scope.data.date = $rootScope.dateToISO($scope.data.date);
+                    console.log($scope.data.cinema);
                     angular.forEach($scope.data.cinema, function (v, i) {
                         var findUser = false;
                         var user = v;

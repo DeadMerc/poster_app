@@ -53,6 +53,9 @@ class Controller extends BaseController {
 
             if($manyImages) {
                 foreach($request->images as $image) {
+                    if(empty($image)){
+                        continue;
+                    }
                     if(is_string($image)){
                         $fileName = $image;
                     }else{

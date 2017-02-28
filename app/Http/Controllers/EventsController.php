@@ -247,6 +247,34 @@ class EventsController extends Controller
      * @apiParam {string} [phone_1]
      * @apiParam {string} [phone_2]
      *
+     *
+     * @apiParam {datetime} date_stop Дата окончания показа в приложении
+     *
+     */
+    /**
+     * @api {post} /v1/events storeEvents
+     * @apiVersion 0.1.2
+     * @apiName storeEvents
+     * @apiGroup Events
+     * @apiDescription add Event object
+     *
+     * @apiHeader {string} token User token
+     * @apiParam {string} category_id
+     * @apiParam {string} title
+     * @apiParam {string} description
+     * @apiParam {string} date
+     * @apiParam {string} time
+     * @apiParam {string='private','public'} type
+     * @apiParam {string} price
+     * @apiParam {array} images
+     * @apiParam {string} [place_id]
+     * @apiParam {string} [address]
+     * @apiParam {string} [phone_1]
+     * @apiParam {string} [phone_2]
+     * @apiParam {double} [lat]
+     * @apiParam {double} [lon]
+     *
+     *
      * @apiParam {datetime} date_stop Дата окончания показа в приложении
      *
      */
@@ -272,6 +300,8 @@ class EventsController extends Controller
             'phone_1' => false,
             'phone_2' => false,
             'publish' => false,
+            'lat'=>false,
+            'lon'=>false
         ];
 
         if($request->category_id == '100' OR $request->user->type == 'admin') {
@@ -387,6 +417,31 @@ class EventsController extends Controller
      * @apiParam {datetime} date_stop Дата окончания показа в приложении
      *
      */
+    /**
+     * @api {post} /v1/events/:id updateEvents
+     * @apiVersion 0.1.1
+     * @apiName updateEvents
+     * @apiGroup Events
+     *
+     * @apiHeader {string} token User token
+     *
+     * @apiParam {integer} id
+     * @apiParam {string} category_id
+     * @apiParam {string} title
+     * @apiParam {string} description
+     * @apiParam {string} date
+     * @apiParam {string} time
+     * @apiParam {string} type
+     * @apiParam {string} price
+     * @apiParam {string} [place_id]
+     * @apiParam {string} [address]
+     * @apiParam {string} [images]
+     * @apiParam {double} [lat]
+     * @apiParam {double} [lon]
+     *
+     * @apiParam {datetime} date_stop Дата окончания показа в приложении
+     *
+     */
     public function update_save(Request $request, $id) {
         $rules = [
             'video' => false,
@@ -405,6 +460,8 @@ class EventsController extends Controller
             'publish' => false,
             'phone_1' => false,
             'phone_2' => false,
+            'lat'=>false,
+            'lon'=>false
 
         ];
         if($request->category_id == '100' OR $request->user->type == 'admin') {
@@ -425,9 +482,8 @@ class EventsController extends Controller
                 $request->date = null;
             }
         }
-
+        Log::info($request->date_stop);
         if(strtotime($request->date_stop)) {
-            Log::info($request->date_stop);
             $request->date_stop = new \DateTime($request->date_stop);
         }
 
@@ -437,14 +493,17 @@ class EventsController extends Controller
         }
 
         $this->saveOriginalUserId($request);
-
-        if($request->images) {
+        if(isset($request->images)) {
             Photo::where('event_id', $id)->delete();
         }
         $event = $this->fromPostToModel($rules, Event::findorfail($id), $request, 'model');
         if($request->cinema) {
-            EventCinemaUser::where('event_id', $id)->delete();
             $cinemas = json_decode($request->cinema);
+            if(is_array($cinemas)){
+                EventCinemaUser::where('event_id', $id)->delete();
+            }else{
+                Log::warning($cinemas);
+            }
             foreach ($cinemas as $cinema) {
                 foreach ($cinema->sessions as $session) {
                     $eventCinema = new EventCinemaUser;
