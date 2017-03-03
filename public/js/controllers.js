@@ -531,7 +531,7 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
                 .then(function (res) {
                     console.log('Try load list of categories');
                     $scope.categories_select = res.data.response;
-                    $scope.changeCategory($scope.data.category_id);
+
                 });
 
             if (typeof $scope.id == 'undefined') {
@@ -546,6 +546,7 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
                         }, 3000);
 
                     }
+
                     $scope.data = res.data.response;
                     //transform data
                     $scope.data.date = new Date($scope.data.date);
@@ -554,12 +555,13 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
                     angular.forEach($scope.data.cinema, function (v, i) {
                         var findUser = false;
                         var user = v;
+                        //console.log(v);
                         angular.forEach($scope.cinema, function (v, i) {
                             if (v.id == user.user_id) {
                                 v.sessions.push(
                                     {
                                         date: new Date(user.date),
-                                        price: user.price
+                                        price: (user.price_range['from']==user.price_range['to']?user.price:user.price_range['from']+'..'+user.price_range['to'])
                                     });
                                 findUser = true;
                             }
@@ -571,7 +573,7 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
                                     sessions: [
                                         {
                                             date: new Date(user.date),
-                                            price: user.price
+                                            price: (user.price_range['from']==user.price_range['to']?user.price:user.price_range['from']+'..'+user.price_range['to'])
                                         }
                                     ]
                                 }
@@ -585,6 +587,12 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
                         $scope.data.price = $scope.data.price_range.from + '..' + $scope.data.price_range.to;
                     }
 
+                    $scope.$watch('categories_select', function(newValue, oldValue) {
+                        $scope.changeCategory($scope.data.category_id);
+                        console.log('Promise start for change category to:'+$scope.data.category_id);
+                    });
+
+
                     $scope.photos = res.data.response.photos;
                     //console.log($scope.data.publish);
                 }, function (res) {
@@ -594,22 +602,25 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
             console.log($scope.params.name + ' Ctrl try edit id ' + $scope.id);
         };
         $scope.changeCategory = function (category_id) {
-
+            console.log('Change category to:'+category_id);
+            //console.log($scope.categories_select);
             var keepGoing = true;
             angular.forEach($scope.categories_select, function (v, i) {
-                if (keepGoing) {
+                if (keepGoing == true) {
                     if (v.id == category_id) {
+                        //console.log(v);
                         if (v.show == 'cinema') {
                             $scope.cinema_block = true;
                             $scope.hideFields = ['address','phone_1','phone_2','price'];
                             keepGoing = false;
-                        } else {
+                        }else{
                             $scope.cinema_block = false;
                             $scope.hideFields = [];
                         }
                     }
                 }
             });
+            console.log($scope.cinema_block);
 
         };
         $scope.addUserToCinema = function (ev) {

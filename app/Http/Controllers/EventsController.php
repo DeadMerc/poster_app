@@ -335,9 +335,29 @@ class EventsController extends Controller
             $request->user->balance = $request->user->balance - $category->post_price;
             $this->saveOriginalUserId($request);
             $event = $this->fromPostToModel($rules, new Event, $request, 'model');
+
             //dd();
             //dd($event);
             if(get_class($event) == 'App\Event') {
+                if($request->cinema) {
+                    $cinemas = json_decode($request->cinema);
+                    if(is_array($cinemas)){
+                        EventCinemaUser::where('event_id', $event->id)->delete();
+                    }else{
+                        Log::warning($cinemas);
+                    }
+                    foreach ($cinemas as $cinema) {
+                        foreach ($cinema->sessions as $session) {
+                            $eventCinema = new EventCinemaUser;
+                            $eventCinema->event_id = $event->id;
+                            $eventCinema->user_id = $cinema->id;
+                            $eventCinema->price = $session->price;
+                            $eventCinema->date = $session->date;
+                            $eventCinema->save();
+                        }
+                    }
+
+                }
                 $request->user->save();
                 $users = [];
                 if($event->type == 'public') {
@@ -443,7 +463,7 @@ class EventsController extends Controller
      *
      */
     public function update_save(Request $request, $id) {
-        //Log::info("Info".json_encode($request->all()));
+        Log::info("Info".json_encode($request->all()));
         $rules = [
             'video' => false,
             'user_id' => false,
@@ -476,8 +496,10 @@ class EventsController extends Controller
         }
 
         if($request->date) {
-            $pos = strpos($request->date, '(');
-            $request->date = substr($request->date,0,$pos);
+            if(preg_match('/\(/i',$request->date)){
+                $pos = strpos($request->date, '(');
+                $request->date = substr($request->date,0,$pos);
+            }
             if(strtotime($request->date)) {
                 $request->date = new \DateTime($request->date);
             }
@@ -489,8 +511,10 @@ class EventsController extends Controller
         //dd(new \DateTime($request->date_stop));
 
         if($request->date_stop) {
-            $pos = strpos($request->date_stop, '(');
-            $request->date_stop = substr($request->date_stop,0,$pos);
+            if(preg_match('/\(/i',$request->date_stop)){
+                $pos = strpos($request->date_stop, '(');
+                $request->date_stop = substr($request->date_stop,0,$pos);
+            }
             $request->date_stop = new \DateTime($request->date_stop);
         }
 
