@@ -569,6 +569,7 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
                         if (findUser == false) {
                             $scope.cinema.push(
                                 {
+                                    name:user.user.name,
                                     id: user.user_id,
                                     sessions: [
                                         {
@@ -637,14 +638,36 @@ var adminControllers = angular.module('adminControllers', ['uiGmapgoogle-maps'])
                 if (double || typeof result == "undefined") {
                     $rootScope.warning('ID Этого кинотеатра уже существует либо id повреждён.');
                 } else {
-                    $scope.cinema.push(
-                        {
-                            id: result,
-                            sessions: [
-                                {date: "2017-01-03", price: 10}
-                            ]
-                        }
-                    );
+                    $http.get('/api/v1/users/'+result,$rootScope.config)
+                        .then(function (res) {
+                            if (res.data.error == false) {
+                                $scope.cinema.push(
+                                    {
+                                        name:res.data.response.name,
+                                        id: result,
+                                        sessions: [
+                                            {
+                                                date: "2017-01-03",
+                                                price: 10
+                                            }
+                                        ]
+                                    }
+                                );
+                            } else {
+                                if (res.data.message == 'valid') {
+                                    var msg = '';
+                                    angular.forEach(res.data.validator, function (v, i) {
+                                        msg += v + '<br>';
+                                    })
+                                } else {
+                                    msg = res.data.message;
+                                }
+                                $rootScope.warning(msg);
+                            }
+                        }, function (res) {
+                            $rootScope.error('Request return failed');
+                        });
+
                 }
 
             });

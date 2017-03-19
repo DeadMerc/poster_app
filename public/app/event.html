@@ -16,7 +16,7 @@
                 <div ng-if="input.type == 'checkbox'">
                     <md-input-container class="md-block">
                         <% keyToText(input.key) %>
-                        <input ng-required="requiredFields.indexOf(input.key) !== -1" type="checkbox" ng-model="data[input.key]" aria-label="">
+                        <md-checkbox ng-required="requiredFields.indexOf(input.key) !== -1" type="checkbox" ng-model="data[input.key]" aria-label="">
                     </md-input-container>
                 </div>
 
@@ -37,9 +37,36 @@
                     </md-input-container>
                     <div ng-if="cinema_block">
                         <hr>
-                        <a ng-click="addUserToCinema($event)">Добавить Кинотеатр</a>
+                        <md-button class="md-primary md-raised" ng-click="addUserToCinema($event)">Добавить Кинотеатр</md-button>
                         <hr>
                         <div ng-repeat="user in cinema" layout-sx="column">
+
+                            <md-card>
+                                <md-card-title>
+                                    <md-card-title-text>
+                                        <span class="md-headline">Кинотеатр:<% user.name %></span>
+                                    </md-card-title-text>
+                                </md-card-title>
+                                <md-card-content>
+                                    <div ng-repeat="session in user.sessions">
+                                        <md-input-container>
+                                            <label>Дата</label>
+                                            <input ng-model="session.date" type="datetime-local">
+                                        </md-input-container>
+
+                                        <md-input-container>
+                                            <label>Стоимость</label>
+                                            <input ng-model="session.price">
+                                        </md-input-container>
+                                        <a class="remove-session" ng-click="removeSession(user,session)"><i class="material-icons">delete</i></a>
+                                    </div>
+                                </md-card-content>
+                                <md-card-actions layout="row" layout-align="end center">
+                                    <md-button class="md-primary md-raised" ng-click="addSession(user)">Добавить сеанс</md-button>
+                                    <md-button class="md-warn md-raised" ng-click="removeCinema(user)">Удалить кинотеатр</md-button>
+                                </md-card-actions>
+                            </md-card>
+                            <!--
                             ID Кинотеатра:"<% user.id %>", <a ng-click="removeCinema(user)"><i class="material-icons md-18">delete</i></a>
                             <a ng-click="addSession(user)"><i class="material-icons">plus_one</i></a>
                             <div ng-repeat="session in user.sessions">
@@ -53,7 +80,7 @@
                                     <input ng-model="session.price">
                                 </md-input-container>
                                 <a class="remove-session" ng-click="removeSession(user,session)"><i class="material-icons">delete</i></a>
-                            </div>
+                            </div>-->
 
                         </div>
                         <hr>

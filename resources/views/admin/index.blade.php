@@ -38,15 +38,15 @@
     <!-- Routes -->
     <script src="http://angular.github.io/angular-phonecat/step-7/app/bower_components/angular-route/angular-route.js"></script>
     <!-- Uploader -->
-    <script src="https://dl.dropboxusercontent.com/u/105655494/libs/ng-file-upload-shim.js"></script>
-    <script src="https://dl.dropboxusercontent.com/u/105655494/libs/ng-file-upload.js"></script>
+    <script src="js/libs/ng-file-upload-shim.js"></script>
+    <script src="js/libs/ng-file-upload.js"></script>
     <!-- paginate -->
     <script src="https://rawgit.com/Crawlink/material-angular-paging/master/build/dist.min.js"></script>
     <!-- Table sorter -->
     <link rel="stylesheet" href="https://cdn.rawgit.com/angular-ui/bower-ui-grid/master/ui-grid.min.css">
     <script src="https://cdn.rawgit.com/angular-ui/bower-ui-grid/master/ui-grid.min.js"></script>
     <!--Google map -->
-    <script src="https://dl.dropboxusercontent.com/u/105655494/js/logger.js"></script>
+    <script src="js/libs/logger.js"></script>
     <script src="js/maps.js"></script>
     <script src='//maps.googleapis.com/maps/api/js?sensor=false&libraries=geometry&key=AIzaSyAERAEhHw6pPKhUpee6ofTz8f3qZUhUgLU'></script>
 

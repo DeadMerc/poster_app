@@ -300,8 +300,8 @@ class EventsController extends Controller
             'phone_1' => false,
             'phone_2' => false,
             'publish' => false,
-            'lat'=>false,
-            'lon'=>false
+            'lat' => false,
+            'lon' => false
         ];
 
         if($request->category_id == '100' OR $request->user->type == 'admin') {
@@ -341,11 +341,20 @@ class EventsController extends Controller
             if(get_class($event) == 'App\Event') {
                 if($request->cinema) {
                     $cinemas = json_decode($request->cinema);
-                    if(is_array($cinemas)){
+                    if(is_array($cinemas)) {
+                        foreach ($cinemas as $cinema) {
+                            foreach ($cinema->sessions as $session) {
+                                if(empty($session->price) or empty($session->date)){
+                                    throw new Exception('Проверьте сеансы у кинотеатров, не хватает даты либо цены.', 100);
+                                }
+                            }
+                        }
                         EventCinemaUser::where('event_id', $event->id)->delete();
-                    }else{
+                    } else {
                         Log::warning($cinemas);
+                        throw new Exception('Проверьте сеансы у кинотеатров.', 100);
                     }
+
                     foreach ($cinemas as $cinema) {
                         foreach ($cinema->sessions as $session) {
                             $eventCinema = new EventCinemaUser;
@@ -463,7 +472,7 @@ class EventsController extends Controller
      *
      */
     public function update_save(Request $request, $id) {
-        Log::info("Info".json_encode($request->all()));
+        Log::info("Info" . json_encode($request->all()));
         $rules = [
             'video' => false,
             'user_id' => false,
@@ -481,8 +490,8 @@ class EventsController extends Controller
             'publish' => false,
             'phone_1' => false,
             'phone_2' => false,
-            'lat'=>false,
-            'lon'=>false
+            'lat' => false,
+            'lon' => false
 
         ];
         if($request->category_id == '100' OR $request->user->type == 'admin') {
@@ -496,9 +505,9 @@ class EventsController extends Controller
         }
 
         if($request->date) {
-            if(preg_match('/\(/i',$request->date)){
+            if(preg_match('/\(/i', $request->date)) {
                 $pos = strpos($request->date, '(');
-                $request->date = substr($request->date,0,$pos);
+                $request->date = substr($request->date, 0, $pos);
             }
             if(strtotime($request->date)) {
                 $request->date = new \DateTime($request->date);
@@ -511,9 +520,9 @@ class EventsController extends Controller
         //dd(new \DateTime($request->date_stop));
 
         if($request->date_stop) {
-            if(preg_match('/\(/i',$request->date_stop)){
+            if(preg_match('/\(/i', $request->date_stop)) {
                 $pos = strpos($request->date_stop, '(');
-                $request->date_stop = substr($request->date_stop,0,$pos);
+                $request->date_stop = substr($request->date_stop, 0, $pos);
             }
             $request->date_stop = new \DateTime($request->date_stop);
         }
@@ -531,15 +540,24 @@ class EventsController extends Controller
         $event = $this->fromPostToModel($rules, Event::findorfail($id), $request, 'model');
         if($request->cinema) {
             $cinemas = json_decode($request->cinema);
-            if(is_array($cinemas)){
-                EventCinemaUser::where('event_id', $id)->delete();
-            }else{
+            if(is_array($cinemas)) {
+                foreach ($cinemas as $cinema) {
+                    foreach ($cinema->sessions as $session) {
+                        if(empty($session->price) or empty($session->date)){
+                            throw new Exception('Проверьте сеансы у кинотеатров, не хватает даты либо цены.', 100);
+                        }
+                    }
+                }
+                EventCinemaUser::where('event_id', $event->id)->delete();
+            } else {
                 Log::warning($cinemas);
+                throw new Exception('Проверьте сеансы у кинотеатров.', 100);
             }
+
             foreach ($cinemas as $cinema) {
                 foreach ($cinema->sessions as $session) {
                     $eventCinema = new EventCinemaUser;
-                    $eventCinema->event_id = $id;
+                    $eventCinema->event_id = $event->id;
                     $eventCinema->user_id = $cinema->id;
                     $eventCinema->price = $session->price;
                     $eventCinema->date = $session->date;
@@ -647,7 +665,7 @@ class EventsController extends Controller
                 });
             }])*/
         ->first();
-        if(!$event){
+        if(!$event) {
             return $this->helpError('Event not found');
         }
         $event = $event->toArray();
