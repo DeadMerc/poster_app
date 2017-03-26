@@ -1,0 +1,199 @@
+
+
+
+.toolbardemoBasicUsage md-toolbar md-icon.md-default-theme {
+    color: white; }
+.photos{
+    width: 100%;
+    height: 250px;
+    position: relative;
+}
+.imagePreview{
+    position: relative;
+    width:300px;
+    height:200px;
+    float: left;
+}
+/**
+* fade in out image
+*/
+.imagePreview img{
+    -webkit-transition: opacity 1s; /* For Safari 3.1 to 6.0 */
+    transition: opacity 1s;
+    width: 100%;
+    height:100%;
+}
+.imagePreview:hover img{
+    opacity: 0.3;
+}
+/**
+* fade in out button
+*/
+.imagePreview .removeButton{
+    opacity: 0;
+    position: absolute;
+    left: 2%;
+    top: 3%;
+    -webkit-transition: opacity 1s; /* For Safari 3.1 to 6.0 */
+    transition: opacity 1s;
+}
+.imagePreview:hover .removeButton{
+    opacity: 1;
+}
+
+/*!
+ * Start Bootstrap - Simple Sidebar HTML Template (http://startbootstrap.com)
+ * Code licensed under the Apache License v2.0.
+ * For details, see http://www.apache.org/licenses/LICENSE-2.0.
+ */
+
+/* Toggle Styles */
+
+.loader{
+    position: absolute;
+    z-index: 9999;
+    left: 50%;
+}
+
+#wrapper {
+    padding-left: 0;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+#wrapper.toggled {
+    padding-left: 250px;
+}
+
+#sidebar-wrapper {
+    z-index: 1000;
+    position: fixed;
+    left: 250px;
+    width: 0;
+    height: 100%;
+    margin-left: -250px;
+    overflow-y: auto;
+    background: white;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+#wrapper.toggled #sidebar-wrapper {
+    width: 250px;
+}
+
+#page-content-wrapper {
+    width: 100%;
+    position: absolute;
+    padding: 15px;
+}
+
+#wrapper.toggled #page-content-wrapper {
+    position: absolute;
+    margin-right: -250px;
+}
+
+/* Sidebar Styles */
+.sidebar-link{
+    width: 75%;
+}
+.sidebar-nav {
+    position: absolute;
+    top: 0;
+    width: 250px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.sidebar-nav li {
+    text-indent: 20px;
+    line-height: 40px;
+    background-color: inherit;
+    -webkit-transition: background-color 0.5s; /* For Safari 3.1 to 6.0 */
+    transition: background-color 0.5s;
+    border-radius: 5px;
+
+}
+
+.sidebar-nav li a {
+    display: block;
+    text-decoration: none;
+    color: #999999;
+}
+
+.sidebar-nav li a:hover {
+    text-decoration: none;
+    color: black;
+}
+
+.sidebar-nav li:hover{
+    background-color: deepskyblue;
+}
+.angular-google-map-container { height: 400px; }
+li{
+    display: flex;
+}
+a{
+    cursor: pointer;
+}
+.sub-menu{
+
+}
+.correct_icon{
+    /*margin-top: 10px;*/
+    position: absolute;
+    right: 10%;
+    top: 40%;
+}
+.sidebar-nav > .sidebar-brand {
+    height: 65px;
+    font-size: 18px;
+    line-height: 60px;
+}
+
+.sidebar-nav > .sidebar-brand a {
+    color: #999999;
+}
+@media (max-width: 600px) {
+    .md-button{
+        font-size: 11px;
+    }
+}
+.remove-session{
+    top: 50%;
+    position: relative;
+}
+
+@media(min-width:768px) {
+
+    #wrapper {
+        /*padding-left: 250px;*/
+    }
+
+    #wrapper.toggled {
+        padding-left: 0;
+    }
+
+    #sidebar-wrapper {
+        width: 250px;
+    }
+
+    #wrapper.toggled #sidebar-wrapper {
+        width: 0;
+    }
+
+    #page-content-wrapper {
+        padding: 20px;
+        position: relative;
+    }
+
+    #wrapper.toggled #page-content-wrapper {
+        position: relative;
+        margin-right: 0;
+    }
+}

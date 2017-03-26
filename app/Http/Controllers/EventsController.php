@@ -721,7 +721,12 @@ class EventsController extends Controller
                 }
             }
             if($cinemaFound == false) {
-                $cinemaNew = Event::with('photos')->find($session->event_id)->toArray();
+                $cinemaNew = Event::with('photos')->find($session->event_id);
+                if($cinemaNew){
+                    $cinemaNew = $cinemaNew->toArray();
+                }else{
+                    throw new \Exception('Event with id:'.$session->event_id.' not found',100);
+                }
                 $cinemaNew['sessions'] = [$session];
                 $event['event'][] = $cinemaNew;
             }
