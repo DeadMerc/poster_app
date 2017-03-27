@@ -31,7 +31,7 @@ class EventsController extends Controller
      *
      */
     public function index(Request $request) {
-        return $this->helpReturn(Event::with('photos')->with('user')->orderBy('id', 'desc')->when($request->unpublish, function($q) use ($request) {
+        return $this->helpReturn(Event::with('photos','comments')->with('user')->orderBy('id', 'desc')->when($request->unpublish, function($q) use ($request) {
             if($request->unpublish == 'true') {
                 return $q->where('publish', "0");
             } else {
