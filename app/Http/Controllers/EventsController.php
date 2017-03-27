@@ -31,7 +31,7 @@ class EventsController extends Controller
      *
      */
     public function index(Request $request) {
-        return $this->helpReturn(Event::with('photos','comments')->with('user')->orderBy('id', 'desc')->when($request->unpublish, function($q) use ($request) {
+        return $this->helpReturn(Event::with('photos','comments','user')->orderBy('id', 'desc')->when($request->unpublish, function($q) use ($request) {
             if($request->unpublish == 'true') {
                 return $q->where('publish', "0");
             } else {
@@ -49,7 +49,7 @@ class EventsController extends Controller
 
     public function show($id) {
         //return $this->helpReturn(Event::find(2666));
-        return $this->helpReturn(Event::with('photos', 'user', 'cinema')->findorfail($id));
+        return $this->helpReturn(Event::with('photos', 'user', 'cinema','comments')->findorfail($id));
     }
 
     /**
